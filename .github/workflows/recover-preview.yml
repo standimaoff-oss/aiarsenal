@@ -4,7 +4,7 @@ on:
     branches: [arena/19004024-aiarsenal]
 permissions:
   contents: write
-  actions: read
+  actions: write
 jobs:
   recover:
     if: contains(github.event.head_commit.message, '[recover]')
@@ -27,3 +27,14 @@ jobs:
           git commit -m 'Publish captured alpha13 game previews for visual review'
           git pull --rebase origin arena/19004024-aiarsenal
           git push origin HEAD:arena/19004024-aiarsenal
+  advance:
+    if: contains(github.event.head_commit.message, '[advance]')
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Stop superseded builds
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh run cancel 39051314507 || true
+          gh run cancel 39051506152 || true

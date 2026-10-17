@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: preview-wwi-${{ github.ref }}
+  group: preview-wwi-${{ github.ref }}-${{ contains(github.event.head_commit.message, '[preview]') && 'active' || github.run_id }}
   cancel-in-progress: false
 jobs:
   preview:
