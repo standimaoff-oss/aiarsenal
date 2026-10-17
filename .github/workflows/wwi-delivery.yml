@@ -1,4 +1,4 @@
-name: Capture World War I in-game previews
+name: WWI build, tests and game previews
 on:
   push:
     branches:
@@ -53,6 +53,12 @@ jobs:
       - name: Build distributable
         working-directory: mods/aiarsenal
         run: ./gradlew build --no-daemon
+      - name: Run regression tests
+        id: regression
+        continue-on-error: true
+        env:
+          MC_RUNS: ${{ runner.temp }}/mc-tests
+        run: python tools/verify_game.py gametest
       - name: Capture real Minecraft F2 images
         env:
           MC_RUNS: ${{ runner.temp }}/mc-runs
@@ -78,7 +84,10 @@ jobs:
           set -euo pipefail
           version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
           sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
-          gh release create "v${version}" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "WWI rebuild ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23 / Java 17. Actual Minecraft F2 preview images. Alpha: back up worlds. Build and capture succeeded; not a claim that all gameplay regression tests passed." --prerelease
+          gh release create "v${version}" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "WWI rebuild ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23 / Java 17. Actual Minecraft F2 preview images. Alpha: back up worlds. Build and capture succeeded; not a claim that all gameplay regression tests passed." --prerelease --draft
+      - name: Report test outcome
+        if: always()
+        run: echo "Regression status ${{ steps.regression.outcome }}" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload preview images only
         if: always()
         uses: actions/upload-artifact@v4
@@ -87,5 +96,7 @@ jobs:
           path: |
             verification/shots/public-preview-*.png
             previews/*.png
+            verification/logs/*.log
+            mods/aiarsenal/build/libs/*.jar
           if-no-files-found: warn
           retention-days: 30
