@@ -139,6 +139,7 @@ public final class ClientModEvents {
         e.registerEntityRenderer((EntityType)ModEntities.TOS1A.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.URAL.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.MARK_I.get(), VehicleRenderer::new);
+        e.registerEntityRenderer(ModEntities.WWI_GRENADE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         e.registerEntityRenderer(ru.aiforge.realwar.craft.CraftRegistry.KA52.get(), ru.aiforge.realwar.client.craft.CraftRenderer::new);
         e.registerEntityRenderer(ru.aiforge.realwar.craft.CraftRegistry.AH64.get(), ru.aiforge.realwar.client.craft.CraftRenderer::new);
         e.registerEntityRenderer(ru.aiforge.realwar.craft.CraftRegistry.RAPTOR.get(), ru.aiforge.realwar.client.craft.CraftRenderer::new);

@@ -87,6 +87,23 @@ overrideHeight:800
     time.sleep(4)
     game.screenshot("gewehr98-first-person")
 
+    # Separate, unedited F2 previews for the equipment. Put the tank out of the background.
+    game.command("tp TestPlayer 20 -60 0 0 0")
+    game.key("mousedown", "3")
+    time.sleep(2)
+    game.screenshot("gewehr98-aim")
+    game.key("mouseup", "3")
+    for item in ("mills_bomb", "stielhandgranate", "wex"):
+        game.command("clear TestPlayer")
+        game.command(f"item replace entity TestPlayer hotbar.0 with aiarsenal:{item}")
+        game.key("key", "1")
+        time.sleep(3)
+        game.screenshot(item+"-in-hand")
+    game.key("mousedown", "3")
+    time.sleep(1)
+    game.screenshot("wex-flame")
+    game.key("mouseup", "3")
+
     if client.poll() is not None or server.poll() is not None:
         raise RuntimeError("Minecraft exited during preview capture")
 

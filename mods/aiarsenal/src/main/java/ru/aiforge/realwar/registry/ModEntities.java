@@ -78,6 +78,8 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<ru.aiforge.realwar.napoleonic.PowderCannonEntity>> CANNON_RI12 = ENTITIES.register("cannon_ri12", () -> EntityType.Builder.<ru.aiforge.realwar.napoleonic.PowderCannonEntity>of(ru.aiforge.realwar.napoleonic.PowderCannonEntity::new, MobCategory.MISC).sized(1.9f,1.6f).clientTrackingRange(48).updateInterval(2).build("cannon_ri12"));
     public static final RegistryObject<EntityType<ru.aiforge.realwar.napoleonic.CannonballEntity>> CANNONBALL = ENTITIES.register("cannonball", () -> EntityType.Builder.<ru.aiforge.realwar.napoleonic.CannonballEntity>of(ru.aiforge.realwar.napoleonic.CannonballEntity::new, MobCategory.MISC).sized(.18f,.18f).clientTrackingRange(64).updateInterval(1).build("cannonball"));
 
+    public static final RegistryObject<EntityType<ru.aiforge.realwar.wwi.GrenadeEntity>> WWI_GRENADE = ENTITIES.register("wwi_grenade", () -> EntityType.Builder.<ru.aiforge.realwar.wwi.GrenadeEntity>of(ru.aiforge.realwar.wwi.GrenadeEntity::new, MobCategory.MISC).sized(.2f,.2f).clientTrackingRange(32).updateInterval(1).build("wwi_grenade"));
+
     private ModEntities() {
     }
 

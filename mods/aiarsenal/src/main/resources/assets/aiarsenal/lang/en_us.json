@@ -1827,7 +1827,7 @@
   "tooltip.aiarsenal.mag.pkp": "For the PKP. Empty: + copper + gunpowder = loaded",
   "hud.aiarsenal.gun.name.t5000": "T-5000",
   "hud.aiarsenal.gun.name.pkp": "PKP",
-  "hud.aiarsenal.gun.bolt": "bolt",
+  "hud.aiarsenal.gun.bolt": "BOLT ACTION",
   "hud.aiarsenal.gun.irons": "irons",
   "hud.aiarsenal.gun.pgo": "PGO-7V3",
   "subtitles.aiarsenal.rifle_t5000": "T-5000 fires",
@@ -2076,5 +2076,8 @@
   "hud.aiarsenal.gun.name.charge_fr6": "6-pounder charge and roundshot",
   "hud.aiarsenal.gun.name.charge_ri12": "12-pounder charge and roundshot",
   "hud.aiarsenal.gun.name.cannonball": "Iron roundshot",
-  "hud.aiarsenal.gun.bolt": "BOLT ACTION"
+  "item.aiarsenal.mills_bomb": "Mills bomb",
+  "item.aiarsenal.stielhandgranate": "Stick grenade (1915)",
+  "item.aiarsenal.wex": "Wex flame projector",
+  "item.aiarsenal.wwi_fuel": "Flamethrower fuel"
 }

@@ -1,16 +1,43 @@
 # AI Arsenal
 
-Forge content mod for Minecraft 1.20.1. Adds vehicles, firearms, artillery, aircraft and equipment from several historical periods.
+Военная техника, стрелковое оружие и снаряжение разных исторических эпох для **Minecraft 1.20.1**.
 
-**Version:** `1.0.1-alpha.13` (unbuilt candidate) · **Minecraft:** `1.20.1` · **Forge:** `47.4.23` · **Java:** `17`
+**Forge 47.4.23 · Java 17 · Альфа-версия**
 
-## WWI rebuild (work in progress)
+## Первая мировая
 
-Source baseline: standimaoff-oss/aimods v1.0.1-alpha.12, commit 0d9f75b2f298d0d043abaaaaf99fccffe0697924.
+- **Mark I Male** — британский гусеничный танк с двумя 57-мм орудиями в бортовых спонсонах. Места водителя и наводчика, фугасные и бронебойные выстрелы, повреждения и перезарядка.
+- **Gewehr 98** — пятизарядная винтовка с ручным затвором, заряжанием обоймой и прицеливанием через модель.
+- **Граната Миллса** и **ручная граната обр. 1915 года** — метательные гранаты с отсчётом после броска.
+- **Огнемёт Wex** — короткая струя пламени с расходуемым топливом. Стены и жидкости перекрывают огонь; под водой огнемёт не работает. Блоки не поджигает.
 
-Changes: enclosed riveted track frames and wider track shoes; separate steel and paint textures; rebuilt shaped Gewehr 98 stock and lower iron sights, separate wood/steel textures. Registry IDs and ammunition stay compatible.
+Характеристики и управление адаптированы для Minecraft. В мод также входят техника, авиация, артиллерия и оружие других эпох.
 
-Restore baseline geometry before building:
+## Скачать и установить
+
+Готовые файлы доступны в разделе **[Releases](https://github.com/standimaoff-oss/aiarsenal/releases)** после публикации проверенной сборки. Черновики не являются опубликованными версиями.
+
+1. Установите Minecraft 1.20.1 и Forge 47.4.23.
+2. Поместите один JAR мода в папку `mods` клиента и сервера.
+3. Удалите предыдущий JAR AI Arsenal, если он установлен.
+
+Перед установкой альфа-версии сделайте резервную копию мира.
+
+## Управление
+
+| Предмет | Управление |
+|---|---|
+| Gewehr 98 | ЛКМ — выстрел, ПКМ — прицел, R — перезарядка пустого магазина |
+| Гранаты | ПКМ — бросок |
+| Wex | Удерживать ПКМ — огонь, Shift+ПКМ — заправить предметом топлива из инвентаря |
+
+[Полное управление](docs/controls.md) · [Снаряжение Первой мировой](docs/wwi-equipment.md)
+
+## Предпросмотр
+
+Игровые кадры публикуются в папке [`previews`](previews/) после запуска Minecraft. Они показывают внешний вид мода; результат автоматических проверок сохраняется рядом с изображениями.
+
+## Сборка из исходников
 
 ```sh
 python3 tools/restore_models.py
@@ -18,6 +45,7 @@ cd mods/aiarsenal
 ./gradlew build --no-daemon
 ```
 
-The `WWI delivery` workflow builds a JAR and captures actual Minecraft F2 screenshots. A release is published only after both succeed. Offline developer renders are not gameplay evidence.
+На Windows: `python tools/restore_models.py`, затем `gradlew.bat build --no-daemon` в `mods/aiarsenal`.
+Готовый JAR: `mods/aiarsenal/build/libs/`. Для первой сборки нужен доступ к серверам Gradle, Forge и Minecraft.
 
-Minecraft 1.20.1, Forge 47.4.23, Java 17. Back up worlds before installing alpha builds.
+[Сторонние компоненты и лицензии](THIRD_PARTY_NOTICES.md).

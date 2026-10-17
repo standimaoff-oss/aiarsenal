@@ -68,7 +68,11 @@ jobs:
           mkdir -p previews
           cp verification/shots/public-preview-mark-i-exterior.png previews/mark-i.png
           cp verification/shots/public-preview-gewehr98-first-person.png previews/gewehr98.png
-          rm -f previews/gewehr98-aim.png
+          cp verification/shots/public-preview-gewehr98-aim.png previews/gewehr98-aim.png
+          for item in mills_bomb stielhandgranate wex; do
+            cp "verification/shots/public-preview-${item}-in-hand.png" "previews/${item}.png"
+          done
+          cp verification/shots/public-preview-wex-flame.png previews/wex-flame.png
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
@@ -84,7 +88,18 @@ jobs:
           set -euo pipefail
           version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
           sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
-          gh release create "v${version}" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "WWI rebuild ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23 / Java 17. Actual Minecraft F2 preview images. Alpha: back up worlds. Build and capture succeeded; not a claim that all gameplay regression tests passed." --prerelease --draft
+          gh release create "v${version}" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Мод для Minecraft 1.20.1 и Forge 47.4.23. Mark I, Gewehr 98, гранаты Миллса и образца 1915 года, огнемёт Wex. Java 17. Изображения — предпросмотр в игре. Альфа-версия: перед установкой сохраните резервную копию мира." --prerelease --draft
+      - name: Save authentic previews to the mod page
+        env:
+          TEST_RESULT: ${{ steps.regression.outcome }}
+        run: |
+          printf 'Regression tests: %s\nSource: %s\nRun: %s/%s/actions/runs/%s\n' "$TEST_RESULT" "$GITHUB_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > previews/verification.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add previews/
+          git commit -m 'Publish in-game mod previews' || exit 0
+          git pull --rebase origin arena/19004024-aiarsenal
+          git push origin HEAD:arena/19004024-aiarsenal
       - name: Report test outcome
         if: always()
         run: echo "Regression status ${{ steps.regression.outcome }}" >> "$GITHUB_STEP_SUMMARY"

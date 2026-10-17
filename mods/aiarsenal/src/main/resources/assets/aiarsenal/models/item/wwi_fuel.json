@@ -1,0 +1,205 @@
+{
+  "gui_light": "side",
+  "textures": {
+    "olive": "aiarsenal:item/wwi/olive",
+    "steel": "aiarsenal:item/wwi/steel",
+    "wood": "aiarsenal:item/wwi/wood",
+    "brass": "aiarsenal:item/wwi/brass",
+    "particle": "aiarsenal:item/wwi/olive"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        2,
+        5
+      ],
+      "to": [
+        12,
+        12,
+        11
+      ],
+      "faces": {
+        "up": {
+          "texture": "#olive"
+        },
+        "down": {
+          "texture": "#olive"
+        },
+        "north": {
+          "texture": "#olive"
+        },
+        "south": {
+          "texture": "#olive"
+        },
+        "east": {
+          "texture": "#olive"
+        },
+        "west": {
+          "texture": "#olive"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        12,
+        6
+      ],
+      "to": [
+        11,
+        13,
+        10
+      ],
+      "faces": {
+        "up": {
+          "texture": "#olive"
+        },
+        "down": {
+          "texture": "#olive"
+        },
+        "north": {
+          "texture": "#olive"
+        },
+        "south": {
+          "texture": "#olive"
+        },
+        "east": {
+          "texture": "#olive"
+        },
+        "west": {
+          "texture": "#olive"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        13,
+        7
+      ],
+      "to": [
+        7,
+        14,
+        9
+      ],
+      "faces": {
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        },
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        13,
+        7
+      ],
+      "to": [
+        11,
+        14,
+        9
+      ],
+      "faces": {
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        },
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        25,
+        140,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        1,
+        0,
+        0
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  }
+}

@@ -1827,7 +1827,7 @@
   "tooltip.aiarsenal.mag.pkp": "Для ПКП. Пустой: + медь + порох = снаряжённый",
   "hud.aiarsenal.gun.name.t5000": "T-5000",
   "hud.aiarsenal.gun.name.pkp": "ПКП",
-  "hud.aiarsenal.gun.bolt": "затвор",
+  "hud.aiarsenal.gun.bolt": "РУЧНОЙ ЗАТВОР",
   "hud.aiarsenal.gun.irons": "мушка",
   "hud.aiarsenal.gun.pgo": "ПГО-7В3",
   "subtitles.aiarsenal.rifle_t5000": "Выстрел T-5000",
@@ -2076,5 +2076,8 @@
   "hud.aiarsenal.gun.name.charge_fr6": "6-фунтовый заряд с ядром",
   "hud.aiarsenal.gun.name.charge_ri12": "12-фунтовый заряд с ядром",
   "hud.aiarsenal.gun.name.cannonball": "Чугунное ядро",
-  "hud.aiarsenal.gun.bolt": "РУЧНОЙ ЗАТВОР"
+  "item.aiarsenal.mills_bomb": "Граната Миллса",
+  "item.aiarsenal.stielhandgranate": "Ручная граната обр. 1915 г.",
+  "item.aiarsenal.wex": "Огнемёт Wex",
+  "item.aiarsenal.wwi_fuel": "Топливо для огнемёта"
 }

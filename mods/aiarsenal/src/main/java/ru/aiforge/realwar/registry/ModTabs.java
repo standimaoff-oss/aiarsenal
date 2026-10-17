@@ -74,7 +74,7 @@ public final class ModTabs {
             "shells_20", "shells_75", "shells_88", "shells_85", "shells_107", "shells_128", "shells_280",
             "rocket_380", "rocket_m13", "sc250", "sc1000", "fab250sv", "fab1000", "fab5000");
     private static final Set<String> NAPOLEONIC = Set.of("musket_1777", "musket_1808", "pistol_an13", "pistol_1809", "sabre_briquet", "sabre_1809", "cannon_fr6", "cannon_ri12", "paper_cartridge", "pistol_cartridge", "charge_fr6", "charge_ri12", "cannonball");
-    private static final Set<String> WWI = Set.of("mark_i_vehicle", "gewehr98", "shells_57");
+    private static final Set<String> WWI = Set.of("mark_i_vehicle", "gewehr98", "shells_57", "mills_bomb", "stielhandgranate", "wex", "wwi_fuel");
     private static final Set<String> WWI_SHARED_AMMO = Set.of("clip_k98"); // same 5-round 7.92x57 Mauser clip feeds Gewehr 98 and Kar98k
     private static final Set<String> SHARED_AMMO = Set.of("shells_122", "shells_152"); // IS-2/KV-2 AND D-30/Msta
     private static final Set<String> NUCLEAR_PARTS = Set.of("lb_casing", "rds_core", "rds_casing", "cordite", "bridgewire_detonator");
@@ -149,15 +149,16 @@ public final class ModTabs {
             for (String sl : new String[]{"head", "chest", "legs", "feet"}) ModTabs.put(Cat.UNIFORMS, "uniform_" + set + "_" + sl);
         // WWI vertical slice: one tank, one infantry rifle, and its 57 mm tank ammunition.
         put(Cat.VEHICLES, "mark_i_vehicle");
-        put(Cat.WEAPONS, "gewehr98");
+        put(Cat.WEAPONS, "gewehr98", "mills_bomb", "stielhandgranate", "wex");
+        put(Cat.AMMO, "wwi_fuel");
         put(Cat.AMMO, "shells_57");
         for (var gun : ru.aiforge.realwar.handheld.GunKind.values()) put(Cat.AMMO, gun.ammo);
         put(Cat.AMMO, "javelin_missile", "charge_fr6", "charge_ri12", "cannonball");
         put(Cat.WEAPONS, "musket_1777", "musket_1808", "pistol_an13", "pistol_1809", "sabre_briquet", "sabre_1809");
         put(Cat.VEHICLES, "cannon_fr6", "cannon_ri12");
-        section("wwi_weapons", "gewehr98");
+        section("wwi_weapons", "gewehr98", "mills_bomb", "stielhandgranate", "wex");
         section("wwi_vehicles", "mark_i_vehicle");
-        section("wwi_ammo", "shells_57");
+        section("wwi_ammo", "shells_57", "wwi_fuel");
         section("ww2_weapons", "mosin_pu");
         section("ww2_vehicles", "t34_vehicle");
         // Genuine 1943–45 garments; do not classify the old Cold War tank uniform as WWII.
