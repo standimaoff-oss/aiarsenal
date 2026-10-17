@@ -83,14 +83,6 @@ jobs:
                   image.verify()
               print(f'{path}: {path.stat().st_size} bytes')
           PY
-      - name: Publish verified build and screenshots
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
-          sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
-          gh release create "v${version}" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Мод для Minecraft 1.20.1 и Forge 47.4.23. Mark I, Gewehr 98, гранаты Миллса и образца 1915 года, огнемёт Wex. Java 17. Изображения — предпросмотр в игре. Альфа-версия: перед установкой сохраните резервную копию мира." --prerelease --draft
       - name: Save authentic previews to the mod page
         env:
           TEST_RESULT: ${{ steps.regression.outcome }}
@@ -102,6 +94,14 @@ jobs:
           git commit -m 'Publish in-game mod previews' || exit 0
           git pull --rebase origin arena/19004024-aiarsenal
           git push origin HEAD:arena/19004024-aiarsenal
+      - name: Publish verified build and screenshots
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
+          sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
+          gh release create "v${version}" --repo "$GITHUB_REPOSITORY" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Мод для Minecraft 1.20.1 и Forge 47.4.23. Mark I, Gewehr 98, гранаты Миллса и образца 1915 года, огнемёт Wex. Java 17. Изображения — предпросмотр в игре. Альфа-версия: перед установкой сохраните резервную копию мира." --prerelease --draft 2> release-error.txt || { cat release-error.txt; echo "::error title=Release publication::$(cat release-error.txt)"; exit 1; }
       - name: Report test outcome
         if: always()
         run: echo "Regression status ${{ steps.regression.outcome }}" >> "$GITHUB_STEP_SUMMARY"

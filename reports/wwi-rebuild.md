@@ -26,7 +26,8 @@ No new JAR or authentic gameplay screenshots were produced. Do not substitute th
 renders as evidence of this candidate. Historical fidelity and first-person framing still need in-game review.
 
 ## Public runner — follow-up
-Repository is now public. Run 39050246486 built alpha.13 successfully and passed the regression-test step
-(which requires the Minecraft server's `required tests passed` marker). Gameplay capture is a separate following step.
+Repository is now public. Run 39050246486 built alpha.13 successfully. The test process failed: the inherited Gewehr 98 recipe also matched Kar98k.
+The job step was marked successful by continue-on-error, not by a passing test suite. The recipe has now been separated.
+Minecraft F2 capture succeeded; release publication failed and its diagnostics are being improved.
 The former account-billing block no longer prevents this run. Alpha.14 equipment sources have additional dedicated
 GameTests and offline item-resource checks; their runtime result must be recorded independently of alpha.13.
