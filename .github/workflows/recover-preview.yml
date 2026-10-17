@@ -36,5 +36,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          gh run cancel 39051314507 || true
-          gh run cancel 39051506152 || true
+          gh run cancel 39052762832
