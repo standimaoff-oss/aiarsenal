@@ -156,9 +156,9 @@ public final class ModTabs {
         put(Cat.AMMO, "javelin_missile", "charge_fr6", "charge_ri12", "cannonball");
         put(Cat.WEAPONS, "musket_1777", "musket_1808", "pistol_an13", "pistol_1809", "sabre_briquet", "sabre_1809");
         put(Cat.VEHICLES, "cannon_fr6", "cannon_ri12");
-        section("wwi_weapons", "gewehr98", "mills_bomb", "stielhandgranate", "wex");
+        section("wwi_weapons", "gewehr98");
         section("wwi_vehicles", "mark_i_vehicle");
-        section("wwi_ammo", "shells_57", "wwi_fuel");
+        section("wwi_ammo", "shells_57");
         section("ww2_weapons", "mosin_pu");
         section("ww2_vehicles", "t34_vehicle");
         // Genuine 1943–45 garments; do not classify the old Cold War tank uniform as WWII.
