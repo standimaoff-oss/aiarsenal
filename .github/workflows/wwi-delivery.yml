@@ -50,6 +50,8 @@ jobs:
           pactl set-default-source qa.monitor
       - name: Restore compressed baseline models
         run: python tools/restore_models.py
+      - name: Validate reproducible equipment resources
+        run: python tools/wwi/test_equipment_assets.py
       - name: Build distributable
         working-directory: mods/aiarsenal
         run: ./gradlew build --no-daemon
