@@ -1,0 +1,3 @@
+Regression tests: success
+Source: dada31ce2a46e241c3f6ba7f9b2c8fd66f6ea950
+Run: https://github.com/standimaoff-oss/aiarsenal/actions/runs/39051543629
