@@ -15,7 +15,7 @@
 
 ## Скачать и установить
 
-Готовые файлы доступны в разделе **[Releases](https://github.com/standimaoff-oss/aiarsenal/releases)** после публикации проверенной сборки. Черновики не являются опубликованными версиями.
+**[Скачать AI Arsenal 1.0.1-alpha.16 — JAR](https://github.com/standimaoff-oss/aiarsenal/releases/download/v1.0.1-alpha.16/aiarsenal-1.0.1-alpha.16.jar)** · [Страница версии и контрольная сумма](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.16)
 
 1. Установите Minecraft 1.20.1 и Forge 47.4.23.
 2. Поместите один JAR мода в папку `mods` клиента и сервера.
@@ -35,7 +35,22 @@
 
 ## Предпросмотр
 
-Игровые кадры публикуются в папке [`previews`](previews/) после запуска Minecraft. Они показывают внешний вид мода; результат автоматических проверок сохраняется рядом с изображениями.
+Настоящие игровые кадры из Minecraft, без внешнего рендера.
+
+### Mark I
+![Mark I в игре](previews/mark-i.png)
+
+### Gewehr 98
+![Gewehr 98 от первого лица](previews/gewehr98.png)
+![Механический прицел Gewehr 98](previews/gewehr98-aim.png)
+
+### Снаряжение
+![Граната Миллса](previews/mills_bomb.png)
+![Ручная граната обр. 1915 г.](previews/stielhandgranate.png)
+![Огнемёт Wex](previews/wex.png)
+![Струя пламени Wex](previews/wex-flame.png)
+
+[Все кадры и результат проверки](previews/).
 
 ## Сборка из исходников
 

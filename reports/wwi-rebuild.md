@@ -1,33 +1,47 @@
-# WWI visual rebuild — 2026-10-17
+# World War I verification — 2026-10-17
 
-Baseline: standimaoff-oss/aimods tag v1.0.1-alpha.12 (0d9f75b2f298d0d043abaaaaf99fccffe0697924).
-The connected aiarsenal repository was empty except for its README. Imported the released mod sources and resources;
-large unchanged GLBs are stored once as vendor/baseline-models.zip. Run tools/restore_models.py before Gradle.
+## Build and gameplay checks
 
-## Changes
-- Mark I: wider track shoes; fixed riveted track-frame panels instead of an open cage around the running gear.
-  Existing entity IDs, pivots, track animation pitch and ammunition remain unchanged. Regenerated deck collision (109 boxes).
-- Gewehr 98: lofted stock, separate wood and steel textures, smaller iron sights, barrel bands and cleaning rod.
-  Preserved animation/node contracts. Reload animation shortened to 2.3 s to match the 46-tick server reload.
-- GLB source library: per-material textures and shape/UV helpers, deterministic generation without Blender.
-- HUD: manual bolt-action rifles are no longer labelled SEMI; Russian and English labels added.
-- CI: distributable build and real Minecraft F2 capture, release only after successful capture.
+Alpha.15 source: `dada31ce2a46e241c3f6ba7f9b2c8fd66f6ea950`.
+[Public build, regression tests and Minecraft capture](https://github.com/standimaoff-oss/aiarsenal/actions/runs/39051543629): successful.
+The recorded regression outcome is `success`, not merely a green continue-on-error step; see `previews/verification.txt`.
 
-## Verification
-`python tools/wwi/verify_assets.py --rebuild`: PASS, including byte-identical regeneration,
-GLB structure, texture identity, running gear, sponson yaw, collision, recipes and language entries.
-This is an offline asset test, NOT a Java compile or Minecraft gameplay test.
+Equipment tests cover fuse storage/clamping, empty/refuel consumption, grenade throw ownership/consumption,
+and flame occlusion by a wall while consuming fuel. Offline resource tests cover models, texture references,
+recipes and translations. These are targeted checks, not a guarantee of compatibility with every modpack.
 
-## Delivery blocker
-GitHub run https://github.com/standimaoff-oss/aiarsenal/actions/runs/39047120605
-never started: "The job was not started because recent account payments have failed or your spending limit needs to be increased."
-Local environment has no Java/Minecraft runtime and cannot access Maven/Forge/Mojang dependency hosts.
-No new JAR or authentic gameplay screenshots were produced. Do not substitute the old alpha.12 release or offline
-renders as evidence of this candidate. Historical fidelity and first-person framing still need in-game review.
+## In-game visual review
 
-## Public runner — follow-up
-Repository is now public. Run 39050246486 built alpha.13 successfully. The test process failed: the inherited Gewehr 98 recipe also matched Kar98k.
-The job step was marked successful by continue-on-error, not by a passing test suite. The recipe has now been separated.
-Minecraft F2 capture succeeded; release publication failed and its diagnostics are being improved.
-The former account-billing block no longer prevents this run. Alpha.14 equipment sources have additional dedicated
-GameTests and offline item-resource checks; their runtime result must be recorded independently of alpha.13.
+Seven genuine Minecraft F2 screenshots were captured and saved in `previews/`.
+The tank, rifle iron sights, grenade and active flame screenshots were personally inspected.
+Alpha.15 still placed the rifle camera too near the receiver and produced flame particles too close to the camera.
+Alpha.16 increases eye relief, opens the rear sight notch, extends the tank gun barrels and moves the flame
+particle stream forward. Item faces now use explicit atlas-safe UVs. Its build and regression tests passed; seven new F2 screenshots were captured and personally inspected.
+Rifle eye relief and the notch are visible, the longer tank barrel exits the sponson and the Wex nozzle points forward.
+The flame-use animation still raises the bulky integrated fuel assembly; this is not a wearable-backpack implementation.
+
+Alpha.16 source: `321ef847753e5bdd8c819bd43bcf6d846c899d15`.
+[Build, tests and capture](https://github.com/standimaoff-oss/aiarsenal/actions/runs/39052885694): passed;
+release creation failed with integration HTTP 403. The release was created with the authenticated CLI,
+and [recovery run 39054140254](https://github.com/standimaoff-oss/aiarsenal/actions/runs/39054140254)
+uploaded the exact tested artifact without rebuilding. Publication is now complete:
+[alpha.16](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.16), JAR 52,166,618 bytes,
+seven screenshots and SHA256SUMS.
+No offline render is used as gameplay evidence.
+
+## Reproducible resources
+
+`python tools/wwi/verify_assets.py --rebuild`: PASS for alpha.16 resources, including byte-identical regeneration,
+GLB structure, textures, running gear, sponson yaw, collision, recipes and language entries.
+`python tools/wwi/test_equipment_assets.py`: 2 tests PASS.
+The Mark I has 90 generated walkable collision boxes. The Gewehr 98 has 1,320 triangles and two animation clips.
+
+The baseline is standimaoff-oss/aimods `v1.0.1-alpha.12` (`0d9f75b2f298d0d043abaaaaf99fccffe0697924`).
+Unchanged baseline GLBs are archived in `vendor/baseline-models.zip`; run `tools/restore_models.py` before Gradle.
+The early private-run billing block was resolved by making this repository public. Alpha.13's inherited
+ambiguous rifle recipe was caught by regression tests and corrected before alpha.15 passed.
+
+## Scope
+
+Gameplay and visuals are adapted to Minecraft, not a historical simulation. The Wex fuel assembly is part of the
+held model, not a separately wearable backpack. Flames do not ignite blocks. This remains an alpha release.
