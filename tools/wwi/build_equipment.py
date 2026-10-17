@@ -32,7 +32,7 @@ models['wwi_fuel']=[box([4,2,5],[12,12,11],'olive'),box([5,12,6],[11,13,10],'oli
 for name,elements in models.items():
  display={
   'gui':{'rotation':[25,140,0],'translation':[0,0,0],'scale':[.8,.8,.8]},
-  'firstperson_righthand':{'rotation':[0,180,0],'translation':[1,0,0],'scale':[.7,.7,.7]},
+  'firstperson_righthand':{'rotation':[0,0,-8],'translation':[0,5,0],'scale':[.6,.6,.6]},
   'thirdperson_righthand':{'rotation':[0,180,0],'translation':[0,1,0],'scale':[.6,.6,.6]},
   'ground':{'translation':[0,2,0],'scale':[.4,.4,.4]}}
  save(ASSETS/f'models/item/{name}.json',{'gui_light':'side','textures':{k:f'aiarsenal:item/wwi/{k}' for k in ['olive','steel','wood','brass']}|{'particle':'aiarsenal:item/wwi/olive'},'elements':elements,'display':display})

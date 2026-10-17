@@ -574,18 +574,18 @@
     "firstperson_righthand": {
       "rotation": [
         0,
-        180,
-        0
+        0,
+        -8
       ],
       "translation": [
-        1,
         0,
+        5,
         0
       ],
       "scale": [
-        0.7,
-        0.7,
-        0.7
+        0.6,
+        0.6,
+        0.6
       ]
     },
     "thirdperson_righthand": {
