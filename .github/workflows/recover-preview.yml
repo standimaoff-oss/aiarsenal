@@ -37,3 +37,22 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           gh run cancel 39052762832
+  deliver:
+    if: contains(github.event.head_commit.message, '[deliver]')
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload the tested alpha.16 build without rebuilding
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          grep -Fx 'Regression tests: success' previews/verification.txt
+          grep -Fx 'Source: 321ef847753e5bdd8c819bd43bcf6d846c899d15' previews/verification.txt
+          gh run download 39052885694 --name wwi-gameplay-previews-13 --dir recovered
+          jar="$(find recovered -name 'aiarsenal-1.0.1-alpha.16.jar' -type f)"
+          test -n "$jar" && test "$(printf '%s\n' "$jar" | wc -l)" -eq 1
+          cp "$jar" aiarsenal-1.0.1-alpha.16.jar
+          sha256sum aiarsenal-1.0.1-alpha.16.jar > SHA256SUMS
+          gh release upload v1.0.1-alpha.16 aiarsenal-1.0.1-alpha.16.jar SHA256SUMS previews/*.png --clobber
