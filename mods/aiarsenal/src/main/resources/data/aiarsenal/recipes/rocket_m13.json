@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:rocket_motor_122"
+    },
+    {
+      "item": "aiarsenal:warhead_122"
+    },
+    {
+      "item": "aiarsenal:steel_tube"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:rocket_m13",
+    "count": 2
+  }
+}

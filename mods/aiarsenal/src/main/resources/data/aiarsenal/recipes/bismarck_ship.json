@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:bismarck_ship",
+    "count": 1
+  }
+}

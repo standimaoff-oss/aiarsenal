@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PHP",
+    "WIW",
+    "III"
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "H": {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    "W": {
+      "item": "aiarsenal:truck_wheel"
+    },
+    "I": {
+      "item": "aiarsenal:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:gun_mount_23",
+    "count": 1
+  }
+}

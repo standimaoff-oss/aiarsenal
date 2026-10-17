@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "UUU",
+    "UTU",
+    "UUU"
+  ],
+  "key": {
+    "U": {
+      "item": "minecraft:iron_block"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:rds_core",
+    "count": 1
+  }
+}

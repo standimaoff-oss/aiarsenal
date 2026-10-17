@@ -1,0 +1,87 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "false",
+            "east": "false"
+          },
+          {
+            "north": "false",
+            "west": "false"
+          },
+          {
+            "south": "false",
+            "east": "false"
+          },
+          {
+            "south": "false",
+            "west": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_post_winter"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_side_winter"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_side_winter",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_side_winter",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_side_winter",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "false",
+        "south": "false",
+        "west": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_side_winter"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "false",
+        "south": "false",
+        "west": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_net_side_winter",
+        "y": 180
+      }
+    }
+  ]
+}

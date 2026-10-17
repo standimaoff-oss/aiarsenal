@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:rocket_motor_122"
+    },
+    {
+      "item": "aiarsenal:warhead_122"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:grad_rocket",
+    "count": 1
+  }
+}

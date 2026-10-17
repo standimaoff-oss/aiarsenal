@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CIC",
+    "ICI",
+    "CIC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:gray_concrete"
+    },
+    "I": {
+      "item": "aiarsenal:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:reinforced_concrete",
+    "count": 4
+  }
+}

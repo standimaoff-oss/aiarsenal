@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "STS",
+    "RHR",
+    "RRR"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "R": {
+      "item": "aiarsenal:reinforced_concrete"
+    },
+    "H": {
+      "item": "aiarsenal:hydraulic_drive"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:launch_pad_1",
+    "count": 1
+  }
+}

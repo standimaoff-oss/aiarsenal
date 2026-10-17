@@ -1,0 +1,19 @@
+{
+ "type": "minecraft:crafting_shapeless",
+ "category": "misc",
+ "ingredients": [
+  {
+   "item": "minecraft:bread"
+  },
+  {
+   "item": "minecraft:cooked_beef"
+  },
+  {
+   "item": "minecraft:paper"
+  }
+ ],
+ "result": {
+  "item": "aiarsenal:ration_irp",
+  "count": 2
+ }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/fort_czech_hedgehog"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/fort_czech_hedgehog",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/fort_czech_hedgehog",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/fort_czech_hedgehog",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:rds_core"
+    },
+    {
+      "item": "aiarsenal:rds_core"
+    },
+    {
+      "item": "aiarsenal:rds_casing"
+    },
+    {
+      "item": "aiarsenal:barometric_fuze"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:rds1",
+    "count": 1
+  }
+}

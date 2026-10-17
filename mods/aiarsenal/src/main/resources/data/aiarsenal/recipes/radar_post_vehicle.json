@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SRS",
+    "BGB",
+    "BBB"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_block"
+    },
+    "R": {
+      "item": "aiarsenal:radar_seeker"
+    },
+    "B": {
+      "item": "minecraft:stone_bricks"
+    },
+    "G": {
+      "item": "aiarsenal:guidance_unit"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:radar_post_vehicle",
+    "count": 1
+  }
+}

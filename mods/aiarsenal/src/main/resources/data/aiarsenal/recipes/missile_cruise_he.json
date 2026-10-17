@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "TGT",
+    "PMP"
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "W": {
+      "item": "aiarsenal:warhead_300"
+    },
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "G": {
+      "item": "aiarsenal:guidance_unit"
+    },
+    "M": {
+      "item": "aiarsenal:rocket_motor_122"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:missile_cruise_he",
+    "count": 1
+  }
+}

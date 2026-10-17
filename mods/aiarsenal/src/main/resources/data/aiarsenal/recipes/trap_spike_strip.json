@@ -1,0 +1,20 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "building",
+ "pattern": [
+  "NNN",
+  "SSS"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "S": {
+   "item": "aiarsenal:steel_plate"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:trap_spike_strip",
+  "count": 2
+ }
+}

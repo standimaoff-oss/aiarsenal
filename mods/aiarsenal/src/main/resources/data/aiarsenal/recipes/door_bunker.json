@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SS",
+    "SR",
+    "SS"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:door_bunker",
+    "count": 1
+  }
+}

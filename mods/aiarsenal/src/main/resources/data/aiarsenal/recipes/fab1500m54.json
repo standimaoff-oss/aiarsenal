@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:contact_fuze"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:fab1500m54",
+    "count": 1
+  }
+}

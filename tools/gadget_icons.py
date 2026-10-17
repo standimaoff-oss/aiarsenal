@@ -1,0 +1,36 @@
+# 64px item textures for gadgets that have no 3D model: tablet, FPV goggles, remote detonator (drawn procedurally).
+from PIL import Image, ImageDraw
+O='/home/user/mods/aiarsenal/src/main/resources/assets/aiarsenal/textures/item/'
+def img(): return Image.new('RGBA',(64,64),(0,0,0,0))
+# tablet: rugged olive case, screen with map grid + target marker
+im=img(); d=ImageDraw.Draw(im)
+d.rounded_rectangle((6,10,58,54),6,fill=(62,70,48,255),outline=(30,34,22,255),width=2)
+for x,y in ((6,10),(52,10),(6,48),(52,48)): d.rectangle((x,y,x+5,y+5),fill=(40,44,30,255))
+d.rectangle((12,15,52,46),fill=(22,48,40,255),outline=(12,20,16,255))
+for i in range(16,52,6): d.line((i,16,i,45),fill=(40,82,66,255))
+for j in range(18,46,6): d.line((13,j,51,j),fill=(40,82,66,255))
+d.line((14,40,24,30,34,34,46,20),fill=(150,200,120,255),width=1)
+d.ellipse((38,22,46,30),outline=(255,70,50,255),width=1); d.line((42,19,42,33),fill=(255,70,50,255)); d.line((35,26,49,26),fill=(255,70,50,255))
+d.rectangle((27,48,37,51),fill=(28,30,20,255))
+im.save(O+'tablet.png')
+# goggles: black visor box with strap and antenna
+im=img(); d=ImageDraw.Draw(im)
+d.rectangle((2,28,62,36),fill=(40,40,46,255))
+d.rounded_rectangle((10,18,54,44),7,fill=(30,30,34,255),outline=(10,10,12,255),width=2)
+d.rounded_rectangle((14,24,30,38),4,fill=(40,60,90,255)); d.rounded_rectangle((34,24,50,38),4,fill=(40,60,90,255))
+d.line((16,26,22,26),fill=(140,180,230,255)); d.line((36,26,42,26),fill=(140,180,230,255))
+d.rectangle((28,40,36,46),fill=(20,20,24,255))
+d.line((48,18,54,6),fill=(25,25,25,255),width=3); d.ellipse((51,3,57,9),fill=(200,40,40,255))
+d.rectangle((20,14,24,18),fill=(230,120,30,255))
+im.save(O+'fpv_goggles.png')
+# detonator: grey box, guarded red button, key switch, antenna, LED
+im=img(); d=ImageDraw.Draw(im)
+d.line((44,22,52,2),fill=(30,30,30,255),width=3); d.ellipse((49,0,55,6),fill=(40,40,40,255))
+d.rounded_rectangle((12,20,52,60),5,fill=(96,100,92,255),outline=(40,42,38,255),width=2)
+d.rectangle((16,24,48,32),fill=(30,30,30,255)); d.text((18,23),"ARM",fill=(255,200,40,255))
+d.rectangle((40,26,46,30),fill=(255,40,30,255))
+d.ellipse((20,36,40,56),fill=(60,20,18,255)); d.ellipse((23,39,37,53),fill=(220,30,24,255)); d.ellipse((26,41,31,46),fill=(255,140,120,255))
+d.rectangle((18,34,42,36),fill=(230,200,40,255))
+d.ellipse((42,44,50,52),fill=(50,50,50,255)); d.line((46,45,46,51),fill=(200,200,200,255))
+im.save(O+'detonator.png')
+print('ok')

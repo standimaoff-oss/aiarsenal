@@ -1,0 +1,235 @@
+{
+ "type": "minecraft:chest",
+ "pools": [
+  {
+   "rolls": {
+    "type": "minecraft:uniform",
+    "min": 3,
+    "max": 6
+   },
+   "bonus_rolls": 0.0,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:steel_ingot",
+     "weight": 14,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:steel_plate",
+     "weight": 8,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:iron_ingot",
+     "weight": 14,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 4
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:ration_irp",
+     "weight": 14,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:bandage",
+     "weight": 12,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:shells_125",
+     "weight": 10,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:shells_20",
+     "weight": 8,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 2,
+        "max": 6
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:mine_pmn2",
+     "weight": 5,
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+       }
+      }
+     ]
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:tripwire_f1",
+     "weight": 4
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:compass",
+     "weight": 3
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:spyglass",
+     "weight": 2
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:lead",
+     "weight": 3
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_private_head",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_private_chest",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_private_legs",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_private_feet",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_private_head",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_private_chest",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_private_legs",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_private_feet",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_sergeant_head",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_sergeant_chest",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_sergeant_legs",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_ru_sergeant_feet",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_sergeant_head",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_sergeant_chest",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_sergeant_legs",
+     "weight": 1
+    },
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:uniform_us_sergeant_feet",
+     "weight": 1
+    }
+   ]
+  }
+ ]
+}

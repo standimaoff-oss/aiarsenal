@@ -1,0 +1,24 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  "ITI",
+  "ITI",
+  "IBI"
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_ingot"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  },
+  "B": {
+   "item": "minecraft:blaze_rod"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:kh101",
+  "count": 1
+ }
+}

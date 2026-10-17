@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,armed=false": {
+      "model": "aiarsenal:block/field_mine_ozm72"
+    },
+    "facing=north,armed=true": {
+      "model": "aiarsenal:block/field_mine_ozm72"
+    },
+    "facing=east,armed=false": {
+      "model": "aiarsenal:block/field_mine_ozm72",
+      "y": 90
+    },
+    "facing=east,armed=true": {
+      "model": "aiarsenal:block/field_mine_ozm72",
+      "y": 90
+    },
+    "facing=south,armed=false": {
+      "model": "aiarsenal:block/field_mine_ozm72",
+      "y": 180
+    },
+    "facing=south,armed=true": {
+      "model": "aiarsenal:block/field_mine_ozm72",
+      "y": 180
+    },
+    "facing=west,armed=false": {
+      "model": "aiarsenal:block/field_mine_ozm72",
+      "y": 270
+    },
+    "facing=west,armed=true": {
+      "model": "aiarsenal:block/field_mine_ozm72",
+      "y": 270
+    }
+  }
+}

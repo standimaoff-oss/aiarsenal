@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "aiarsenal:steel_tube"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:oak_planks"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:c96",
+    "count": 1
+  }
+}

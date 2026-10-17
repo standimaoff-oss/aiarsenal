@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    "TPT",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:launcher_package_122",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PTP",
+    "SI "
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:saiga12",
+    "count": 1
+  }
+}

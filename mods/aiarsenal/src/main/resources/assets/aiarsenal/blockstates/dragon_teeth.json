@@ -1,0 +1,72 @@
+{
+  "variants": {
+    "facing=north": [
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth"
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 90
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 180
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 270
+      }
+    ],
+    "facing=east": [
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 90
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 180
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 270
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth"
+      }
+    ],
+    "facing=south": [
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 180
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 270
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth"
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 90
+      }
+    ],
+    "facing=west": [
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 270
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth"
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 90
+      },
+      {
+        "model": "aiarsenal:block/fort_dragon_teeth",
+        "y": 180
+      }
+    ]
+  }
+}

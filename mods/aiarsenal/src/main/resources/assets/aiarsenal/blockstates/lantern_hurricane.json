@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "hanging=false,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lantern_hurricane_off"
+    },
+    "hanging=false,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lantern_hurricane_off"
+    },
+    "hanging=false,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lantern_hurricane"
+    },
+    "hanging=false,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lantern_hurricane"
+    },
+    "hanging=true,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lantern_hurricane_hanging_off"
+    },
+    "hanging=true,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lantern_hurricane_hanging_off"
+    },
+    "hanging=true,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lantern_hurricane_hanging"
+    },
+    "hanging=true,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lantern_hurricane_hanging"
+    }
+  }
+}

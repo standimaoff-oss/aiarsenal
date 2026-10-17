@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "F F",
+    "FFF",
+    "FFF"
+  ],
+  "key": {
+    "F": {
+      "item": "aiarsenal:rubberized_fabric"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:hazmat_chestplate",
+    "count": 1
+  }
+}

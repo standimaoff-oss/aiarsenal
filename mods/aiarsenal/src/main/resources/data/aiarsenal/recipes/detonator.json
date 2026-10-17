@@ -1,0 +1,27 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  " R ",
+  "ITI",
+  "IBI"
+ ],
+ "key": {
+  "R": {
+   "item": "minecraft:lightning_rod"
+  },
+  "I": {
+   "item": "minecraft:iron_ingot"
+  },
+  "T": {
+   "item": "minecraft:redstone_torch"
+  },
+  "B": {
+   "item": "minecraft:stone_button"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:detonator",
+  "count": 1
+ }
+}

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_tube"
+    },
+    {
+      "item": "aiarsenal:gun_barrels_23"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:bmp3_vehicle",
+    "count": 1
+  }
+}

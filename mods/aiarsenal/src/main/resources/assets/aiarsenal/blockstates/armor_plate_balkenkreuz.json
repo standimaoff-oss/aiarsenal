@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/armor_plate_balkenkreuz"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/armor_plate_balkenkreuz",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/armor_plate_balkenkreuz",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/armor_plate_balkenkreuz",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "aiarsenal:duckboard",
+    "aiarsenal:door_wood_army",
+    "aiarsenal:crate_ammo",
+    "aiarsenal:trap_punji",
+    "aiarsenal:trap_flare"
+  ]
+}

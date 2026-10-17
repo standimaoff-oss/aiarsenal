@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SRS",
+    "SSS",
+    "C C"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "C": {
+      "item": "minecraft:smooth_stone"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:gate_swing",
+    "count": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "building",
+ "pattern": [
+  "BBB",
+  "BLB"
+ ],
+ "key": {
+  "B": {
+   "item": "minecraft:bamboo"
+  },
+  "L": {
+   "item": "minecraft:oak_leaves"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:trap_punji",
+  "count": 1
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "building",
+ "pattern": [
+  "PRP",
+  "PGP"
+ ],
+ "key": {
+  "P": {
+   "item": "minecraft:spruce_planks"
+  },
+  "R": {
+   "item": "minecraft:string"
+  },
+  "G": {
+   "item": "minecraft:green_dye"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:crate_ammo",
+  "count": 1
+ }
+}

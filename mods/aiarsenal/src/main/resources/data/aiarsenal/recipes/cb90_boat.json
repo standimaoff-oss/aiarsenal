@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    {
+      "item": "minecraft:oak_boat"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:cb90_boat",
+    "count": 1
+  }
+}

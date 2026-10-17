@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "F F",
+    "F F"
+  ],
+  "key": {
+    "F": {
+      "item": "aiarsenal:rubberized_fabric"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:hazmat_boots",
+    "count": 1
+  }
+}

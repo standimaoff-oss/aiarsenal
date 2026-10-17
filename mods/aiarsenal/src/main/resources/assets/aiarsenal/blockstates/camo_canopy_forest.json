@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_center_forest"
+      }
+    },
+    {
+      "when": {
+        "north": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_forest"
+      }
+    },
+    {
+      "when": {
+        "east": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_forest",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_forest",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_forest",
+        "y": 270
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/armor_plate_vdv"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/armor_plate_vdv",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/armor_plate_vdv",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/armor_plate_vdv",
+      "y": 270
+    }
+  }
+}

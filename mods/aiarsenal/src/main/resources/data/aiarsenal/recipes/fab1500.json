@@ -1,0 +1,23 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "IBI",
+  "TTT",
+  "IBI"
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_block"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  },
+  "B": {
+   "item": "aiarsenal:fab500"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:fab1500",
+  "count": 1
+ }
+}

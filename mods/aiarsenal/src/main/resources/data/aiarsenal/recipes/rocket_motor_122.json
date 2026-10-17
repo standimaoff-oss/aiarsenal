@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:steel_tube"
+    },
+    {
+      "item": "aiarsenal:steel_tube"
+    },
+    {
+      "item": "aiarsenal:propellant_grain"
+    },
+    {
+      "item": "aiarsenal:propellant_grain"
+    },
+    {
+      "item": "aiarsenal:propellant_grain"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:rocket_motor_122",
+    "count": 1
+  }
+}

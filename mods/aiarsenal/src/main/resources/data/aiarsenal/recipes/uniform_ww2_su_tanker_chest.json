@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YXW",
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:brown_wool"
+    },
+    "X": {
+      "item": "minecraft:black_dye"
+    },
+    "Y": {
+      "item": "minecraft:red_dye"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:uniform_ww2_su_tanker_chest"
+  }
+}

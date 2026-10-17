@@ -1,0 +1,34 @@
+{
+ "variants": {
+  "facing=north,spent=false": {
+   "model": "aiarsenal:block/r17_trap_flare"
+  },
+  "facing=north,spent=true": {
+   "model": "aiarsenal:block/r17_trap_flare_spent"
+  },
+  "facing=east,spent=false": {
+   "model": "aiarsenal:block/r17_trap_flare",
+   "y": 90
+  },
+  "facing=east,spent=true": {
+   "model": "aiarsenal:block/r17_trap_flare_spent",
+   "y": 90
+  },
+  "facing=south,spent=false": {
+   "model": "aiarsenal:block/r17_trap_flare",
+   "y": 180
+  },
+  "facing=south,spent=true": {
+   "model": "aiarsenal:block/r17_trap_flare_spent",
+   "y": 180
+  },
+  "facing=west,spent=false": {
+   "model": "aiarsenal:block/r17_trap_flare",
+   "y": 270
+  },
+  "facing=west,spent=true": {
+   "model": "aiarsenal:block/r17_trap_flare_spent",
+   "y": 270
+  }
+ }
+}

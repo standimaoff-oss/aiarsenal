@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SRS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:hatch_bunker",
+    "count": 1
+  }
+}

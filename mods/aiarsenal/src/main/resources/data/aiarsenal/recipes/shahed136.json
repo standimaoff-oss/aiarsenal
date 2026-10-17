@@ -1,0 +1,24 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  " I ",
+  "ITI",
+  "IPI"
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_ingot"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  },
+  "P": {
+   "item": "minecraft:piston"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:shahed136",
+  "count": 1
+ }
+}

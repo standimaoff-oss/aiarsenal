@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/armor_plate_vmf"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/armor_plate_vmf",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/armor_plate_vmf",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/armor_plate_vmf",
+      "y": 270
+    }
+  }
+}

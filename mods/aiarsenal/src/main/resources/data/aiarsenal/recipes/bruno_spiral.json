@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BNB",
+    "N N",
+    "BNB"
+  ],
+  "key": {
+    "B": {
+      "item": "aiarsenal:barbed_wire"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:bruno_spiral",
+    "count": 4
+  }
+}

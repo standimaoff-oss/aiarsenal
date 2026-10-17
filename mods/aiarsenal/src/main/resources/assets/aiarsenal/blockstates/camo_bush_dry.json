@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "aiarsenal:block/r16_bush_desert"
+      },
+      {
+        "model": "aiarsenal:block/r16_bush_desert",
+        "y": 90
+      },
+      {
+        "model": "aiarsenal:block/r16_bush_desert",
+        "y": 180
+      },
+      {
+        "model": "aiarsenal:block/r16_bush_desert",
+        "y": 270
+      }
+    ]
+  }
+}

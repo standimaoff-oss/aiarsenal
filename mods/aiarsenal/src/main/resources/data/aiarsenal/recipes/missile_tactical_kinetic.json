@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:missile_tactical_kinetic",
+    "count": 1
+  }
+}

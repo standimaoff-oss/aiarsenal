@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "aiarsenal:block/r17_trap_ied"
+  },
+  "facing=east": {
+   "model": "aiarsenal:block/r17_trap_ied",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "aiarsenal:block/r17_trap_ied",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "aiarsenal:block/r17_trap_ied",
+   "y": 270
+  }
+ }
+}

@@ -1,0 +1,4798 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "ox": "0",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "0",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "0",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "0",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "0",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "0",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "0",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "0",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "0",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "0",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "0",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "0",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c0_0_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "1",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "1",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "1",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "1",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "1",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "1",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "1",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "1",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "1",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "1",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "1",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "1",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_0_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "1",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_2_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "1",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_2_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "1",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_2_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "1",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_2_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "1",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_3_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "1",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_3_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "1",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_3_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "1",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c1_3_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_8"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_0_8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_8"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_1_8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_2_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "2",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "2",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "2",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "2",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c2_3_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_8"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_9"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_9",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_9",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_0_9",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_8"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_9"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_9",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_9",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_1_9",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_2_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "3",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "3",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "3",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "3",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "3",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "3",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "3",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "3",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "3",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "3",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "3",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "3",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c3_3_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_8"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_9"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_9",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_9",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "0",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_0_9",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_8"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "8"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_9"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_9",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_9",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "1",
+    "oz": "9"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_1_9",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_0"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "0"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_1"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "1"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_2"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "2"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_6"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_6",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_6",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "6"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_7"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "2",
+    "oz": "7"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_2_7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "3",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "3",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "4",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "4",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "4",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "4",
+    "oy": "3",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c4_3_5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "5",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_3"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "5",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "5",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "5",
+    "oy": "1",
+    "oz": "3"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "5",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_4"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "5",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "5",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "5",
+    "oy": "1",
+    "oz": "4"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "ox": "5",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_5"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "ox": "5",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_5",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "ox": "5",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_5",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "ox": "5",
+    "oy": "1",
+    "oz": "5"
+   },
+   "apply": {
+    "model": "aiarsenal:block/r17_heli_body_c5_1_5",
+    "y": 270
+   }
+  }
+ ]
+}

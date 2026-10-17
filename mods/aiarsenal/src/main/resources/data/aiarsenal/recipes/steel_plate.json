@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SS"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:steel_plate",
+    "count": 2
+  }
+}

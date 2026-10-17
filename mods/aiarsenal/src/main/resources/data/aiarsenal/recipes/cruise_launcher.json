@@ -1,0 +1,24 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  "III",
+  "PPP",
+  "SSS"
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_block"
+  },
+  "P": {
+   "item": "minecraft:piston"
+  },
+  "S": {
+   "item": "minecraft:smooth_stone"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:cruise_launcher",
+  "count": 1
+ }
+}

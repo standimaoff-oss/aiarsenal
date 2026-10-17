@@ -1,0 +1,24 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  "III",
+  "CDC",
+  "I I"
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_ingot"
+  },
+  "C": {
+   "item": "minecraft:copper_ingot"
+  },
+  "D": {
+   "item": "minecraft:observer"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:orion",
+  "count": 1
+ }
+}

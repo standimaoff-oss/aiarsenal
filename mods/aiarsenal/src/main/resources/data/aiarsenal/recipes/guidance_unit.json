@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RCR",
+    "GKG",
+    "RCR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "K": {
+      "item": "minecraft:clock"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:guidance_unit",
+    "count": 1
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_center_desert"
+      }
+    },
+    {
+      "when": {
+        "north": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_desert"
+      }
+    },
+    {
+      "when": {
+        "east": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_desert",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_desert",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "false"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_canopy_fringe_desert",
+        "y": 270
+      }
+    }
+  ]
+}

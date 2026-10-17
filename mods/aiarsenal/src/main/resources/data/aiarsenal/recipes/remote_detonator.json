@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "PCP",
+    "PBP"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:redstone_torch"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "B": {
+      "item": "minecraft:stone_button"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:remote_detonator",
+    "count": 1
+  }
+}

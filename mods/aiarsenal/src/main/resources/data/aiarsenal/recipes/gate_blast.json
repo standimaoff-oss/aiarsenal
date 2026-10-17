@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SYS",
+    "SOS",
+    "SYS"
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "Y": {
+      "item": "minecraft:yellow_dye"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:gate_blast",
+    "count": 1
+  }
+}

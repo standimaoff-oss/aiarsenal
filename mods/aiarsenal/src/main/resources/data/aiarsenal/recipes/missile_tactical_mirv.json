@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:missile_tactical_he"
+    },
+    {
+      "item": "aiarsenal:warhead_122"
+    },
+    {
+      "item": "aiarsenal:warhead_122"
+    },
+    {
+      "item": "aiarsenal:warhead_122"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:missile_tactical_mirv",
+    "count": 1
+  }
+}

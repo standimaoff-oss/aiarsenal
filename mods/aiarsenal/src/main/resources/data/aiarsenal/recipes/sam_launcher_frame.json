@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PHP",
+    "PSP",
+    "PSP"
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "H": {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    "S": {
+      "item": "aiarsenal:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:sam_launcher_frame",
+    "count": 1
+  }
+}

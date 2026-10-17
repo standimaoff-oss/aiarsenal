@@ -1,0 +1,26 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "BIB",
+  "PNP",
+  "BIB"
+ ],
+ "key": {
+  "B": {
+   "item": "minecraft:iron_block"
+  },
+  "I": {
+   "item": "minecraft:copper_block"
+  },
+  "P": {
+   "item": "minecraft:piston"
+  },
+  "N": {
+   "item": "minecraft:nether_star"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:tu95ms",
+  "count": 1
+ }
+}

@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "aiarsenal:block/r17_crate_weapons_body"
+  },
+  "facing=east": {
+   "model": "aiarsenal:block/r17_crate_weapons_body",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "aiarsenal:block/r17_crate_weapons_body",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "aiarsenal:block/r17_crate_weapons_body",
+   "y": 270
+  }
+ }
+}

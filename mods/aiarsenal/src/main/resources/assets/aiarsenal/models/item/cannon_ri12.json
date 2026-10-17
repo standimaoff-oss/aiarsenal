@@ -1,0 +1,7 @@
+{
+  "parent": "builtin/entity",
+  "textures": {
+    "layer0": "aiarsenal:item/cannon_ri12",
+    "particle": "aiarsenal:item/cannon_ri12"
+  }
+}

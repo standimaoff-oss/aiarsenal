@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TX",
+    "C ",
+    "S "
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "C": {
+      "item": "aiarsenal:cordite"
+    },
+    "S": {
+      "item": "aiarsenal:steel_ingot"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:shells_120",
+    "count": 4
+  }
+}

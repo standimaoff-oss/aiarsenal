@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aiarsenal:item/tos1a_vehicle"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "aiarsenal:camo_net"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:green_dye"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:camo_canopy_forest",
+    "count": 2
+  }
+}

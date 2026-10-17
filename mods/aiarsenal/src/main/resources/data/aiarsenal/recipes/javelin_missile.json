@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " S ",
+    " W ",
+    " M "
+  ],
+  "key": {
+    "S": {
+      "item": "aiarsenal:radar_seeker"
+    },
+    "W": {
+      "item": "aiarsenal:warhead_122"
+    },
+    "M": {
+      "item": "aiarsenal:rocket_motor_122"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:javelin_missile",
+    "count": 1
+  }
+}

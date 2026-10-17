@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "aiarsenal:block/r17_trap_spike_strip"
+  },
+  "facing=east": {
+   "model": "aiarsenal:block/r17_trap_spike_strip",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "aiarsenal:block/r17_trap_spike_strip",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "aiarsenal:block/r17_trap_spike_strip",
+   "y": 270
+  }
+ }
+}

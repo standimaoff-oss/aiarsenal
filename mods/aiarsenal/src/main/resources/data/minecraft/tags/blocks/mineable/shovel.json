@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "aiarsenal:scorched_earth",
+    "aiarsenal:sandbags",
+    "aiarsenal:trench_wall",
+    "aiarsenal:trench_wall_tin",
+    "aiarsenal:firing_step"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "aiarsenal:camo_net",
+    "aiarsenal:camo_screen_forest",
+    "aiarsenal:camo_canopy_forest",
+    "aiarsenal:camo_bush_forest",
+    "aiarsenal:camo_screen_desert",
+    "aiarsenal:camo_canopy_desert",
+    "aiarsenal:camo_bush_dry",
+    "aiarsenal:camo_screen_winter",
+    "aiarsenal:camo_canopy_winter",
+    "aiarsenal:camo_bush_snow"
+  ]
+}

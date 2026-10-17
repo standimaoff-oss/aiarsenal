@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "aiarsenal:nuclear_blast",
+    "aiarsenal:blast",
+    "aiarsenal:ordnance"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PIP",
+    "T T"
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:mark_i_vehicle",
+    "count": 1
+  }
+}

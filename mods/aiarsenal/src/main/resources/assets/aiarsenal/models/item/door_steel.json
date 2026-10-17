@@ -1,0 +1,142 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "forge:obj",
+  "model": "aiarsenal:models/block/door/door_steel_item.obj",
+  "flip_v": true,
+  "automatic_culling": false,
+  "mtl_override": "aiarsenal:models/block/door/door.mtl",
+  "textures": {
+    "concrete": "aiarsenal:block/fort_concrete",
+    "concrete_dark": "aiarsenal:block/fort_concrete_dark",
+    "steel": "aiarsenal:block/fort_steel",
+    "wire": "aiarsenal:block/fort_wire",
+    "wood": "aiarsenal:block/fort_wood",
+    "hazard": "aiarsenal:block/fort_hazard",
+    "rubber": "aiarsenal:block/field_rubber",
+    "brass": "aiarsenal:block/deco_brass",
+    "rope": "aiarsenal:block/deco_rope",
+    "black": "aiarsenal:block/deco_black",
+    "chrome": "aiarsenal:block/deco_chrome",
+    "glass": "aiarsenal:block/deco_glass",
+    "glass_red": "aiarsenal:block/deco_glass_red",
+    "glass_orange": "aiarsenal:block/deco_glass_orange",
+    "led": "aiarsenal:block/deco_led",
+    "steel_olive": "aiarsenal:block/door_steel_olive",
+    "steel_grey": "aiarsenal:block/door_steel_grey",
+    "lab_white": "aiarsenal:block/door_lab_white",
+    "paint_red": "aiarsenal:block/door_paint_red",
+    "dark_steel": "aiarsenal:block/door_dark_steel",
+    "wood_green": "aiarsenal:block/door_wood_green",
+    "mesh": "aiarsenal:block/gate_mesh",
+    "star": "aiarsenal:block/gate_star",
+    "boom": "aiarsenal:block/gate_boom",
+    "net": "aiarsenal:block/camo_net_forest",
+    "leaf": "aiarsenal:block/camo_leaf_forest",
+    "particle": "aiarsenal:block/door_steel_olive"
+  },
+  "render_type": "minecraft:cutout",
+  "display": {
+    "gui": {
+      "rotation": [
+        15,
+        210,
+        0
+      ],
+      "translation": [
+        -1.66,
+        -3.12,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0.0,
+        1.8,
+        0
+      ],
+      "scale": [
+        0.15,
+        0.15,
+        0.15
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0.0,
+        -3.2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0.88,
+        1.261,
+        0
+      ],
+      "scale": [
+        0.1875,
+        0.1875,
+        0.1875
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0.939,
+        -1.6,
+        0
+      ],
+      "scale": [
+        0.2,
+        0.2,
+        0.2
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        -0.939,
+        -1.6,
+        0
+      ],
+      "scale": [
+        0.2,
+        0.2,
+        0.2
+      ]
+    }
+  }
+}

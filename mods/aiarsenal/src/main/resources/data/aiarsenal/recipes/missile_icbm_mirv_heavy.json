@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:missile_icbm_mirv"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:missile_icbm_mirv_heavy",
+    "count": 1
+  }
+}

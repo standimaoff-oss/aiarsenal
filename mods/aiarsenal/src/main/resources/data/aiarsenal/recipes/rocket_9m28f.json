@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:tnt"
+    },
+    "F": {
+      "item": "minecraft:tnt"
+    },
+    "G": {
+      "item": "minecraft:gunpowder"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " C ",
+    "IFI",
+    "IGI"
+  ],
+  "result": {
+    "count": 3,
+    "item": "aiarsenal:rocket_9m28f"
+  },
+  "show_notification": true
+}

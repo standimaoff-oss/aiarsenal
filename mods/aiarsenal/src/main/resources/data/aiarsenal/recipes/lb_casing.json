@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "P P",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:lb_casing",
+    "count": 1
+  }
+}

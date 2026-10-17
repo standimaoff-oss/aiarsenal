@@ -1,0 +1,1 @@
+Alpha.13 F2 captures. Source b523f90. Build passed; regression failed due to inherited ambiguous Gewehr/Kar98k recipe.

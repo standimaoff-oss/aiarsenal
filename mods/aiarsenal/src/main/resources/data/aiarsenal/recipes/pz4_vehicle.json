@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_tube"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:pz4_vehicle",
+    "count": 1
+  }
+}

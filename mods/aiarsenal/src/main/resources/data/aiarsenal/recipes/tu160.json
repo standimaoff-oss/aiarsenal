@@ -1,0 +1,26 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "BIB",
+  "FNF",
+  "BIB"
+ ],
+ "key": {
+  "B": {
+   "item": "minecraft:iron_block"
+  },
+  "I": {
+   "item": "minecraft:diamond_block"
+  },
+  "F": {
+   "item": "minecraft:blast_furnace"
+  },
+  "N": {
+   "item": "minecraft:nether_star"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:tu160",
+  "count": 1
+ }
+}

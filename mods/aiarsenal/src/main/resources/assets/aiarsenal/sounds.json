@@ -1,0 +1,831 @@
+{
+  "engine": {
+    "sounds": [
+      "aiarsenal:engine"
+    ],
+    "subtitle": "subtitles.aiarsenal.engine"
+  },
+  "explosion_far": {
+    "sounds": [
+      {
+        "name": "aiarsenal:explosion_far",
+        "attenuation_distance": 400
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.explosion_far"
+  },
+  "explosion_near": {
+    "sounds": [
+      {
+        "name": "aiarsenal:explosion_near",
+        "attenuation_distance": 200
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.explosion_near"
+  },
+  "hydraulics": {
+    "sounds": [
+      {
+        "name": "aiarsenal:hydraulics",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.hydraulics"
+  },
+  "incoming": {
+    "sounds": [
+      {
+        "attenuation_distance": 64,
+        "name": "aiarsenal:incoming"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.incoming"
+  },
+  "launch": {
+    "sounds": [
+      {
+        "attenuation_distance": 64,
+        "name": "aiarsenal:launch"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.launch"
+  },
+  "reload": {
+    "sounds": [
+      "aiarsenal:reload"
+    ],
+    "subtitle": "subtitles.aiarsenal.reload"
+  },
+  "rocket_flight": {
+    "sounds": [
+      {
+        "attenuation_distance": 64,
+        "name": "aiarsenal:rocket_flight"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rocket_flight"
+  },
+  "submunition": {
+    "sounds": [
+      "aiarsenal:submunition"
+    ],
+    "subtitle": "subtitles.aiarsenal.submunition"
+  },
+  "tu95_engine": {
+    "sounds": [
+      {
+        "name": "aiarsenal:tu95_engine",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.tu95_engine"
+  },
+  "tu160_engine": {
+    "sounds": [
+      {
+        "name": "aiarsenal:tu160_engine",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.tu160_engine"
+  },
+  "afterburner": {
+    "sounds": [
+      {
+        "name": "aiarsenal:afterburner",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.afterburner"
+  },
+  "tu95_cabin": {
+    "sounds": [
+      {
+        "name": "aiarsenal:tu95_cabin",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.tu95_cabin"
+  },
+  "tu160_cabin": {
+    "sounds": [
+      {
+        "name": "aiarsenal:tu160_cabin",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.tu160_cabin"
+  },
+  "wind": {
+    "sounds": [
+      {
+        "name": "aiarsenal:wind",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.wind"
+  },
+  "gear": {
+    "sounds": [
+      {
+        "name": "aiarsenal:gear",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.gear"
+  },
+  "bay_doors": {
+    "sounds": [
+      {
+        "name": "aiarsenal:bay_doors",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.bay_doors"
+  },
+  "bomb_release": {
+    "sounds": [
+      {
+        "name": "aiarsenal:bomb_release",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.bomb_release"
+  },
+  "bomb_whistle": {
+    "sounds": [
+      {
+        "name": "aiarsenal:bomb_whistle",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.bomb_whistle"
+  },
+  "warning": {
+    "sounds": [
+      {
+        "name": "aiarsenal:warning",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.warning"
+  },
+  "shahed_engine": {
+    "subtitle": "subtitles.aiarsenal.shahed_engine",
+    "sounds": [
+      {
+        "name": "aiarsenal:shahed_engine",
+        "stream": false
+      }
+    ]
+  },
+  "jet_loop": {
+    "subtitle": "subtitles.aiarsenal.jet_loop",
+    "sounds": [
+      {
+        "name": "aiarsenal:jet_loop",
+        "stream": false
+      }
+    ]
+  },
+  "turboprop_loop": {
+    "subtitle": "subtitles.aiarsenal.turboprop_loop",
+    "sounds": [
+      {
+        "name": "aiarsenal:turboprop_loop",
+        "stream": false
+      }
+    ]
+  },
+  "fpv_motor": {
+    "subtitle": "subtitles.aiarsenal.fpv_motor",
+    "sounds": [
+      {
+        "name": "aiarsenal:fpv_motor",
+        "stream": false
+      }
+    ]
+  },
+  "booster": {
+    "subtitle": "subtitles.aiarsenal.booster",
+    "sounds": [
+      {
+        "name": "aiarsenal:booster",
+        "stream": false
+      }
+    ]
+  },
+  "launch_rail": {
+    "subtitle": "subtitles.aiarsenal.launch_rail",
+    "sounds": [
+      {
+        "name": "aiarsenal:launch_rail",
+        "stream": false
+      }
+    ]
+  },
+  "launch_cold": {
+    "subtitle": "subtitles.aiarsenal.launch_cold",
+    "sounds": [
+      {
+        "name": "aiarsenal:launch_cold",
+        "stream": false
+      }
+    ]
+  },
+  "nuke_blast": {
+    "subtitle": "subtitles.aiarsenal.nuke_blast",
+    "sounds": [
+      {
+        "name": "aiarsenal:nuke_blast",
+        "stream": true
+      }
+    ]
+  },
+  "nuke_far": {
+    "subtitle": "subtitles.aiarsenal.nuke_far",
+    "sounds": [
+      {
+        "name": "aiarsenal:nuke_far",
+        "stream": true
+      }
+    ]
+  },
+  "geiger": {
+    "subtitle": "subtitles.aiarsenal.geiger",
+    "sounds": [
+      {
+        "name": "aiarsenal:geiger",
+        "stream": false
+      }
+    ]
+  },
+  "tablet_beep": {
+    "subtitle": "subtitles.aiarsenal.tablet_beep",
+    "sounds": [
+      {
+        "name": "aiarsenal:tablet_beep",
+        "stream": false
+      }
+    ]
+  },
+  "detonator": {
+    "subtitle": "subtitles.aiarsenal.detonator",
+    "sounds": [
+      {
+        "name": "aiarsenal:detonator",
+        "stream": false
+      }
+    ]
+  },
+  "fpv_static": {
+    "subtitle": "subtitles.aiarsenal.fpv_static",
+    "sounds": [
+      {
+        "name": "aiarsenal:fpv_static",
+        "stream": false
+      }
+    ]
+  },
+  "siren": {
+    "subtitle": "subtitles.aiarsenal.siren",
+    "sounds": [
+      {
+        "name": "aiarsenal:siren",
+        "stream": true
+      }
+    ]
+  },
+  "rw_nuke_blast": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rw_nuke_blast",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.rw_nuke_blast"
+  },
+  "nuke_rumble": {
+    "sounds": [
+      {
+        "name": "aiarsenal:nuke_rumble",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.nuke_rumble"
+  },
+  "rw_nuke_far": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rw_nuke_far",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.rw_nuke_far"
+  },
+  "blast_large": {
+    "sounds": [
+      {
+        "name": "aiarsenal:blast_large",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.blast_large"
+  },
+  "blast_medium": {
+    "sounds": [
+      {
+        "name": "aiarsenal:blast_medium"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.blast_medium"
+  },
+  "blast_small": {
+    "sounds": [
+      {
+        "name": "aiarsenal:blast_small"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.blast_small"
+  },
+  "geiger_click": {
+    "sounds": [
+      {
+        "name": "aiarsenal:geiger_click"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.geiger_click"
+  },
+  "arm_beep": {
+    "sounds": [
+      {
+        "name": "aiarsenal:arm_beep"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.arm_beep"
+  },
+  "rw_bomb_whistle": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rw_bomb_whistle"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.rw_bomb_whistle"
+  },
+  "shock_crack": {
+    "sounds": [
+      {
+        "name": "aiarsenal:shock_crack"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.shock_crack"
+  },
+  "rocket_launch_small": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rocket_launch_small"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.rocket_launch_small"
+  },
+  "rocket_launch_large": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rocket_launch_large"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.rocket_launch_large"
+  },
+  "sam_launch": {
+    "sounds": [
+      {
+        "name": "aiarsenal:sam_launch"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.sam_launch"
+  },
+  "rocket_whoosh": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rocket_whoosh"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.rocket_whoosh"
+  },
+  "flak_burst": {
+    "sounds": [
+      {
+        "name": "aiarsenal:flak_burst"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.flak_burst"
+  },
+  "engine_idle": {
+    "sounds": [
+      {
+        "name": "aiarsenal:engine_idle"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.engine_idle"
+  },
+  "engine_start": {
+    "sounds": [
+      {
+        "name": "aiarsenal:engine_start"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.engine_start"
+  },
+  "reload_clank": {
+    "sounds": [
+      {
+        "name": "aiarsenal:reload_clank"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.reload_clank"
+  },
+  "hydraulic": {
+    "sounds": [
+      {
+        "name": "aiarsenal:hydraulic"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.hydraulic"
+  },
+  "lock_tone": {
+    "sounds": [
+      {
+        "name": "aiarsenal:lock_tone"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.lock_tone"
+  },
+  "lock_done": {
+    "sounds": [
+      {
+        "name": "aiarsenal:lock_done"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.lock_done"
+  },
+  "siren_wail": {
+    "sounds": [
+      {
+        "name": "aiarsenal:siren_wail"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.siren_wail"
+  },
+  "cannon_tank": {
+    "sounds": [
+      {
+        "name": "aiarsenal:cannon_tank"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.cannon_tank"
+  },
+  "cannon_howitzer": {
+    "sounds": [
+      {
+        "name": "aiarsenal:cannon_howitzer"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.cannon_howitzer"
+  },
+  "shell_whistle": {
+    "sounds": [
+      {
+        "name": "aiarsenal:shell_whistle"
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rw.shell_whistle"
+  },
+  "rotor": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rotor",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rotor"
+  },
+  "rotor_turbine": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rotor_turbine",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rotor_turbine"
+  },
+  "boat_engine": {
+    "sounds": [
+      {
+        "name": "aiarsenal:boat_engine",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.boat_engine"
+  },
+  "craft_cannon": {
+    "sounds": [
+      {
+        "name": "aiarsenal:craft_cannon",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.craft_cannon"
+  },
+  "craft_mg": {
+    "sounds": [
+      {
+        "name": "aiarsenal:craft_mg",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.craft_mg"
+  },
+  "torpedo_launch": {
+    "sounds": [
+      {
+        "name": "aiarsenal:torpedo_launch",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.torpedo_launch"
+  },
+  "flare_pop": {
+    "sounds": [
+      {
+        "name": "aiarsenal:flare_pop",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.flare_pop"
+  },
+  "sonar_ping": {
+    "sounds": [
+      {
+        "name": "aiarsenal:sonar_ping",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.sonar_ping"
+  },
+  "missile_warn": {
+    "sounds": [
+      {
+        "name": "aiarsenal:missile_warn",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.missile_warn"
+  },
+  "prop_piston": {
+    "sounds": [
+      {
+        "name": "aiarsenal:prop_piston",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.prop_piston"
+  },
+  "air_rush": {
+    "sounds": [
+      {
+        "name": "aiarsenal:air_rush",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.air_rush"
+  },
+  "rifle_ak": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rifle_ak",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rifle_ak"
+  },
+  "rifle_m4": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rifle_m4",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rifle_m4"
+  },
+  "mag_out": {
+    "sounds": [
+      {
+        "name": "aiarsenal:mag_out",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.mag_out"
+  },
+  "mag_in": {
+    "sounds": [
+      {
+        "name": "aiarsenal:mag_in",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.mag_in"
+  },
+  "bolt_rack": {
+    "sounds": [
+      {
+        "name": "aiarsenal:bolt_rack",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.bolt_rack"
+  },
+  "dry_fire": {
+    "sounds": [
+      {
+        "name": "aiarsenal:dry_fire",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.dry_fire"
+  },
+  "selector": {
+    "sounds": [
+      {
+        "name": "aiarsenal:selector",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.selector"
+  },
+  "rifle_t5000": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rifle_t5000",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rifle_t5000"
+  },
+  "mg_pkp": {
+    "sounds": [
+      {
+        "name": "aiarsenal:mg_pkp",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.mg_pkp"
+  },
+  "bolt_cycle": {
+    "sounds": [
+      {
+        "name": "aiarsenal:bolt_cycle",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.bolt_cycle"
+  },
+  "shotgun_saiga": {
+    "sounds": [
+      {
+        "name": "aiarsenal:shotgun_saiga",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.shotgun_saiga"
+  },
+  "shotgun_870": {
+    "sounds": [
+      {
+        "name": "aiarsenal:shotgun_870",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.shotgun_870"
+  },
+  "pump_action": {
+    "sounds": [
+      {
+        "name": "aiarsenal:pump_action",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.pump_action"
+  },
+  "shell_in": {
+    "sounds": [
+      {
+        "name": "aiarsenal:shell_in",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.shell_in"
+  },
+  "smg_ppsh": {
+    "sounds": [
+      {
+        "name": "aiarsenal:smg_ppsh",
+        "volume": 0.18,
+        "attenuation_distance": 64,
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.smg_ppsh"
+  },
+  "smg_mp40": {
+    "sounds": [
+      {
+        "name": "aiarsenal:smg_mp40",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.smg_mp40"
+  },
+  "rifle_mosin": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rifle_mosin",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rifle_mosin"
+  },
+  "rifle_k98": {
+    "sounds": [
+      {
+        "name": "aiarsenal:rifle_k98",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.rifle_k98"
+  },
+  "clip_in": {
+    "sounds": [
+      {
+        "name": "aiarsenal:clip_in",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.clip_in"
+  },
+  "pistol_c96": {
+    "sounds": [
+      {
+        "name": "aiarsenal:pistol_c96",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.pistol_c96"
+  },
+  "pistol_tt33": {
+    "sounds": [
+      {
+        "name": "aiarsenal:pistol_tt33",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.aiarsenal.pistol_tt33"
+  },
+  "musket_fire": {
+    "subtitle": "subtitles.aiarsenal.musket_fire",
+    "sounds": [
+      {
+        "name": "aiarsenal:musket_fire"
+      }
+    ]
+  },
+  "flintlock_fire": {
+    "subtitle": "subtitles.aiarsenal.flintlock_fire",
+    "sounds": [
+      {
+        "name": "aiarsenal:flintlock_fire"
+      }
+    ]
+  },
+  "powder_cannon": {
+    "subtitle": "subtitles.aiarsenal.powder_cannon",
+    "sounds": [
+      {
+        "name": "aiarsenal:powder_cannon"
+      }
+    ]
+  },
+  "paper_load": {
+    "sounds": [
+      {
+        "name": "aiarsenal:paper_load"
+      }
+    ]
+  },
+  "ramrod": {
+    "sounds": [
+      {
+        "name": "aiarsenal:ramrod"
+      }
+    ]
+  }
+}

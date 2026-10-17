@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YXY",
+    "W W"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:gray_wool"
+    },
+    "X": {
+      "item": "minecraft:black_dye"
+    },
+    "Y": {
+      "item": "minecraft:white_dye"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:uniform_ww2_de_tanker_feet"
+  }
+}

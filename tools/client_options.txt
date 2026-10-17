@@ -1,0 +1,14 @@
+tutorialStep:none
+onboardAccessibility:false
+skipMultiplayerWarning:true
+joinedFirstServer:true
+renderDistance:8
+simulationDistance:6
+maxFps:30
+guiScale:2
+fov:0.15
+graphicsMode:1
+renderClouds:"false"
+pauseOnLostFocus:false
+narrator:0
+soundCategory_master:0.0

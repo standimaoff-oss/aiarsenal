@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "covered=false": {
+   "model": "aiarsenal:block/r17_trap_punji_open"
+  },
+  "covered=true": {
+   "model": "aiarsenal:block/r17_trap_punji_covered"
+  }
+ }
+}

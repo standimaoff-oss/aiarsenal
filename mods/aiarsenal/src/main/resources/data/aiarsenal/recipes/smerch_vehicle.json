@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:chassis_8x8"
+    },
+    {
+      "item": "aiarsenal:armored_cab"
+    },
+    {
+      "item": "aiarsenal:armored_cab"
+    },
+    {
+      "item": "aiarsenal:launcher_package_300"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:smerch_vehicle",
+    "count": 1
+  }
+}

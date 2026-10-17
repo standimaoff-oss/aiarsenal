@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:steel_block"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:steel_ingot",
+    "count": 9
+  }
+}
