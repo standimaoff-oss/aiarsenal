@@ -24,3 +24,9 @@ never started: "The job was not started because recent account payments have fai
 Local environment has no Java/Minecraft runtime and cannot access Maven/Forge/Mojang dependency hosts.
 No new JAR or authentic gameplay screenshots were produced. Do not substitute the old alpha.12 release or offline
 renders as evidence of this candidate. Historical fidelity and first-person framing still need in-game review.
+
+## Public runner — follow-up
+Repository is now public. Run 39050246486 built alpha.13 successfully and passed the regression-test step
+(which requires the Minecraft server's `required tests passed` marker). Gameplay capture is a separate following step.
+The former account-billing block no longer prevents this run. Alpha.14 equipment sources have additional dedicated
+GameTests and offline item-resource checks; their runtime result must be recorded independently of alpha.13.
