@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "MGM",
+    "MBM"
+  ],
+  "key": {
+    "W": {
+      "item": "aiarsenal:warhead_300"
+    },
+    "M": {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    "G": {
+      "item": "aiarsenal:guidance_unit"
+    },
+    "B": {
+      "item": "aiarsenal:steel_block"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:missile_operational_he",
+    "count": 1
+  }
+}

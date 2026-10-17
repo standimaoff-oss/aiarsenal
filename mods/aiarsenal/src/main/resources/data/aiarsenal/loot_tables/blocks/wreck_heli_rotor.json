@@ -1,0 +1,29 @@
+{
+ "type": "minecraft:block",
+ "pools": [
+  {
+   "rolls": 1.0,
+   "bonus_rolls": 0.0,
+   "conditions": [
+    {
+     "condition": "minecraft:survives_explosion"
+    },
+    {
+     "condition": "minecraft:block_state_property",
+     "block": "aiarsenal:wreck_heli_rotor",
+     "properties": {
+      "ox": "0",
+      "oy": "0",
+      "oz": "0"
+     }
+    }
+   ],
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "aiarsenal:wreck_heli_rotor"
+    }
+   ]
+  }
+ ]
+}

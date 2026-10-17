@@ -1,0 +1,7 @@
+{
+  "parent": "builtin/entity",
+  "textures": {
+    "layer0": "aiarsenal:item/sabre_1809",
+    "particle": "aiarsenal:item/sabre_1809"
+  }
+}

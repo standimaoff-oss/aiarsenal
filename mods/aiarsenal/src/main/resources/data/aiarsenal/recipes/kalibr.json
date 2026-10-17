@@ -1,0 +1,30 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  "IFI",
+  "ITI",
+  "GBG"
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_ingot"
+  },
+  "F": {
+   "item": "minecraft:firework_rocket"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  },
+  "G": {
+   "item": "minecraft:gunpowder"
+  },
+  "B": {
+   "item": "minecraft:blaze_rod"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:kalibr",
+  "count": 1
+ }
+}

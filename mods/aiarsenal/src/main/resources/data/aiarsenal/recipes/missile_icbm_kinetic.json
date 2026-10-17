@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:missile_operational_kinetic"
+    },
+    {
+      "item": "aiarsenal:missile_operational_kinetic"
+    },
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:missile_icbm_kinetic",
+    "count": 1
+  }
+}

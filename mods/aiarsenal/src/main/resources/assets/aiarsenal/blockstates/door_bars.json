@@ -1,0 +1,58 @@
+{
+  "variants": {
+    "facing=north,half=lower,hinge=left": {
+      "model": "aiarsenal:block/r16_bars_frame"
+    },
+    "facing=north,half=upper,hinge=left": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=north,half=lower,hinge=right": {
+      "model": "aiarsenal:block/r16_bars_frame_r"
+    },
+    "facing=north,half=upper,hinge=right": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=east,half=lower,hinge=left": {
+      "model": "aiarsenal:block/r16_bars_frame",
+      "y": 90
+    },
+    "facing=east,half=upper,hinge=left": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=east,half=lower,hinge=right": {
+      "model": "aiarsenal:block/r16_bars_frame_r",
+      "y": 90
+    },
+    "facing=east,half=upper,hinge=right": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=south,half=lower,hinge=left": {
+      "model": "aiarsenal:block/r16_bars_frame",
+      "y": 180
+    },
+    "facing=south,half=upper,hinge=left": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=south,half=lower,hinge=right": {
+      "model": "aiarsenal:block/r16_bars_frame_r",
+      "y": 180
+    },
+    "facing=south,half=upper,hinge=right": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=west,half=lower,hinge=left": {
+      "model": "aiarsenal:block/r16_bars_frame",
+      "y": 270
+    },
+    "facing=west,half=upper,hinge=left": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    },
+    "facing=west,half=lower,hinge=right": {
+      "model": "aiarsenal:block/r16_bars_frame_r",
+      "y": 270
+    },
+    "facing=west,half=upper,hinge=right": {
+      "model": "aiarsenal:block/r16_empty_bars"
+    }
+  }
+}

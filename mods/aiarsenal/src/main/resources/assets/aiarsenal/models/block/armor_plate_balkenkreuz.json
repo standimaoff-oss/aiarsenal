@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "aiarsenal:block/deco_armor_balkenkreuz",
+    "side": "aiarsenal:block/deco_armor_side",
+    "top": "aiarsenal:block/deco_armor"
+  }
+}

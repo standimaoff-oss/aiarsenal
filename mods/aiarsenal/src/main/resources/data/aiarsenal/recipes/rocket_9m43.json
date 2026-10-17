@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:gunpowder"
+    },
+    "F": {
+      "item": "minecraft:bone_meal"
+    },
+    "G": {
+      "item": "minecraft:gunpowder"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " C ",
+    "IFI",
+    "IGI"
+  ],
+  "result": {
+    "count": 4,
+    "item": "aiarsenal:rocket_9m43"
+  },
+  "show_notification": true
+}

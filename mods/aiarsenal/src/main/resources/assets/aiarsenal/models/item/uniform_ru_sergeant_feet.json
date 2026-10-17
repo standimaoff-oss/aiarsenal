@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aiarsenal:item/uniform_ru_sergeant_feet"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:steel_tube"
+    },
+    {
+      "item": "aiarsenal:steel_tube"
+    },
+    {
+      "item": "aiarsenal:steel_ingot"
+    },
+    {
+      "item": "aiarsenal:steel_ingot"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:gun_barrels_23",
+    "count": 1
+  }
+}

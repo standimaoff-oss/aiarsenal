@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "level=2": {
+      "model": "aiarsenal:block/s3_particle"
+    },
+    "level=3": {
+      "model": "aiarsenal:block/s3_particle"
+    }
+  }
+}

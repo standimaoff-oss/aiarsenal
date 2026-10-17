@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NNN",
+    "CCC",
+    "PPP"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "C": {
+      "item": "aiarsenal:cordite"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:flak_ammo_box",
+    "count": 1
+  }
+}

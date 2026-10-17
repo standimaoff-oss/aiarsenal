@@ -1,0 +1,47 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "ox": "0",
+        "oy": "0"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_gate_boom_static"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "ox": "0",
+        "oy": "0"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_gate_boom_static",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "ox": "0",
+        "oy": "0"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_gate_boom_static",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "ox": "0",
+        "oy": "0"
+      },
+      "apply": {
+        "model": "aiarsenal:block/r16_gate_boom_static",
+        "y": 270
+      }
+    }
+  ]
+}

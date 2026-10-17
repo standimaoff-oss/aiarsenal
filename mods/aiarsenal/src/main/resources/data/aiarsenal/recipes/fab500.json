@@ -1,0 +1,20 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "ITI",
+  "ITI",
+  " I "
+ ],
+ "key": {
+  "I": {
+   "item": "minecraft:iron_ingot"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:fab500",
+  "count": 1
+ }
+}

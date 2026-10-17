@@ -1,0 +1,24 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "building",
+ "pattern": [
+  "R",
+  "T",
+  "S"
+ ],
+ "key": {
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  },
+  "S": {
+   "item": "aiarsenal:shells_152"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:trap_ied",
+  "count": 1
+ }
+}

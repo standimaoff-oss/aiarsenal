@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "TTP",
+    "DI "
+  ],
+  "key": {
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "D": {
+      "item": "minecraft:black_dye"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:m4a1",
+    "count": 1
+  }
+}

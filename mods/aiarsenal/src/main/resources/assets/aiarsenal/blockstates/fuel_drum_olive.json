@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,lying=false": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_up"
+    },
+    "facing=north,lying=true": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_side"
+    },
+    "facing=east,lying=false": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_up",
+      "y": 90
+    },
+    "facing=east,lying=true": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_side",
+      "y": 90
+    },
+    "facing=south,lying=false": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_up",
+      "y": 180
+    },
+    "facing=south,lying=true": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_side",
+      "y": 180
+    },
+    "facing=west,lying=false": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_up",
+      "y": 270
+    },
+    "facing=west,lying=true": {
+      "model": "aiarsenal:block/field_fuel_drum_olive_drum_side",
+      "y": 270
+    }
+  }
+}

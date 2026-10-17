@@ -1,0 +1,22 @@
+{
+ "type": "minecraft:crafting_shapeless",
+ "category": "misc",
+ "ingredients": [
+  {
+   "item": "aiarsenal:bandage"
+  },
+  {
+   "item": "aiarsenal:bandage"
+  },
+  {
+   "item": "minecraft:golden_carrot"
+  },
+  {
+   "item": "minecraft:red_dye"
+  }
+ ],
+ "result": {
+  "item": "aiarsenal:first_aid_kit",
+  "count": 1
+ }
+}

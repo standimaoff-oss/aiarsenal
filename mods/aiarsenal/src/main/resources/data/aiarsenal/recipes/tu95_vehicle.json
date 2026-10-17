@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "EUE",
+    "BHB"
+  ],
+  "key": {
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "E": {
+      "item": "aiarsenal:diesel_engine"
+    },
+    "U": {
+      "item": "aiarsenal:guidance_unit"
+    },
+    "B": {
+      "item": "aiarsenal:steel_block"
+    },
+    "H": {
+      "item": "aiarsenal:hydraulic_drive"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:tu95_vehicle",
+    "count": 1
+  }
+}

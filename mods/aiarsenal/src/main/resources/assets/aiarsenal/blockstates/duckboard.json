@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/field_duckboard"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/field_duckboard",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/field_duckboard",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/field_duckboard",
+      "y": 270
+    }
+  }
+}

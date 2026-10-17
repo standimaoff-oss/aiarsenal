@@ -1,0 +1,60 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "aiarsenal:block/deco_flagpole_pole"
+      }
+    },
+    {
+      "when": {
+        "top": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flagpole_finial"
+      }
+    },
+    {
+      "when": {
+        "bottom": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flagpole_base"
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flag_fittings"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flag_fittings",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flag_fittings",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flag_fittings",
+        "y": 270
+      }
+    }
+  ]
+}

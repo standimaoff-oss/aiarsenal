@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "aiarsenal:camo_net"
+    },
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "minecraft:white_dye"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:camo_screen_winter",
+    "count": 2
+  }
+}

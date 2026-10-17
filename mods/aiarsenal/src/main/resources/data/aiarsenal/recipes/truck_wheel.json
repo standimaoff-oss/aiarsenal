@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FFF",
+    "FPF",
+    "FFF"
+  ],
+  "key": {
+    "F": {
+      "item": "aiarsenal:rubberized_fabric"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:truck_wheel",
+    "count": 1
+  }
+}

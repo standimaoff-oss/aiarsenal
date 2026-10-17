@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T",
+    "C",
+    "S"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "C": {
+      "item": "aiarsenal:cordite"
+    },
+    "S": {
+      "item": "aiarsenal:steel_block"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:rocket_380",
+    "count": 1
+  }
+}

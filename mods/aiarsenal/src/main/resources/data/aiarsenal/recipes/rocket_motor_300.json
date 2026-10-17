@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TGT",
+    "GGG",
+    "TPT"
+  ],
+  "key": {
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "G": {
+      "item": "aiarsenal:propellant_grain"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:rocket_motor_300",
+    "count": 1
+  }
+}

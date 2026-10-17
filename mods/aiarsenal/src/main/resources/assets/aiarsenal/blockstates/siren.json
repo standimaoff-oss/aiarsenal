@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "aiarsenal:block/s3_particle"
+    },
+    "half=upper": {
+      "model": "aiarsenal:block/s3_particle"
+    }
+  }
+}

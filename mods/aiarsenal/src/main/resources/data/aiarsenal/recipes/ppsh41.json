@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PTT",
+    "WI "
+  ],
+  "key": {
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:ppsh41",
+    "count": 1
+  }
+}

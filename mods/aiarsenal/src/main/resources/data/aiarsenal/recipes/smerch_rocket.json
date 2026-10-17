@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    {
+      "item": "aiarsenal:warhead_300"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:smerch_rocket",
+    "count": 1
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:chassis_8x8"
+    },
+    {
+      "item": "aiarsenal:armored_cab"
+    },
+    {
+      "item": "aiarsenal:sam_launcher_frame"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:radar_seeker"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:s400_vehicle",
+    "count": 1
+  }
+}

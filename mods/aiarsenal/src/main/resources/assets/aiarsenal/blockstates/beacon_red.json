@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_beacon_red_off"
+    },
+    "lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_beacon_red_off"
+    },
+    "lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_beacon_red"
+    },
+    "lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_beacon_red"
+    }
+  }
+}

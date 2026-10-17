@@ -1,0 +1,91 @@
+name: Capture World War I in-game previews
+on:
+  push:
+    branches:
+      - arena/19004024-aiarsenal
+permissions:
+  contents: write
+concurrency:
+  group: preview-wwi-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  preview:
+    if: contains(github.event.head_commit.message, '[preview]')
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    env:
+      DISPLAY: ':99'
+      LIBGL_ALWAYS_SOFTWARE: '1'
+      GALLIUM_DRIVER: llvmpipe
+      QA_PREFIX: public-preview
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            mods/aiarsenal/**/*.gradle*
+            mods/aiarsenal/gradle/wrapper/gradle-wrapper.properties
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install software display and image validation
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb xdotool x11-utils pulseaudio libegl1 libgl1 libgl1-mesa-dri libopenal1 libxi6 libxrender1 libxxf86vm1 libxfixes3 libxkbcommon0 libsm6 libflite1
+          python -m pip install pillow
+          Xvfb :99 -screen 0 1400x1000x24 -nolisten tcp > "$RUNNER_TEMP/xvfb.log" 2>&1 &
+          python - <<'PY'
+          import subprocess,time
+          end=time.monotonic()+30
+          while subprocess.run(['xdpyinfo','-display',':99'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+              if time.monotonic()>end: raise RuntimeError('Xvfb did not become ready')
+              time.sleep(.2)
+          PY
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=qa rate=48000
+          pactl set-default-sink qa
+          pactl set-default-source qa.monitor
+      - name: Restore compressed baseline models
+        run: python tools/restore_models.py
+      - name: Build distributable
+        working-directory: mods/aiarsenal
+        run: ./gradlew build --no-daemon
+      - name: Capture real Minecraft F2 images
+        env:
+          MC_RUNS: ${{ runner.temp }}/mc-runs
+        run: python tools/wwi/preview_game.py
+      - name: Publish only the curated preview images
+        run: |
+          mkdir -p previews
+          cp verification/shots/public-preview-mark-i-exterior.png previews/mark-i.png
+          cp verification/shots/public-preview-gewehr98-first-person.png previews/gewehr98.png
+          rm -f previews/gewehr98-aim.png
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          for path in sorted(Path('previews').glob('*.png')):
+              with Image.open(path) as image:
+                  image.verify()
+              print(f'{path}: {path.stat().st_size} bytes')
+          PY
+      - name: Publish verified build and screenshots
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
+          sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
+          gh release create "v${version}" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "WWI rebuild ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23 / Java 17. Actual Minecraft F2 preview images. Alpha: back up worlds. Build and capture succeeded; not a claim that all gameplay regression tests passed." --prerelease
+      - name: Upload preview images only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wwi-gameplay-previews-${{ github.run_number }}
+          path: |
+            verification/shots/public-preview-*.png
+            previews/*.png
+          if-no-files-found: warn
+          retention-days: 30

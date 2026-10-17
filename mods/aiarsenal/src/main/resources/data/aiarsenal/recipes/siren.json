@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "PTP",
+    "PSP"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bell"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "T": {
+      "item": "aiarsenal:steel_tube"
+    },
+    "S": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:siren",
+    "count": 1
+  }
+}

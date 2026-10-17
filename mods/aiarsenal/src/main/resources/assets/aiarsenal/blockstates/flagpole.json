@@ -1,0 +1,25 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "aiarsenal:block/deco_flagpole_pole"
+      }
+    },
+    {
+      "when": {
+        "top": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flagpole_finial"
+      }
+    },
+    {
+      "when": {
+        "bottom": "true"
+      },
+      "apply": {
+        "model": "aiarsenal:block/deco_flagpole_base"
+      }
+    }
+  ]
+}

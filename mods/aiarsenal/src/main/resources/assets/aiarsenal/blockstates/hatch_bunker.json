@@ -1,0 +1,38 @@
+{
+  "variants": {
+    "facing=north,half=bottom": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "y": 180
+    },
+    "facing=north,half=top": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "y": 180,
+      "x": 180
+    },
+    "facing=east,half=bottom": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "y": 270
+    },
+    "facing=east,half=top": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "y": 270,
+      "x": 180
+    },
+    "facing=south,half=bottom": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame"
+    },
+    "facing=south,half=top": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "x": 180
+    },
+    "facing=west,half=bottom": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "y": 90
+    },
+    "facing=west,half=top": {
+      "model": "aiarsenal:block/r16_hatch_bunker_frame",
+      "y": 90,
+      "x": 180
+    }
+  }
+}

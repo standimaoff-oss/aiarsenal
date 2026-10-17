@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "F",
+    "T",
+    "P"
+  ],
+  "key": {
+    "F": {
+      "item": "aiarsenal:contact_fuze"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "P": {
+      "item": "minecraft:stone_pressure_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:mine_pmn2",
+    "count": 2
+  }
+}

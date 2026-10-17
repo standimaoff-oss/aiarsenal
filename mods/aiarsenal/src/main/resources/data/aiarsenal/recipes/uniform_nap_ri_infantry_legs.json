@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WYW",
+    "WXW",
+    "W W"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:green_wool"
+    },
+    "X": {
+      "item": "minecraft:iron_nugget"
+    },
+    "Y": {
+      "item": "minecraft:green_dye"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:uniform_nap_ri_infantry_legs"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "forge:obj",
+  "model": "aiarsenal:models/block/fort/concertina_side.obj",
+  "flip_v": true,
+  "automatic_culling": false,
+  "shade_quads": true,
+  "emissive_ambient": true,
+  "mtl_override": "aiarsenal:models/block/fort/fort.mtl",
+  "textures": {
+    "sandbag": "aiarsenal:block/fort_sandbag",
+    "sandbag_olive": "aiarsenal:block/fort_sandbag_olive",
+    "concrete": "aiarsenal:block/fort_concrete",
+    "concrete_dark": "aiarsenal:block/fort_concrete_dark",
+    "steel": "aiarsenal:block/fort_steel",
+    "wire": "aiarsenal:block/fort_wire",
+    "wood": "aiarsenal:block/fort_wood",
+    "camo_net": "aiarsenal:block/fort_camo_net",
+    "hazard": "aiarsenal:block/fort_hazard",
+    "particle": "aiarsenal:block/fort_wire"
+  },
+  "render_type": "minecraft:cutout"
+}

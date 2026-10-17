@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "WWW",
+    "BBB",
+    "IBI"
+  ],
+  "key": {
+    "W": {
+      "item": "aiarsenal:barbed_wire"
+    },
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:gate_sliding",
+    "count": 1
+  }
+}

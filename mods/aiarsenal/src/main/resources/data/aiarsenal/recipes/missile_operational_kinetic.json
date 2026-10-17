@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB",
+    "MGM",
+    "MPM"
+  ],
+  "key": {
+    "B": {
+      "item": "aiarsenal:steel_block"
+    },
+    "M": {
+      "item": "aiarsenal:rocket_motor_300"
+    },
+    "G": {
+      "item": "aiarsenal:guidance_unit"
+    },
+    "P": {
+      "item": "aiarsenal:steel_plate"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:missile_operational_kinetic",
+    "count": 1
+  }
+}

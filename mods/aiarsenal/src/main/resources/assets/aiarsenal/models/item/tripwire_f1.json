@@ -1,0 +1,134 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "forge:obj",
+  "model": "aiarsenal:models/block/field/tripwire_f1.obj",
+  "flip_v": true,
+  "automatic_culling": false,
+  "mtl_override": "aiarsenal:models/block/field/field.mtl",
+  "textures": {
+    "sandbag": "aiarsenal:block/fort_sandbag",
+    "sandbag_olive": "aiarsenal:block/fort_sandbag_olive",
+    "concrete": "aiarsenal:block/fort_concrete",
+    "concrete_dark": "aiarsenal:block/fort_concrete_dark",
+    "steel": "aiarsenal:block/fort_steel",
+    "wire": "aiarsenal:block/fort_wire",
+    "wood": "aiarsenal:block/fort_wood",
+    "camo_net": "aiarsenal:block/fort_camo_net",
+    "hazard": "aiarsenal:block/fort_hazard",
+    "plank": "aiarsenal:block/field_plank",
+    "tin": "aiarsenal:block/field_tin",
+    "earth": "aiarsenal:block/field_earth",
+    "drum": "aiarsenal:block/field_drum",
+    "drum_top": "aiarsenal:block/field_drum_top",
+    "olive": "aiarsenal:block/field_olive",
+    "rubber": "aiarsenal:block/field_rubber",
+    "rust": "aiarsenal:block/field_rust",
+    "mon50": "aiarsenal:block/field_mon50",
+    "sign": "aiarsenal:block/field_sign",
+    "particle": "aiarsenal:block/field_olive"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  }
+}

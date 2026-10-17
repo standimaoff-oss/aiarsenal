@@ -1,0 +1,27 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  "NBN",
+  "TET",
+  "BTB"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:netherite_ingot"
+  },
+  "B": {
+   "item": "minecraft:blaze_rod"
+  },
+  "T": {
+   "item": "minecraft:tnt"
+  },
+  "E": {
+   "item": "minecraft:end_crystal"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:yars",
+  "count": 1
+ }
+}

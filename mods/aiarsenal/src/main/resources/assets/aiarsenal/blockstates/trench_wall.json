@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/field_trench_wall"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/field_trench_wall",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/field_trench_wall",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/field_trench_wall",
+      "y": 270
+    }
+  }
+}

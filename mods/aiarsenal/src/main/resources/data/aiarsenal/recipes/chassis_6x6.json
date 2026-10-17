@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WSW",
+    "WDW",
+    "WHW"
+  ],
+  "key": {
+    "W": {
+      "item": "aiarsenal:truck_wheel"
+    },
+    "S": {
+      "item": "aiarsenal:steel_plate"
+    },
+    "D": {
+      "item": "aiarsenal:diesel_engine"
+    },
+    "H": {
+      "item": "aiarsenal:hydraulic_drive"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:chassis_6x6",
+    "count": 1
+  }
+}

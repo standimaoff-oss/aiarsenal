@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aiarsenal:item/paper_cartridge",
+    "particle": "aiarsenal:item/paper_cartridge"
+  }
+}

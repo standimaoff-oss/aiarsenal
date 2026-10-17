@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "aiarsenal:diesel_engine"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_block"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:steel_plate"
+    },
+    {
+      "item": "aiarsenal:hydraulic_drive"
+    },
+    {
+      "item": "aiarsenal:guidance_unit"
+    },
+    {
+      "item": "aiarsenal:radar_seeker"
+    }
+  ],
+  "result": {
+    "item": "aiarsenal:sub636_vehicle",
+    "count": 1
+  }
+}

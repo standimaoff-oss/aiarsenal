@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "aiarsenal:block/armor_plate_star_red"
+    },
+    "facing=east": {
+      "model": "aiarsenal:block/armor_plate_star_red",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "aiarsenal:block/armor_plate_star_red",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aiarsenal:block/armor_plate_star_red",
+      "y": 270
+    }
+  }
+}

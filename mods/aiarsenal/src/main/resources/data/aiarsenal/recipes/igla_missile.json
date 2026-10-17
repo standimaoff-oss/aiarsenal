@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " F ",
+    " W ",
+    " M "
+  ],
+  "key": {
+    "F": {
+      "item": "aiarsenal:proximity_fuze"
+    },
+    "W": {
+      "item": "aiarsenal:warhead_122"
+    },
+    "M": {
+      "item": "aiarsenal:rocket_motor_122"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:igla_missile",
+    "count": 2
+  }
+}

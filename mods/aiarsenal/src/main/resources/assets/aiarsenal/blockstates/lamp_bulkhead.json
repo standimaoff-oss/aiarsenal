@@ -1,0 +1,108 @@
+{
+  "variants": {
+    "facing=down,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 180
+    },
+    "facing=down,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 180
+    },
+    "facing=down,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 180
+    },
+    "facing=down,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 180
+    },
+    "facing=up,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off"
+    },
+    "facing=up,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off"
+    },
+    "facing=up,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead"
+    },
+    "facing=up,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead"
+    },
+    "facing=north,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90
+    },
+    "facing=north,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90
+    },
+    "facing=north,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90
+    },
+    "facing=north,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90
+    },
+    "facing=south,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,lit=false,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=false,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead_off",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=true,powered=false": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=true,powered=true": {
+      "model": "aiarsenal:block/deco_lamp_bulkhead",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

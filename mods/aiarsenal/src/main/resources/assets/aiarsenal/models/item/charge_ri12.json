@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aiarsenal:item/charge_ri12",
+    "particle": "aiarsenal:item/charge_ri12"
+  }
+}

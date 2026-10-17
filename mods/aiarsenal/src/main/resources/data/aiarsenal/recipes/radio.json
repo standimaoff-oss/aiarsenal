@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "SCS",
+    "SRS"
+  ],
+  "key": {
+    "A": {"item": "minecraft:lightning_rod"},
+    "S": {"item": "aiarsenal:steel_plate"},
+    "C": {"item": "minecraft:comparator"},
+    "R": {"item": "minecraft:redstone_block"}
+  },
+  "result": {"item": "aiarsenal:radio", "count": 1}
+}

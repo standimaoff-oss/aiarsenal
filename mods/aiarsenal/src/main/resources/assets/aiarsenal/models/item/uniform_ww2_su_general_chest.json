@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aiarsenal:item/uniform_ww2_su_general_chest"
+  }
+}

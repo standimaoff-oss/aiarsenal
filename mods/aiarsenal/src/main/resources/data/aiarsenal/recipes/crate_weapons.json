@@ -1,0 +1,23 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "building",
+ "pattern": [
+  "SNS",
+  "SLS"
+ ],
+ "key": {
+  "S": {
+   "item": "aiarsenal:steel_plate"
+  },
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "L": {
+   "item": "minecraft:lime_dye"
+  }
+ },
+ "result": {
+  "item": "aiarsenal:crate_weapons",
+  "count": 1
+ }
+}
