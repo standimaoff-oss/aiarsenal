@@ -406,6 +406,7 @@ public final class GunClient {
                 .append(Component.translatable(rpgOptic ? "hud.aiarsenal.gun.pgo" : "hud.aiarsenal.gun.irons").getString());
         else if (k.singleLoad()) b.append(k.fixedMagnification()).append("×");
         else if (k.scope()) b.append(zoom()).append("\u00d7");
+        else if (k.boltAction()) b.append(Component.translatable("hud.aiarsenal.gun.bolt").getString());
         else b.append(Component.translatable(auto ? "hud.aiarsenal.gun.auto" : "hud.aiarsenal.gun.semi").getString());
         b.append("  \u00b7  +").append(spare);
         int col = 0xFFE8E8E8;

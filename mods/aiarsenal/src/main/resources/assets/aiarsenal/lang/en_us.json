@@ -2075,5 +2075,6 @@
   "hud.aiarsenal.gun.name.pistol_cartridge": "Paper pistol cartridge",
   "hud.aiarsenal.gun.name.charge_fr6": "6-pounder charge and roundshot",
   "hud.aiarsenal.gun.name.charge_ri12": "12-pounder charge and roundshot",
-  "hud.aiarsenal.gun.name.cannonball": "Iron roundshot"
+  "hud.aiarsenal.gun.name.cannonball": "Iron roundshot",
+  "hud.aiarsenal.gun.bolt": "BOLT ACTION"
 }

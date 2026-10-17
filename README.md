@@ -2,7 +2,7 @@
 
 Forge content mod for Minecraft 1.20.1. Adds vehicles, firearms, artillery, aircraft and equipment from several historical periods.
 
-**Version:** `1.0.1-alpha.12` · **Minecraft:** `1.20.1` · **Forge:** `47.4.23` · **Java:** `17`
+**Version:** `1.0.1-alpha.13` (unbuilt candidate) · **Minecraft:** `1.20.1` · **Forge:** `47.4.23` · **Java:** `17`
 
 ## WWI rebuild (work in progress)
 

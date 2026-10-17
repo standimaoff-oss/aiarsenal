@@ -135,7 +135,7 @@ def stock_mesh(wood: int, wood_dark: int, steel: int, dark: int) -> Mesh:
     m = Mesh()
     m.loft(wood, STOCK, 0.22)
     # Butt plate (tilted back) with the Felddiskus disc.
-    m.oriented_box(wood_dark, (0.0, 0.010, BUTT_Z - 0.004), (0.0, 0.0, 0.0), (0.0, 0.048, 0.0), (0.0, 0.0, 0.010))
+    m.oriented_box(wood_dark, (0.0, 0.010, BUTT_Z - 0.004), (0.0355, 0.0, 0.0), (0.0, 0.048, 0.0), (0.0, 0.0, 0.010))
     m.cylinder(dark, (-0.0, 0.012, BUTT_Z - 0.010), (-0.0, 0.012, BUTT_Z - 0.014), 0.026, 14, dark, 0.2)
     # Finger grooves in the forestock.
     for i in range(6):
@@ -157,7 +157,7 @@ def stock_mesh(wood: int, wood_dark: int, steel: int, dark: int) -> Mesh:
     m.cylinder(dark, (0.0, 0.004, 0.120), (0.0, 0.004, 0.660), 0.0035, 6, dark, 0.12)
     m.cylinder(dark, (0.0, 0.004, 0.660), (0.0, 0.004, 0.680), 0.0055, 6, dark, 0.12)
     # Trigger, trigger guard and the magazine floor plate.
-    m.oriented_box(steel, (0.0, -0.0180, -0.010), (0.0, 0.0, 0.0), (0.0, 0.0140, 0.0), (0.0, 0.0, 0.0045))
+    m.oriented_box(steel, (0.0, -0.0180, -0.010), (0.003, 0.0, 0.0), (0.0, 0.0140, 0.0), (0.0, 0.0, 0.0045))
     m.box(steel, (-0.0210, -0.0430, -0.012), (0.0210, -0.0350, 0.020), 0.12)
     m.box(dark, (-0.0210, -0.0400, -0.010), (-0.0165, -0.0270, 0.018), 0.12)
     m.box(dark, (0.0165, -0.0400, -0.010), (0.0210, -0.0270, 0.018), 0.12)
@@ -274,12 +274,12 @@ def main() -> None:
     up = axis_quaternion((1, 0, 0), -.42)
     down = axis_quaternion((1, 0, 0), 0)
     b.add_animation("gewehr98_reload", [
-        (bolt, "translation", [0, .24, .42, 1.75, 2.08, 2.50],
+        (bolt, "translation", [0, .24, .42, 1.75, 2.08, 2.30],
          [0, .0290, .0620, 0, .0290, -0.0430, 0, .0290, -0.0430, 0, .0290, -0.0430, 0, .0290, .0620, 0, .0290, .0620]),
-        (bolt, "rotation", [0, .24, .42, 1.75, 2.08, 2.50], [*down, *up, *up, *up, *down, *down]),
-        (clip, "translation", [0, .24, .55, 1.72, 2.05, 2.50],
+        (bolt, "rotation", [0, .24, .42, 1.75, 2.08, 2.30], [*down, *up, *up, *up, *down, *down]),
+        (clip, "translation", [0, .24, .55, 1.72, 2.05, 2.30],
          [0, .1180, .0650, 0, .1450, .0650, 0, .0780, .0650, 0, .0780, .0650, 0, .1180, .0650, 0, .1180, .0650]),
-        (clip, "rotation", [0, .24, .55, 1.72, 2.05, 2.50], [*down, *up, *down, *down, *up, *down]),
+        (clip, "rotation", [0, .24, .55, 1.72, 2.05, 2.30], [*down, *up, *down, *down, *up, *down]),
     ])
 
     path = MODEL_DIR / "gewehr98.glb"

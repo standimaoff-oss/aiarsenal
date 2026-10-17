@@ -2075,5 +2075,6 @@
   "hud.aiarsenal.gun.name.pistol_cartridge": "Бумажный пистолетный патрон",
   "hud.aiarsenal.gun.name.charge_fr6": "6-фунтовый заряд с ядром",
   "hud.aiarsenal.gun.name.charge_ri12": "12-фунтовый заряд с ядром",
-  "hud.aiarsenal.gun.name.cannonball": "Чугунное ядро"
+  "hud.aiarsenal.gun.name.cannonball": "Чугунное ядро",
+  "hud.aiarsenal.gun.bolt": "РУЧНОЙ ЗАТВОР"
 }
