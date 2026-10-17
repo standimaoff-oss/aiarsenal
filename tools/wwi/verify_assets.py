@@ -457,7 +457,7 @@ def main() -> int:
               "Gewehr 98 model length is outside the historical rifle scale")
         check(deck["boxes"] > 0 and deck["resolution"] <= 0.2001, "Mark I deck collision is missing or too coarse")
         xbounds, ybounds, zbounds = deck["bounds"]
-        check(4.8 < xbounds[1] - xbounds[0] < 5.2 and 6.9 < zbounds[1] - zbounds[0] < 7.5,
+        check(3.5 < xbounds[1] - xbounds[0] < 4.0 and 6.9 < zbounds[1] - zbounds[0] < 7.5,
               "Mark I collision footprint disagrees with the tank dimensions")
         check(0.0 <= ybounds[0] < 0.05 and 2.1 < ybounds[1] < 2.5,
               "Mark I collision height disagrees with the GLB shell")

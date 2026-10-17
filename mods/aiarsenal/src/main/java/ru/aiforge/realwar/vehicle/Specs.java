@@ -189,7 +189,7 @@ public final class Specs {
     }
 
     // ---- WWI vertical slice. Male sponsons carry two separate QF 6-pdr mounts; there is no turret.
-    public static final VehicleSpec MARK_I = new VehicleSpec("mark_i", 4.95f, 2.50f, 7.20f, 2.35f, new float[0][],
+    public static final VehicleSpec MARK_I = new VehicleSpec("mark_i", 3.90f, 2.50f, 7.20f, 2.35f, new float[0][],
             new float[][]{{0.0f, 1.55f, 1.45f}, {0.0f, 1.42f, 0.15f}}, new String[]{"driver", "gunner"},
             new float[][]{{0.0f, 1.275f, 0.0f, 1.15f, 0.845f, 2.30f},
                     {0.0f, 1.62f, -1.72f, 0.62f, 0.28f, 0.44f},

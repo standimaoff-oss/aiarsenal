@@ -118,7 +118,7 @@ public final class GunRenderer {
             if (!rel && since < .25f) pose.rotate(k.id + ".cock", -.7f * (1 - since / .25f), 1, 0, 0);
         }
         if (k == GunKind.C96 || k == GunKind.GEWEHR98) pose.hide(k.id + ".clip", !rel);
-        if (k == GunKind.GEWEHR98) pose.hide(k.id + ".round", FirearmItem.ammo(st) == 0);
+        if (k == GunKind.GEWEHR98) pose.hide(k.id + ".round", true);
         if (k.singleLoad()) pose.hide(k.id + ".round", !rel);
         boolean flash = since < (k.launcher() ? 0.09f : 0.045f);
         pose.hide(k.id + ".flash", !flash);
@@ -300,7 +300,7 @@ public final class GunRenderer {
             pose.hide(id + ".ramrod", true);
             pose.hide(id + ".charge", true);
             if (id.equals("c96")) pose.hide(id + ".clip", true);
-            if (id.equals("gewehr98") && stack.getItem() instanceof FirearmItem f) pose.hide(id + ".round", FirearmItem.ammo(stack) == 0);
+            if (id.equals("gewehr98")) pose.hide(id + ".round", true);
             if (id.equals("mosin_pu") || id.equals("k98k_zf39")) pose.hide(id + ".round", true);
             if (stack.getItem() instanceof FirearmItem && FirearmItem.ammo(stack) == 0 && ctx != ItemDisplayContext.GUI) pose.hide(id + ".round", true);
             pose.compute();

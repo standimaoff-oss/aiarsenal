@@ -242,9 +242,9 @@ public final class WWITests {
     public static void mark_i_tracks_sponsons_and_breeches_are_real_hit_zones(GameTestHelper h) {
         VehicleDamage.Geo g = VehicleDamage.geo(VehicleKind.MARK_I, true, true);
         float[] aim = {0.0f, 0.0f};
-        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, 2.34, 0.13, -2.45, aim)
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, 1.50, 0.13, -2.45, aim)
                 == ru.aiforge.realwar.damage.DamageState.TRACK_L, "+X is the left external track");
-        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -2.34, 0.13, -2.45, aim)
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -1.50, 0.13, -2.45, aim)
                 == ru.aiforge.realwar.damage.DamageState.TRACK_R, "-X is the right external track");
         h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -1.41, 1.22, 0.95, aim)
                 == ru.aiforge.realwar.damage.DamageState.BARREL, "right QF 6-pdr breech/barrel zone");

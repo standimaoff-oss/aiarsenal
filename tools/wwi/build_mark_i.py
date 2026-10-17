@@ -41,14 +41,12 @@ def atlas() -> bytes:
     """British khaki enamel with deterministic, subtle brushed grain and weathering specks."""
     w = h = 128
     rng = random.Random(1916)
-    palette = ((92, 100, 65), (102, 107, 72), (112, 108, 72), (80, 89, 61), (119, 112, 78))
     pixels = []
     for y in range(h):
         for x in range(w):
-            stripe = 3 * math.sin(x * 0.18 + math.sin(y * 0.07)) + 2 * math.sin(y * 0.14)
-            base = palette[(x // 19 + y // 23) % len(palette)]
-            grain = rng.randrange(-5, 6) + int(stripe)
-            pixels.append(tuple(max(0, min(255, c + grain)) for c in base) + (255,))
+            # Restrained khaki enamel: no large checkerboard patches on armour panels.
+            grain = rng.randrange(-4, 5) + int(2*math.sin(x*.11+y*.04))
+            pixels.append(tuple(max(0,min(255,c+grain)) for c in (126,123,84))+(255,))
     return png_rgba(w, h, pixels)
 
 
@@ -264,7 +262,7 @@ def build(path: Path, lod=False) -> tuple[int,float]:
         poses=[]
         for i in range(TRACK_LINKS):
             y,z,rx=loop_point(i*pitch)
-            poses.append((side*2.34,y,z,rx))
+            poses.append((side*1.50,y,z,rx))
         for i,(x,y,z,rx) in enumerate(poses):
             shoe=Mesh()
             shoe.oriented_box(track,(0,0,0),(0.25,0,0),(0,TRACK_HALF_THICKNESS,0),(0,0,pitch*0.46))
@@ -289,18 +287,18 @@ def build(path: Path, lod=False) -> tuple[int,float]:
         frame = Mesh()
         profile = [(0.26,-2.40),(0.87,-3.12),(2.13,-3.12),
                    (2.13,3.12),(0.87,3.12),(0.26,2.40)]
-        frame.prism(paint, profile, "x", side*2.17, side*2.24, 2.0)
+        frame.prism(paint, profile, "x", side*1.25, side*1.31, 2.0)
         children.append(b.add_node("track_frame_"+name, b.add_mesh("track_frame_"+name,frame)))
 
     # Six road wheels plus the driven rear sprocket and front idler, animated by the existing tracked-vehicle pose.
     for side,name in ((1,"L"),(-1,"R")):
         for i in range(6):
             z=-1.78+i*0.70
-            children.append(b.add_node(f"rw_{name}_{i}",wheel_i,(side*2.08,ROAD_WHEEL_CENTER_Y,z)))
+            children.append(b.add_node(f"rw_{name}_{i}",wheel_i,(side*1.38,ROAD_WHEEL_CENTER_Y,z)))
         for i,z in enumerate((-2.0,0.0,2.0)):
-            children.append(b.add_node(f"rr_{name}_{i}",return_roller_i,(side*2.08,RETURN_ROLLER_CENTER_Y,z)))
-        children.append(b.add_node("spk_"+name,sprocket_i,(side*2.08,1.20,-3.20)))
-        children.append(b.add_node("idl_"+name,sprocket_i,(side*2.08,1.20,3.20)))
+            children.append(b.add_node(f"rr_{name}_{i}",return_roller_i,(side*1.38,RETURN_ROLLER_CENTER_Y,z)))
+        children.append(b.add_node("spk_"+name,sprocket_i,(side*1.38,1.20,-3.20)))
+        children.append(b.add_node("idl_"+name,sprocket_i,(side*1.38,1.20,3.20)))
     # Independent side-sponson pivots are fixed outward by +/-90 deg; the runtime counter-rotates both to the aimed line.
     yaw_right=b.add_node("launcher_yaw",translation=(-1.41,1.22,0.0),rotation=axis_quaternion((0,1,0),-math.pi/2))
     pitch_right=b.add_node("launcher_pitch")

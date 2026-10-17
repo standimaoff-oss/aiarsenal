@@ -34,7 +34,7 @@ public final class VehicleDamage {
     public static final int CAROUSEL = 0, BUSTLE = 1, SPONSON = 2, PACK = 3;
     private static final double[][] MARK_I_TRACK_PATH = {{0.13, -2.45}, {0.82, -3.28}, {2.28, -3.28},
             {2.28, 3.28}, {0.82, 3.28}, {0.13, 2.45}}; // (height, forward) from tools/wwi/build_mark_i.py
-    private static final double MARK_I_TRACK_X = 2.34;
+    private static final double MARK_I_TRACK_X = 1.50;
 
     private VehicleDamage() {
     }

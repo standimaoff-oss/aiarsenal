@@ -100,7 +100,7 @@ public final class PenetrationTests {
                 Armour.Ammo.of(Ballistics.Profile.QF6_AP), v0(Ballistics.Profile.QF6_AP), 0.99);
         h.assertTrue(r.zone() == Armour.HULL_S && r.result() == Armour.PEN && r.nominal() == 8f,
                 "57 mm QF 6-pdr AP through the 8 mm sponson: " + s(r));
-        Vector3d track = new Vector3d(2.34, 0.13, -2.45);
+        Vector3d track = new Vector3d(1.50, 0.13, -2.45);
         r = Armour.solve(g, VehicleKind.MARK_I, false, ZERO, track, new Vector3d(-1, 0, 0),
                 Armour.Ammo.of(Ballistics.Profile.QF6_AP), v0(Ballistics.Profile.QF6_AP), 0.99);
         h.assertTrue(r.zone() == Armour.TRACK && r.result() == Armour.MODULE && r.module() == DamageState.TRACK_L

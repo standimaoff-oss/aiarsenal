@@ -172,7 +172,7 @@ public class GunVehicle extends LauncherVehicle {
                     1.395f, 0.375f, 0.33f, 0.28f, 0.115f, 6, 3, TOS_PITCH, 30.0f, 0.6f, 0.5f, () -> ModItems.ROCKET_220.get(), null, false, false);
             // WWI Mark I Male: two independently loaded QF 6-pdr sponsons; a single trigger fires every loaded mount.
             case MARK_I -> new Cfg(Ballistics.Profile.QF6_HE, Ballistics.Profile.QF6_AP, false, 0.14f,
-                    2.34f, 0.305f, 0.385f, 0.385f, 0.115f, 6, 3, 0.29533399f, 45.0f, 0.45f, 0.35f,
+                    1.50f, 0.305f, 0.385f, 0.385f, 0.115f, 6, 3, 0.29533399f, 45.0f, 0.45f, 0.35f,
                     () -> ModItems.SHELLS_57.get(), null, false, false);
             default -> throw new IllegalArgumentException("not a gun vehicle: " + k);
         };
