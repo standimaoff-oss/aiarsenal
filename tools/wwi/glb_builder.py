@@ -9,9 +9,8 @@ r27 (WWI rebuild) additions:
     128 px atlas keeps a constant texel density on every plate, wheel and barrel;
   * several textures per file with a per-material ``baseColorTexture`` index (the runtime binds one draw call per
     texture and looks the image up through the material);
-  * ``prism`` (extruded convex profile), ``slab`` (plate with thickness), ``band`` (swept belt) and ``lathe``
-    helpers that let a vehicle be described in real dimensions instead of a pile of boxes;
-  * ``belt_path`` computes the tangent-and-arc track outline of a pulley set the way a real track wraps it.
+  * ``prism`` (extruded convex profile), ``slab`` and ``loft`` helpers for shaped geometry;
+  * validation of child indices and automatic 32-bit indices for large mesh groups.
 """
 from __future__ import annotations
 
@@ -234,141 +233,6 @@ class Mesh:
             j = (i + 1) % 4
             self.face(material, ((a, b, c, d)[i], back[i], back[j], (a, b, c, d)[j]), tile)
 
-    def band(self, material: int, path, width: float, thickness: float, tile: float = 1.0,
-             closed: bool = True) -> None:
-        """Sweep a rectangular section along a closed 2-D path in the (y, z) plane.
-
-        ``path`` is a list of (y, z, tangent_angle) samples where the angle is measured from +z towards +y;
-        the path is the line the belt rides on (the pulley contact) and the section reaches ``thickness``
-        metres outwards from it.
-        """
-        count = len(path)
-        last = count if closed else count - 1
-        for i in range(last):
-            y0, z0, a0 = path[i]
-            y1, z1, a1 = path[(i + 1) % count]
-            ny0, nz0 = -math.cos(a0), math.sin(a0)
-            ny1, nz1 = -math.cos(a1), math.sin(a1)
-            outer0 = (y0 + ny0 * thickness, z0 + nz0 * thickness)
-            outer1 = (y1 + ny1 * thickness, z1 + nz1 * thickness)
-            x0, x1 = -width * 0.5, width * 0.5
-            # outer surface (the side that faces the ground / the world)
-            self.face(material, ((x0, outer0[0], outer0[1]), (x1, outer0[0], outer0[1]),
-                                 (x1, outer1[0], outer1[1]), (x0, outer1[0], outer1[1])), tile)
-            # inner surface (the side that rides on the pulleys)
-            self.face(material, ((x1, y0, z0), (x0, y0, z0), (x0, y1, z1), (x1, y1, z1)), tile)
-            # side walls
-            self.face(material, ((x0, y0, z0), (x1, y0, z0),
-                                 (x1, outer0[0], outer0[1]), (x0, outer0[0], outer0[1])), tile)
-            self.face(material, ((x1, y1, z1), (x0, y1, z1),
-                                 (x0, outer1[0], outer1[1]), (x1, outer1[0], outer1[1])), tile)
-
-
-def belt_path(pulleys, samples_per_arc: int = 8):
-    """Outline of a track belt wrapped around a set of pulleys.
-
-    ``pulleys`` is a list of (y, z, radius) circles. The belt is the convex hull of those circles, so the straight
-    runs stay tangent to the hull and only the extreme pulleys are wrapped - exactly how a track lies on its road
-    wheels, idler and sprocket. All angles are measured in the (z, y) plane: 0 rad points forward (+z), pi/2 points up.
-    Returns a list of (y, z, tangent_angle) samples plus the total belt length in metres.
-    """
-    circles = [(float(y), float(z), float(r)) for y, z, r in pulleys]
-    n = len(circles)
-    # Convex hull of the centres in (z, y) space, counter-clockwise (monotone chain).
-    pts = sorted(((c[1], c[0]) for c in circles))
-    hull = []
-    for p in pts:
-        while len(hull) >= 2:
-            a, b = hull[-2], hull[-1]
-            if (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]) <= 0:
-                hull.pop()
-            else:
-                break
-        hull.append(p)
-    lower = hull[:]
-    upper = []
-    for p in reversed(pts):
-        while len(upper) >= 2:
-            a, b = upper[-2], upper[-1]
-            if (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]) <= 0:
-                upper.pop()
-            else:
-                break
-        upper.append(p)
-    ring = lower[:-1] + upper[:-1]
-    idx = []
-    for hz, hy in ring:
-        best = min(range(n), key=lambda i: (circles[i][0] - hy) ** 2 + (circles[i][1] - hz) ** 2)
-        idx.append(best)
-    clean = []
-    for i in idx:
-        if not clean or clean[-1] != i:
-            clean.append(i)
-    if len(clean) > 1 and clean[0] == clean[-1]:
-        clean.pop()
-    if len(clean) < 2:
-        raise ValueError("belt needs at least two pulleys")
-
-    def normal_angle(a, b):
-        """Outward normal of the common outer tangent between two circles (angle in the (z, y) plane)."""
-        ay, az, ar = circles[a]
-        by, bz, br = circles[b]
-        dz, dy = bz - az, by - ay
-        dist = math.hypot(dz, dy)
-        if dist < 1e-6:
-            raise ValueError("coincident pulleys")
-        alpha = math.atan2(dy, dz)
-        beta = math.acos(max(-1.0, min(1.0, (ar - br) / dist)))
-        return alpha - beta
-
-    def point(angle, circle):
-        cy, cz, r = circles[circle]
-        # angle measured from +z towards +y: the outward normal is (cos a) in z and (sin a) in y
-        return (cy + r * math.sin(angle), cz + r * math.cos(angle))
-
-    path = []
-    total = 0.0
-    m = len(clean)
-    for i in range(m):
-        a = clean[i]
-        b = clean[(i + 1) % m]
-        c = clean[(i + 2) % m]
-        na = normal_angle(a, b)
-        nb = normal_angle(b, c)
-        p0 = point(na, a)
-        p1 = point(na, b)
-        if path:
-            total += math.hypot(p0[0] - path[-1][0], p0[1] - path[-1][1])
-        total += math.hypot(p1[0] - p0[0], p1[1] - p0[1])
-        # tangent direction: the normal turned by +90 deg (counter-clockwise travel)
-        path.append((p0[0], p0[1], na + math.pi / 2))
-        # arc around b from the incoming normal to the outgoing one
-        delta = (nb - na) % math.tau
-        steps = max(1, int(round(delta / (math.tau / (samples_per_arc * 6)))))
-        for s in range(1, steps + 1):
-            ang = na + delta * s / steps
-            y, z = point(ang, b)
-            path.append((y, z, ang + math.pi / 2))
-        total += delta * circles[b][2]
-    return path, total
-
-
-def path_point(path, lengths, s):
-    """Position and tangent angle at arclength ``s`` along a sampled closed path."""
-    total = lengths[-1]
-    s = s % total
-    lo, hi = 0, len(lengths) - 1
-    while lo + 1 < hi:
-        mid = (lo + hi) // 2
-        if lengths[mid] <= s:
-            lo = mid
-        else:
-            hi = mid
-    seg = lengths[lo + 1] - lengths[lo]
-    u = 0.0 if seg <= 1e-9 else (s - lengths[lo]) / seg
-    y0, z0, a0 = path[lo]
-    y1, z1, a1 = path[(lo + 1) % len(path)]
-    return (y0 + (y1 - y0) * u, z0 + (z1 - z0) * u, a0 + (a1 - a0) * u)
 
 
 class GlbBuilder:
@@ -412,7 +276,7 @@ class GlbBuilder:
             pos = self._accessor(group["p"], "VEC3", 5126, 34962, bounds=True)
             nor = self._accessor(group["n"], "VEC3", 5126, 34962)
             uv = self._accessor(group["uv"], "VEC2", 5126, 34962)
-            idx = self._accessor(group["i"], "SCALAR", 5123, 34963)
+            idx = self._accessor(group["i"], "SCALAR", 5123 if len(group["i"]) <= 65536 else 5125, 34963)
             primitives.append({"attributes": {"POSITION": pos, "NORMAL": nor, "TEXCOORD_0": uv},
                                "indices": idx, "material": material, "mode": 4})
         if not primitives:
@@ -478,6 +342,10 @@ class GlbBuilder:
     def save(self, path: Path, scene_roots: list[int]) -> None:
         if not self.materials or not self.images:
             raise ValueError("GLB needs textured materials")
+        for node in self.nodes:
+            for child in node.get("children", []):
+                if not isinstance(child, int) or not 0 <= child < len(self.nodes):
+                    raise ValueError(f"Invalid child index in {node['name']}: {child!r}")
         self._align(4)
         doc = {"asset":{"version":"2.0","generator":"aiarsenal WWI procedural source: " + self.title},
                "scene":0,"scenes":[{"nodes":scene_roots}],"nodes":self.nodes,"meshes":self.meshes,

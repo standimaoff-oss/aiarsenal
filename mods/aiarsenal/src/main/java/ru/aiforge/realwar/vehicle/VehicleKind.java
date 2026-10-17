@@ -64,7 +64,7 @@ public enum VehicleKind {
     /** Ural-4320-31: 6x6, 8.6 t curb / 15.2 t gross (troops: ~12 t), YaMZ-238M2 240 hp, 85 km/h; 2 cab + 12 bench seats. */
     URAL(Specs.URAL, 180, 12000.0f, 176.0f, 85.0f, 1.3f, 0, 0, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f),
     /** British Mark I Male (1916): 28.4 t, 78 kW, 6.4 km/h, two independently loaded QF 6-pdr sponson guns. */
-    MARK_I(Specs.MARK_I, 420, 28400.0f, 78.0f, 6.4f, 0.55f, 2, 100, 60, 45.0f, -10.0f, 20.0f, 1.23f, 0.0f, 0.42f);
+    MARK_I(Specs.MARK_I, 420, 28400.0f, 78.0f, 6.4f, 0.55f, 2, 100, 60, 45.0f, -10.0f, 20.0f, 2.23f, 0.0f, 0.42f);
 
     public final VehicleSpec spec;
     public final int hp;

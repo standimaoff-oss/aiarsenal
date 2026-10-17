@@ -172,9 +172,10 @@ def stock_mesh(wood: int, wood_dark: int, steel: int, dark: int) -> Mesh:
     m.box(dark, (0.005, 0.037, 0.636), (0.010, 0.049, 0.652), 0.10)
     # Rear sight: tangent leaf on a base with the aperture slider.
     m.box(steel, (-0.019, 0.0405, 0.150), (0.019, 0.0470, 0.210), 0.10)
-    m.box(dark, (-0.011, 0.0470, 0.168), (0.011, 0.0560, 0.192), 0.10)
-    m.box(steel, (-0.015, 0.0545, 0.170), (0.015, 0.0615, 0.190), 0.10)
-    m.box(dark, (-0.0022, 0.0520, 0.178), (0.0022, 0.0600, 0.182), 0.10)
+    m.box(dark, (-0.011, 0.0470, 0.168), (0.011, 0.0520, 0.192), 0.10)
+    m.box(steel, (-0.015, 0.0505, 0.170), (-0.0022, 0.0575, 0.190), 0.10)
+    m.box(steel, (0.0022, 0.0505, 0.170), (0.015, 0.0575, 0.190), 0.10)
+    m.box(dark, (-0.0022, 0.0470, 0.178), (0.0022, 0.0520, 0.182), 0.10)
     # Magazine floor plate with the latch.
     m.box(dark, (-0.020, -0.0250, 0.030), (0.020, -0.0215, 0.105), 0.12)
     m.cylinder(dark, (0.0, -0.0260, 0.060), (0.0, -0.0330, 0.060), 0.0032, 6, dark, 0.1)
@@ -256,7 +257,7 @@ def main() -> None:
     clip = b.add_node("gewehr98.clip", clip_i, (0, 0.1180, 0.0650))
     bullet = b.add_node("gewehr98.round", round_i, (0, 0.0690, 0.0750))
     flash = b.add_node("gewehr98.flash", flash_i, (0, BORE_Y, MUZZLE_Z + 0.002))
-    sight = b.add_node("gewehr98.sight", translation=(0, 0.0560, 0.1800))
+    sight = b.add_node("gewehr98.sight", translation=(0, 0.0540, 0.1800))
     arm_r = b.add_node("gewehr98.arm_r", translation=(0, -0.0400, -0.0500))
     arm_l = b.add_node("gewehr98.arm_l", translation=(0, -0.0350, 0.3180))
     b.set_children(root, [body, bolt, clip, bullet, flash, sight, arm_r, arm_l])

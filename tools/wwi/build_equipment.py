@@ -10,7 +10,7 @@ DATA=ROOT/'mods/aiarsenal/src/main/resources/data/aiarsenal'
 def save(path,data):
  path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 def box(lo,hi,tex):
- return {'from':lo,'to':hi,'faces':{f:{'texture':'#'+tex} for f in ('up','down','north','south','east','west')}}
+ return {'from':lo,'to':hi,'faces':{f:{'texture':'#'+tex,'uv':[0,0,16,16]} for f in ('up','down','north','south','east','west')}}
 for name,base in [('olive',(95,105,65)),('steel',(95,104,111)),('wood',(132,90,50)),('brass',(178,141,65))]:
  rng=random.Random(name);pix=[]
  for y in range(32):

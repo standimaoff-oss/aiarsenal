@@ -216,8 +216,8 @@ def gun_mesh(steel: int, dark: int, brass: int, lod=False) -> tuple[int, int]:
     breech.cylinder(steel,(0,-0.02,-0.06),(0,0.02,0.14),0.105,12,steel)
     breech.box(brass,(-0.04,0.12,-0.20),(0.04,0.16,-0.08))
     barrel=Mesh()
-    barrel.cylinder(steel,(0,0,0.04),(0,0,1.18 if not lod else 1.12),0.043,16,steel)
-    barrel.cylinder(dark,(0,0,1.14 if not lod else 1.08),(0,0,1.23 if not lod else 1.17),0.058,16,dark)
+    barrel.cylinder(steel,(0,0,0.04),(0,0,2.18 if not lod else 2.12),0.043,16,steel)
+    barrel.cylinder(dark,(0,0,2.14 if not lod else 2.08),(0,0,2.23 if not lod else 2.17),0.058,16,dark)
     # Iron front blade and rear notch; no modern optic.
     barrel.box(steel,(-0.025,0.044,0.96),(0.025,0.092,1.01))
     barrel.box(steel,(-0.07,0.065,0.08),(0.07,0.085,0.14))
