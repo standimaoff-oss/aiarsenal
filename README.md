@@ -15,7 +15,7 @@
 
 ## Скачать и установить
 
-**[Скачать AI Arsenal 1.0.1-alpha.48 — JAR](https://github.com/standimaoff-oss/aiarsenal/releases/download/v1.0.1-alpha.48/aiarsenal-1.0.1-alpha.48.jar)** · [Страница версии и контрольная сумма](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.48)
+**[Скачать AI Arsenal 1.0.1-alpha.50 — JAR](https://github.com/standimaoff-oss/aiarsenal/releases/download/v1.0.1-alpha.50/aiarsenal-1.0.1-alpha.50.jar)** · [Страница версии и контрольная сумма](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.50)
 
 1. Установите Minecraft 1.20.1 и Forge 47.4.23.
 2. Поместите один JAR мода в папку `mods` клиента и сервера.
@@ -49,6 +49,12 @@
 ![Ручная граната обр. 1915 г.](previews/stielhandgranate.png)
 ![Огнемёт Wex](previews/wex.png)
 ![Струя пламени Wex](previews/wex-flame.png)
+
+### ЗСУ Второй мировой и современности
+![Flakpanzer IV Wirbelwind](previews/wirbelwind.png)
+![ЗСУ-37](previews/zsu37.png)
+![FlakPz Gepard 1A2](previews/gepard.png)
+![ЗСУ-23-4М4 Шилка](previews/shilka.png)
 
 [Все кадры и результат проверки](previews/).
 
