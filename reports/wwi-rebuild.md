@@ -70,3 +70,16 @@ PNG with the same back-face culling Minecraft applies, so geometry can be inspec
 a game client: `python tools/wwi/render_preview.py mark_i.glb --azim -32 --elev 14`.
 These renders are development aids; in-game F2 captures remain the gameplay evidence.
 `python tools/wwi/verify_assets.py --rebuild` passes byte-identical for the new resources.
+
+## Sponson guns and release alpha.27
+
+The in-game capture of alpha.18 showed the flaw the offline renderer could not: with the shared
+aim line at the bow, both QF 6-pdrs lay along the hull side. Alpha.27 fixes the whole chain -
+per-sponson traverse sectors (+/-35 deg about broadside, elevation -10..+20 deg), an aim line
+that reaches into either sector (+/-125 deg), and barrels re-proportioned to the real sponson
+depth (muzzle 1.15 m from the trunnion, 0.74 m proud of the armour face, was 2.23 m / 1.82 m).
+Pose, ballistics, the barrel collider, reticle traces, muzzle blast, hit-cam X-ray and wreck
+poses all derive from the same clamped angles, and
+`WWITests.mark_i_sponsons_traverse_only_their_historical_sector` fires both sponsons in a
+gametest and checks each projectile's flight direction against its own line.
+Released as [v1.0.1-alpha.27](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.27).
