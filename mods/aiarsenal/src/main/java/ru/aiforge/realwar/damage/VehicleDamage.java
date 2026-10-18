@@ -233,7 +233,12 @@ public final class VehicleDamage {
             // the random hull point: the splash and the crew sphere then come from the real direction
             HitContext.Blast bl = HitContext.takeBlast();
             if (bl != null && bl.pos().distanceToSqr(v.position()) < 400.0) {
-                h = new HitContext.Hit(bl.pos(), v.position().subtract(bl.pos()).normalize(), HitContext.Kind.HE, bl.tnt());
+                // the blast pushes toward the middle of the hull, not toward the feet: a ground-level burst
+                // beside the tank must meet a side or bottom plate, not graze under the floor
+                Vec3 mid = v.position().add(0.0, v.spec.height() * 0.5, 0.0);
+                Vec3 dv = mid.subtract(bl.pos());
+                if (dv.lengthSqr() < 1e-6) dv = new Vec3(0.0, 1.0, 0.0);
+                h = new HitContext.Hit(bl.pos(), dv.normalize(), HitContext.Kind.HE, bl.tnt());
                 prevShot = HitContext.shot();
                 HitContext.setShot(bl.shot());
                 blastShot = bl.shot();
