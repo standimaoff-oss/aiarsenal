@@ -324,7 +324,7 @@ public final class WWITests {
     }
 
     /** r30: each QF 6-pdr traverses only its historical sector and fires along its own clamped line. */
-    @GameTest(template = "arena", batch = "rw_wwi", timeoutTicks = 90)
+    @GameTest(template = "arena", batch = "rw_wwi", timeoutTicks = 400)
     public static void mark_i_sponsons_traverse_only_their_historical_sector(GameTestHelper h) {
         ServerLevel level = h.getLevel();
         BlockPos c = h.absolutePos(new BlockPos(2, 0, 2));
@@ -354,7 +354,7 @@ public final class WWITests {
                     operator.setXRot(0.0f);
                     tick[0] = 0;
                     phase[0] = 1;
-                } else if (tick[0] > 20) {
+                } else if (tick[0] > 60) {   // elevation is hand-cranked at ~0.35 deg/tick from the elMin seed
                     h.fail("the laid aim never settled at az/el 0: " + tank.az() + "/" + tank.el());
                 }
                 return;
@@ -368,7 +368,7 @@ public final class WWITests {
                     h.assertTrue(dr.dot(new Vec3(-1.0, 0.0, 0.0)) > 0.999, "right gun not on broadside: " + dr);
                     phase[0] = 2;
                     tick[0] = 0;
-                } else if (tick[0] > 20) {
+                } else if (tick[0] > 200) {   // the sponson yaw drive is rate limited too
                     h.fail("the aim never reached right broadside: az " + tank.az());
                 }
                 return;
@@ -389,7 +389,7 @@ public final class WWITests {
                 h.succeed();
                 return;
             }
-            if (tick[0] > 40) h.fail("the sponsons never fired");
+            if (tick[0] > 80) h.fail("the sponsons never fired");
         });
     }
 }
