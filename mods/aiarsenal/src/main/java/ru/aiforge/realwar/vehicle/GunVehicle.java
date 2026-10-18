@@ -351,8 +351,9 @@ public class GunVehicle extends LauncherVehicle {
 
     public Vec3 tubeWorld(int tube) {
         if (this.kind == VehicleKind.MARK_I) {
-            // Each cannon pivots about its own sponson trunnion; only its muzzle follows the shared aim line.
-            Matrix4d localAim = new Matrix4d().rotateY(Math.toRadians(this.az())).rotateX(-Math.toRadians(this.el()));
+            // Each cannon pivots about its own sponson trunnion inside its historical sector.
+            Matrix4d localAim = new Matrix4d().rotateY(Math.toRadians(this.sponsonAz(tube)))
+                    .rotateX(-Math.toRadians(this.sponsonEl()));
             Vector3d muzzle = localAim.transformPosition(new Vector3d(0.0, 0.0, this.kind.tubeLen));
             muzzle.add(tube == 0 ? -1.41 : 1.41, 1.22, 0.0);
             Vector3d world = this.bodyFrame().transformPosition(muzzle);
@@ -868,10 +869,12 @@ public class GunVehicle extends LauncherVehicle {
             for (int slot = 0; slot < this.kind.magazine; ++slot) {
                 if (slot != k && this.isLoaded(slot) && this.slotType(slot) == want) { second = slot; break; }
             }
+            // every sponson fires along its own clamped line of fire, never along the shared aim line
+            Vec3 d0 = this.sponsonDir(k).add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
             Vec3 m0 = this.tubeWorld(k);
-            ShellEntity.fire(sl, prof, m0.add(d.scale(0.2)), d, this.getId());
+            ShellEntity.fire(sl, prof, m0.add(d0.scale(0.2)), d0, this.getId());
             if (second >= 0) {
-                Vec3 d2 = dir.add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
+                Vec3 d2 = this.sponsonDir(second).add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
                 Vec3 m1 = this.tubeWorld(second);
                 ShellEntity.fire(sl, prof, m1.add(d2.scale(0.2)), d2, this.getId());
                 this.markFiredPair(k, second);

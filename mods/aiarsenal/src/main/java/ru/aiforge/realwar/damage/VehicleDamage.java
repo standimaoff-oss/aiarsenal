@@ -141,7 +141,10 @@ public final class VehicleDamage {
     /** Hull-frame turret angles (stabilised gun drawn on a tilted hull). */
     public static float[] turretAngles(VehicleEntity v) {
         if (!(v instanceof LauncherVehicle lv)) return new float[]{0, 0};
-        if (v.kind == VehicleKind.MARK_I) return new float[]{lv.az(), lv.el()}; // hand-laid sponson guns; no stabiliser
+        if (v.kind == VehicleKind.MARK_I) {
+            // hand-laid sponson guns; no stabiliser, and each gun lives inside its own traverse sector
+            return new float[]{v.kind.sponsonAz(0, lv.az()), v.kind.sponsonEl(lv.el())};
+        }
         return v.stabilised(lv.az(), lv.el(), v.bodyPitch, v.bodyRoll);
     }
 

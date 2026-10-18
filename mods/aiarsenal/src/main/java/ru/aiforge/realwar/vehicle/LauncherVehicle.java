@@ -351,6 +351,20 @@ extends VehicleEntity {
         return this.launchDir(this.az(), this.el());
     }
 
+    /** Mark I: the azimuth each sponson gun can reach (aim line clamped to its historical sector). */
+    public float sponsonAz(int tube) {
+        return this.kind.sponsonAz(tube, this.az());
+    }
+
+    public float sponsonEl() {
+        return this.kind.sponsonEl(this.el());
+    }
+
+    /** Line of fire of one Mark I sponson gun; equals {@link #launchDir()} for every other vehicle. */
+    public Vec3 sponsonDir(int tube) {
+        return this.kind == VehicleKind.MARK_I ? this.launchDir(this.sponsonAz(tube), this.sponsonEl()) : this.launchDir();
+    }
+
     public Vec3 launchDir(double az, double el) {
         Vector3d d = this.pitchFrame(az, el).transformDirection(new Vector3d(0.0, 0.0, (double)this.kind.fireAxisZ()));
         return new Vec3(d.x, d.y, d.z).normalize();
@@ -662,10 +676,12 @@ extends VehicleEntity {
         if (this.kind == VehicleKind.MARK_I) {
             // Sponson bases are fixed outward by 90 degrees in the GLB; counter-rotate each so both 6-pdrs follow
             // the shared direct-aim line. This is not a turret and receives no stabilisation.
-            pose.rotate("launcher_yaw", (float)Math.toRadians(az + 90.0f), 0.0f, 1.0f, 0.0f);
-            pose.rotate("launcher_yaw_left", (float)Math.toRadians(az - 90.0f), 0.0f, 1.0f, 0.0f);
-            pose.rotate("launcher_pitch", (float)Math.toRadians(pitchDeg), 1.0f, 0.0f, 0.0f);
-            pose.rotate("launcher_pitch_left", (float)Math.toRadians(pitchDeg), 1.0f, 0.0f, 0.0f);
+            float azR = this.kind.sponsonAz(0, az), azL = this.kind.sponsonAz(1, az);
+            float sponsonPitch = -this.kind.fireAxisZ() * (this.kind.sponsonEl(el) - this.kick * 0.8f);
+            pose.rotate("launcher_yaw", (float)Math.toRadians(azR + 90.0f), 0.0f, 1.0f, 0.0f);
+            pose.rotate("launcher_yaw_left", (float)Math.toRadians(azL - 90.0f), 0.0f, 1.0f, 0.0f);
+            pose.rotate("launcher_pitch", (float)Math.toRadians(sponsonPitch), 1.0f, 0.0f, 0.0f);
+            pose.rotate("launcher_pitch_left", (float)Math.toRadians(sponsonPitch), 1.0f, 0.0f, 0.0f);
         } else {
             if (this.spec.yawPivot() != null) {
                 pose.rotate("launcher_yaw", (float)Math.toRadians(az), 0.0f, 1.0f, 0.0f);

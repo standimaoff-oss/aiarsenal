@@ -154,5 +154,39 @@ public enum VehicleKind {
     public float fireAxisZ() {
         return this == SMERCH ? -1.0f : 1.0f;   // BM-21 fires forward over the cab (cab shields), Smerch to the rear
     }
+
+    // -------------------------------------------------------------------------------- Mark I sponsons
+    /** Traverse of one QF 6-pdr sponson about its outward rest, degrees (real Mark I: a sector per sponson). */
+    public float sponsonArc() {
+        return this == MARK_I ? 35.0f : 0.0f;
+    }
+
+    /** Rest azimuth of a sponson in hull degrees (0 = bow): tube 0 = right sponson (-x), tube 1 = left (+x). */
+    public float sponsonRest(int tube) {
+        return tube == 0 ? -90.0f : 90.0f;
+    }
+
+    /**
+     * The azimuth one sponson can actually reach: the shared aim line clamped to its historical sector, so the
+     * barrel never swings along the hull side. Pose, ballistics and the barrel collider all use this.
+     */
+    public float sponsonAz(int tube, float az) {
+        if (this != MARK_I) return az;
+        float rest = sponsonRest(tube);
+        float w = wrapSign(az - rest);
+        return rest + Math.max(-sponsonArc(), Math.min(sponsonArc(), w));
+    }
+
+    private static float wrapSign(float d) {
+        float w = d % 360.0f;
+        if (w > 180.0f) w -= 360.0f;
+        if (w < -180.0f) w += 360.0f;
+        return w;
+    }
+
+    /** Elevation sector of the sponson guns (real Hotchkiss mount: -10..+20 deg). */
+    public float sponsonEl(float el) {
+        return this == MARK_I ? Math.max(-10.0f, Math.min(20.0f, el)) : el;
+    }
 }
 

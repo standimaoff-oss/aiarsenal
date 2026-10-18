@@ -261,9 +261,16 @@ public final class Armour {
             if (model > 0.5) len = Math.min(len, model + 0.10);
         }
         if (k == VehicleKind.MARK_I) {
-            // the two QF 6-pdrs turn about their own sponson trunnions (tools/wwi/build_mark_i.py)
-            return new Tube[]{new Tube(new Vector3d(-1.41, 1.22, 0.0), dir, len, r, 0.65),
-                    new Tube(new Vector3d(1.41, 1.22, 0.0), dir, len, r, 0.65)};
+            // the two QF 6-pdrs turn about their own sponson trunnions (tools/wwi/build_mark_i.py), each inside
+            // its historical sector: the barrel collider follows the clamped gun, not the shared aim line
+            Tube[] out = new Tube[2];
+            for (int t = 0; t < 2; ++t) {
+                double a2 = Math.toRadians(k.sponsonAz(t, ang[0])), e2 = Math.toRadians(k.sponsonEl(ang[1]));
+                Vector3d d2 = new Vector3d(Math.sin(a2) * Math.cos(e2) * fz, Math.sin(e2) * fz,
+                        Math.cos(a2) * Math.cos(e2) * fz).normalize();
+                out[t] = new Tube(new Vector3d(t == 0 ? -1.41 : 1.41, 1.22, 0.0), d2, len, r, 0.65);
+            }
+            return out;
         }
         if (!g.turret() || g.yp() == null || g.pp() == null) return new Tube[0];
         Vector3d o = new Vector3d(g.yp()[0] + g.pp()[0] * ca + g.pp()[2] * sa,

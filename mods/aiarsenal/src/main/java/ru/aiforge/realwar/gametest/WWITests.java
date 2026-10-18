@@ -310,12 +310,75 @@ public final class WWITests {
                 == ru.aiforge.realwar.damage.DamageState.TRACK_L, "+X is the left external track");
         h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -1.50, 0.13, -2.45, aim)
                 == ru.aiforge.realwar.damage.DamageState.TRACK_R, "-X is the right external track");
-        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -1.41, 1.22, 0.95, aim)
+        // at aim 0 both guns rest at the forward end of their sector (35 deg off broadside), so the barrel
+        // probes sit on the clamped axes: sin/cos 55 deg = 0.81915 / 0.57358
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -2.22915, 1.22, 0.57358, aim)
                 == ru.aiforge.realwar.damage.DamageState.BARREL, "right QF 6-pdr breech/barrel zone");
-        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, 1.41, 1.22, 0.95, aim)
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, 2.22915, 1.22, 0.57358, aim)
                 == ru.aiforge.realwar.damage.DamageState.BARREL, "left QF 6-pdr breech/barrel zone");
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, -1.41, 1.22, 0.95, aim)
+                != ru.aiforge.realwar.damage.DamageState.BARREL, "no barrel along the hull side at aim 0");
         h.assertTrue(VehicleDamage.zone(g, VehicleKind.MARK_I, false, 1.41, 1.5, -0.35, aim)
                 == ru.aiforge.realwar.damage.DamageState.AMMO, "sponson ammunition rack zone");
         h.succeed();
+    }
+
+    /** r30: each QF 6-pdr traverses only its historical sector and fires along its own clamped line. */
+    @GameTest(template = "arena", batch = "rw_wwi", timeoutTicks = 90)
+    public static void mark_i_sponsons_traverse_only_their_historical_sector(GameTestHelper h) {
+        ServerLevel level = h.getLevel();
+        BlockPos c = h.absolutePos(new BlockPos(2, 0, 2));
+        int y = clearRunway(level, c, 8);
+        GunVehicle tank = spawn(level, ModEntities.MARK_I.get(), c.getX() + 0.5, y, c.getZ() + 0.5, 0.0f);
+        ServerPlayer operator = mock(h);
+        h.assertTrue(tank.enterSeat(operator, 0), "seat 0 is the Mark I driver/operator");
+        tank.fillMagazine(1);
+        // aim straight ahead: neither gun may lie along the hull side, both stop 35 deg off broadside
+        h.assertTrue(Math.abs(tank.sponsonAz(0) + 55.0f) < 0.01f && Math.abs(tank.sponsonAz(1) - 55.0f) < 0.01f,
+                "aim az 0 must clamp to the sector ends: " + tank.sponsonAz(0) + "/" + tank.sponsonAz(1));
+        org.joml.Vector3d tr = tank.bodyFrame().transformPosition(new org.joml.Vector3d(-1.41, 1.22, 0.0));
+        Vec3 tr0 = new Vec3(tr.x, tr.y, tr.z);
+        Vec3 d0 = tank.tubeWorld(0).subtract(tr0).normalize();
+        h.assertTrue(d0.z < 0.75, "the right gun still points along the hull: " + d0);
+        h.assertTrue(d0.dot(new Vec3(-0.81915, 0.0, 0.57358)) > 0.999, "right gun off its clamped line: " + d0);
+        operator.setYRot(-90.0f);
+        operator.setXRot(0.0f);
+        int[] tick = {0};
+        int[] phase = {0};
+        int[] seq = {tank.firedSeq()};
+        h.onEachTick(() -> {
+            tick[0]++;
+            if (phase[0] == 0) {
+                if (Math.abs(tank.az() + 90.0f) < 0.5f) {
+                    // right broadside: the right gun is centred, the left one stays at its forward stop
+                    h.assertTrue(Math.abs(tank.sponsonAz(0) + 90.0f) < 0.01f, "right gun off broadside: " + tank.sponsonAz(0));
+                    h.assertTrue(Math.abs(tank.sponsonAz(1) - 55.0f) < 0.01f, "left gun left its sector: " + tank.sponsonAz(1));
+                    Vec3 dr = tank.tubeWorld(0).subtract(tr0).normalize();
+                    h.assertTrue(dr.dot(new Vec3(-1.0, 0.0, 0.0)) > 0.999, "right gun not on broadside: " + dr);
+                    phase[0] = 1;
+                    tick[0] = 0;
+                } else if (tick[0] > 20) {
+                    h.fail("the aim never reached right broadside: az " + tank.az());
+                }
+                return;
+            }
+            tank.handleControl(operator, 0, 0, true, false, 0);
+            if (tank.firedSeq() != seq[0]) {
+                java.util.List<ShellEntity> shells = level.getEntitiesOfClass(ShellEntity.class,
+                        tank.getBoundingBox().inflate(24.0));
+                h.assertTrue(shells.size() == 2, "both sponsons fire one round each, got " + shells.size());
+                boolean broadside = false, clamped = false;
+                for (ShellEntity sh : shells) {
+                    Vec3 dm = sh.getDeltaMovement().normalize();
+                    if (dm.x < -0.99) broadside = true;
+                    if (dm.x > 0.7 && dm.z > 0.4) clamped = true;
+                }
+                h.assertTrue(broadside, "the right sponson did not fire along its broadside line");
+                h.assertTrue(clamped, "the left sponson did not fire along its clamped 55 deg line");
+                h.succeed();
+                return;
+            }
+            if (tick[0] > 40) h.fail("the sponsons never fired");
+        });
     }
 }

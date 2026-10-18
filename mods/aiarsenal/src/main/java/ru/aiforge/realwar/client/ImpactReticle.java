@@ -30,6 +30,7 @@ import ru.aiforge.realwar.craft.CraftWeapon;
 import ru.aiforge.realwar.craft.PlaneEntity;
 import ru.aiforge.realwar.ordnance.Ballistics;
 import ru.aiforge.realwar.ordnance.BulletManager;
+import ru.aiforge.realwar.vehicle.VehicleKind;
 import ru.aiforge.realwar.vehicle.GunVehicle;
 import ru.aiforge.realwar.vehicle.MlrsEntity;
 
@@ -291,6 +292,13 @@ public final class ImpactReticle {
                 return;
             }
             empty = gv.loadedOfType(gv.loadType()) == 0 && !reloading;   // r28: the selected round type, not the whole rack
+            if (gv.kind == VehicleKind.MARK_I) {
+                for (int tube = 0; tube < 2; ++tube) {
+                    Vec3 ds = gv.sponsonDir(tube);
+                    add(shell(lv, gv.profile(), gv.tubeWorld(tube).add(ds.scale(0.2)), ds, gv));
+                }
+                return;
+            }
             Vec3 d = gv.launchDir();
             add(shell(lv, gv.profile(), gv.tubeWorld(0).add(d.scale(0.2)), d, gv));
             if (gv.twinSalvo()) add(shell(lv, gv.profile(), gv.tubeWorld(1).add(d.scale(0.2)), d, gv));

@@ -379,8 +379,16 @@ public final class HitCam {
         if (lm != null) {
             Pose pose = lm.scratch();
             if (ge.turret()) {
-                pose.rotate("launcher_yaw", (float) Math.toRadians(ang[0]), 0f, 1f, 0f);
-                pose.rotate("launcher_pitch", (float) Math.toRadians(-kind.fireAxisZ() * ang[1]), 1f, 0f, 0f);
+                if (kind == ru.aiforge.realwar.vehicle.VehicleKind.MARK_I) {
+                    float azR = kind.sponsonAz(0, ang[0]), azL = kind.sponsonAz(1, ang[0]), elS = kind.sponsonEl(ang[1]);
+                    pose.rotate("launcher_yaw", (float) Math.toRadians(azR + 90f), 0f, 1f, 0f);
+                    pose.rotate("launcher_yaw_left", (float) Math.toRadians(azL - 90f), 0f, 1f, 0f);
+                    pose.rotate("launcher_pitch", (float) Math.toRadians(-kind.fireAxisZ() * elS), 1f, 0f, 0f);
+                    pose.rotate("launcher_pitch_left", (float) Math.toRadians(-kind.fireAxisZ() * elS), 1f, 0f, 0f);
+                } else {
+                    pose.rotate("launcher_yaw", (float) Math.toRadians(ang[0]), 0f, 1f, 0f);
+                    pose.rotate("launcher_pitch", (float) Math.toRadians(-kind.fireAxisZ() * ang[1]), 1f, 0f, 0f);
+                }
             }
             int[] cat = ModuleProps.categories(lm.model);
             for (int i = 0; i < cat.length; i++) if (cat[i] == ModuleProps.C_INTERIOR) pose.hideIdx(i, true);
