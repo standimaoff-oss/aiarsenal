@@ -45,9 +45,9 @@ SPONSON_X = 1.41
 SPONSON_Y = 1.22
 BARREL_TIP = 1.15
 TRACK_X = 1.50          # centre plane of the belt
-FRAME_IN, FRAME_OUT = 1.24, 1.31
-HULL_X = 1.16           # hull side plate
-SPONSON_OUT = 1.83
+FRAME_IN, FRAME_OUT = 1.18, 1.58
+HULL_X = 1.18           # inner hull side plate
+SPONSON_OUT = 2.08
 
 _CACHE: dict[tuple, bytes] = {}
 
@@ -70,47 +70,27 @@ def _noise_grid(rng: random.Random, n: int, cells: int) -> list[list[float]]:
 
 
 def atlas() -> bytes:
-    """512 px painted armour: even khaki-grey paint, deep panel seams with a lit edge,
-    rows of rivet heads along every seam. No streaks/patchwork - they read as wood in game."""
-    key = ("atlas33",)
+    """512 px rolled British armour plate: olive-drab khaki-grey steel with subtle mill scale and oil shading.
+    Plate joints and butt-straps are real 3D geometry on the model so the hull never looks like tiled wallpaper."""
+    key = ("atlas35",)
     if key in _CACHE:
         return _CACHE[key]
     n = 512
-    rng = random.Random(41)
-    blotch = _noise_grid(rng, n, 12)
+    rng = random.Random(1916)
+    blotch = _noise_grid(rng, n, 16)
     grain = _noise_grid(rng, n, 96)
+    fine = _noise_grid(rng, n, 192)
     pix = [(0, 0, 0, 255)] * (n * n)
-    seams_y = [64, 192, 320, 448]
-    seams_x = [128, 384]
     for y in range(n):
         for x in range(n):
             b = blotch[y][x]
             g = grain[y][x]
-            r, gg, bb = 92 + 14 * b, 90 + 13 * b, 76 + 11 * b
-            seam = any(abs(y - s_) <= 1 for s_ in seams_y) or any(abs(x - s_) <= 1 for s_ in seams_x)
-            lite = any(2 <= y - s_ <= 3 for s_ in seams_y) or any(2 <= x - s_ <= 3 for s_ in seams_x)
-            if seam:
-                r, gg, bb = r * 0.38, gg * 0.38, bb * 0.36
-            elif lite:
-                r, gg, bb = r * 1.18, gg * 1.18, bb * 1.14
-            v = 0.94 + 0.12 * g
-            pix[y * n + x] = (int(min(255, r * v)), int(min(255, gg * v)), int(min(255, bb * v)), 255)
-    # rivet heads: bright dome, dark rim crescent, spaced along both seam directions
-    riv = [(x, y) for y in (56, 72, 184, 200, 312, 328, 440, 456) for x in range(16, n, 32)]
-    riv += [(x, y) for x in (120, 136, 376, 392) for y in range(16, n, 32)]
-    for rx, ry in riv:
-        for dy in range(-4, 5):
-            for dx in range(-4, 5):
-                d = math.hypot(dx, dy)
-                if d > 4.2:
-                    continue
-                i = ((ry + dy) % n) * n + ((rx + dx) % n)
-                base = pix[i]
-                if d < 2.6:
-                    f = 1.45 - 0.12 * d
-                    pix[i] = (int(min(255, base[0] * f)), int(min(255, base[1] * f)), int(min(255, base[2] * f)), 255)
-                elif dy > 0 or dx > 2:
-                    pix[i] = (int(base[0] * 0.55), int(base[1] * 0.55), int(base[2] * 0.52), 255)
+            f = fine[y][x]
+            # Authentic British Service Drab / warm gunmetal-olive tone
+            r = 84 + 16 * b + 8 * (g - 0.5) + 5 * (f - 0.5)
+            gg = 86 + 16 * b + 8 * (g - 0.5) + 5 * (f - 0.5)
+            bb = 68 + 13 * b + 6 * (g - 0.5) + 4 * (f - 0.5)
+            pix[y * n + x] = (int(max(20, min(230, r))), int(max(20, min(230, gg))), int(max(16, min(210, bb))), 255)
     png = png_rgba(n, n, pix)
     _CACHE[key] = png
     return png
@@ -324,120 +304,171 @@ def hull_mesh(paint, highlight, steel, dark, brass, wood, lod: bool) -> Mesh:
 
 
 def sponson_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> Mesh:
-    """Octagonal side casemate: chamfered top/bottom, raked front corners, gun port."""
+    """British Mark I Male side sponson casemate:faceted armoured box projecting from the outer track frame
+    with sloped roof/floor, semi-cylindrical QF 6-pdr gun shield, Hotchkiss MG ball mount and rear crew door."""
     m = Mesh()
-    s = side
-    plan = [(1.05, 1.10), (1.05, 1.52), (0.70, SPONSON_OUT), (-0.70, SPONSON_OUT),
-            (-1.05, 1.52), (-1.05, 1.10)]
+    s = float(side)
+    # 6-point planform projecting from inside the track frame (1.42) out to SPONSON_OUT (2.08)
+    plan = [
+        (1.12, 1.42),
+        (1.12, 1.74),
+        (0.74, SPONSON_OUT),
+        (-0.74, SPONSON_OUT),
+        (-1.12, 1.74),
+        (-1.12, 1.42),
+    ]
     secs = []
-    for y, inset in ((0.88, 0.35), (1.06, 0.0), (1.74, 0.0), (1.94, 0.35)):
-        ring = [(s * (x - inset * 0.9) if x > 1.2 else s * x, y, z * (1.0 - inset * 0.28)) for z, x in plan]
-        secs.append([(px, py, pz) for px, py, pz in ring])
-    loft_rings(m, paint, secs, 0.5)
-    # gun port: recessed dark disc, mantlet ring and the embrasure frame on the outer face
-    m.cylinder(dark, (s * (SPONSON_OUT - 0.06), 1.38, 0.0), (s * (SPONSON_OUT + 0.01), 1.38, 0.0), 0.17, 12, dark, 0.3)
-    m.cylinder(steel, (s * (SPONSON_OUT - 0.02), 1.38, 0.0), (s * (SPONSON_OUT + 0.10), 1.38, 0.0), 0.21, 14, steel, 0.3)
-    m.slab(highlight, [(s * 1.30, 1.94, -0.98), (s * (SPONSON_OUT + 0.05), 1.94, -0.98),
-                       (s * (SPONSON_OUT + 0.05), 1.94, 0.98), (s * 1.30, 1.94, 0.98)], 0.05, 0.4)
-    # vision slits in the raked front corners, inspection hatch on the side
-    for zc in (-0.80, 0.80):
-        m.box(dark, (s * 1.60, 1.44, zc - 0.10), (s * 1.72, 1.52, zc + 0.10), 0.15)
-    m.box(steel, (s * (SPONSON_OUT - 0.01), 1.06, -0.62), (s * (SPONSON_OUT + 0.02), 1.30, -0.30), 0.25)
+    for y, inset in ((0.76, 0.28), (0.94, 0.0), (1.68, 0.0), (1.88, 0.26)):
+        ring = []
+        for z, x in plan:
+            xx = x if x <= 1.44 else max(1.44, x - inset)
+            zz = z * (1.0 - 0.14 * (inset / 0.28))
+            ring.append((s * xx, y, zz))
+        secs.append(ring if side > 0 else list(reversed(ring)))
+    loft_rings(m, paint, secs, 0.8)
+
+    # Heavy overhanging roof plate with riveted edge lip
+    m.box(highlight, (min(s * 1.52, s * (SPONSON_OUT - 0.18)), 1.86, -0.96),
+          (max(s * 1.52, s * (SPONSON_OUT - 0.18)), 1.92, 0.96), 0.5)
+    # Semi-cylindrical internal rotating gun shield & recessed embrasure around the 6-pdr pivot (y=1.22, z=0.0)
+    m.cylinder(dark, (s * (SPONSON_OUT - 0.12), 1.22, 0.0), (s * (SPONSON_OUT + 0.04), 1.22, 0.0), 0.32, 18, dark, 0.3)
+    m.cylinder(steel, (s * (SPONSON_OUT - 0.06), 1.22, 0.0), (s * (SPONSON_OUT + 0.10), 1.22, 0.0), 0.24, 18, steel, 0.3)
+    # Secondary Hotchkiss machine-gun ball mount on the rear-side facet + armoured vision slits
+    m.cylinder(steel, (s * (SPONSON_OUT - 0.10), 1.36, -0.56), (s * (SPONSON_OUT + 0.05), 1.36, -0.56), 0.11, 12, steel, 0.2)
+    m.box(dark, (min(s * (SPONSON_OUT - 0.02), s * (SPONSON_OUT + 0.02)), 1.54, 0.28),
+          (max(s * (SPONSON_OUT - 0.02), s * (SPONSON_OUT + 0.02)), 1.60, 0.54), 0.2)
+    # Rear crew access door on the back bevel of the sponson with hinges & grab handle
+    m.box(steel, (min(s * 1.60, s * 1.88), 0.98, -1.14), (max(s * 1.60, s * 1.88), 1.62, -1.06), 0.3)
     if not lod:
-        for y in (1.06, 1.72):
-            rivet_row(m, brass, (s * 1.50, y, -0.90), (s * 1.50, y, 0.90), 12)
-        rivet_row(m, brass, (s * SPONSON_OUT, 1.72, -0.60), (s * SPONSON_OUT, 1.72, 0.60), 9)
-        rivet_row(m, brass, (s * SPONSON_OUT, 1.06, -0.60), (s * SPONSON_OUT, 1.06, 0.60), 9)
+        # 3D structural angle-iron strips and rivet rows framing the sponson facets
+        for y in (0.96, 1.66):
+            rivet_row(m, brass, (s * SPONSON_OUT, y, -0.68), (s * SPONSON_OUT, y, 0.68), 11)
+        for z in (-0.70, 0.70):
+            rivet_row(m, brass, (s * SPONSON_OUT, 0.98, z), (s * SPONSON_OUT, 1.64, z), 6)
     return m
 
 
 def wheel_mesh(steel, rubber, radius: float, teeth: int = 0) -> Mesh:
+    """Flanged cast-iron roller / drive sprocket; teeth stay inside the outer rim radius."""
     m = Mesh()
-    sides = 14
-    m.cylinder(steel, (-0.09, 0, 0), (0.09, 0, 0), radius, sides, steel, 0.4)      # rim
+    sides = 14 if teeth == 0 else teeth * 2
     m.cylinder(rubber, (-0.115, 0, 0), (0.115, 0, 0), radius * 0.92, sides, rubber, 0.4)
-    m.cylinder(steel, (-0.13, 0, 0), (0.13, 0, 0), radius * 0.34, 10, steel, 0.3)  # hub
+    for sx in (-1, 1):
+        m.cylinder(steel, (sx * 0.08, 0, 0), (sx * 0.115, 0, 0), radius, sides, steel, 0.4)
+    m.cylinder(steel, (-0.13, 0, 0), (0.13, 0, 0), radius * 0.34, 10, steel, 0.3)
     m.cylinder(rubber, (-0.15, 0, 0), (0.15, 0, 0), radius * 0.16, 8, rubber, 0.2)
-    for i in range(8):
-        a = i * math.tau / 8
-        m.cylinder(steel, (-0.10, math.sin(a) * radius * 0.55, math.cos(a) * radius * 0.55),
-                   (0.10, math.sin(a) * radius * 0.55, math.cos(a) * radius * 0.55), 0.022, 6, steel, 0.2)
+    for i in range(6):
+        a = math.tau * i / 6
+        y, z = math.cos(a) * radius * 0.56, math.sin(a) * radius * 0.56
+        m.cylinder(steel, (-0.125, y, z), (0.125, y, z), radius * 0.06, 6, steel, 0.2)
     if teeth:
         for i in range(teeth):
-            a = i * math.tau / teeth
-            y, z = math.sin(a) * radius, math.cos(a) * radius
-            m.oriented_box(steel, (0, y * 0.78, z * 0.78), (0.09, 0, 0),
-                           (0, y * 0.14, z * 0.14), (0, -z * 0.09, y * 0.09))
+            a = math.tau * i / teeth
+            u = (0.0, math.cos(a), math.sin(a))
+            v = (0.0, -math.sin(a), math.cos(a))
+            c = (0.0, u[1] * (radius - 0.022), u[2] * (radius - 0.022))
+            m.oriented_box(steel, c, (0.045, 0, 0),
+                           tuple(x * 0.022 for x in u), tuple(x * 0.020 for x in v), 0.2)
     return m
 
 
-def gun_mesh(steel, dark, brass, lod: bool):
-    """Cradle/breech and the recoiling Hotchkiss 6-pdr tube, in sponson-local space (+Z out)."""
+def gun_mesh(steel, dark, brass, lod: bool) -> tuple[Mesh, Mesh]:
+    """Hotchkiss QF 6-pounder 6 cwt (57 mm L/40) in cylindrical cradle with under-barrel recoil cylinder."""
     breech = Mesh()
-    breech.box(steel, (-0.14, -0.16, -0.52), (0.14, 0.12, -0.02), 0.3)            # breech block
-    breech.box(dark, (-0.10, -0.20, -0.46), (0.10, -0.14, -0.06), 0.25)           # recoil cradle
-    breech.cylinder(steel, (-0.09, -0.02, -0.44), (-0.09, -0.02, -0.04), 0.035, 8, steel, 0.25)
-    breech.cylinder(steel, (0.09, -0.02, -0.44), (0.09, -0.02, -0.04), 0.035, 8, steel, 0.25)
-    breech.cylinder(steel, (-0.20, -0.02, 0.0), (0.20, -0.02, 0.0), 0.05, 8, steel, 0.25)   # trunnion
-    breech.box(brass, (-0.03, 0.10, -0.30), (0.03, 0.16, -0.24), 0.15)            # sight boss
     barrel = Mesh()
-    sides = 10 if not lod else 6
-    secs = []
-    for z, r in ((-0.06, 0.052), (0.10, 0.046), (0.34, 0.040), (0.62, 0.034), (BARREL_TIP - 0.09, 0.029),
-                 (BARREL_TIP - 0.09, 0.033), (BARREL_TIP, 0.031), (BARREL_TIP, 0.023)):
-        ring = []
-        for i in range(sides):
-            a = i * math.tau / sides
-            ring.append((math.cos(a) * r, math.sin(a) * r - 0.02, z))
-        secs.append(ring)
-    loft_rings(barrel, steel, secs, 0.3)
-    barrel.cylinder(dark, (0, -0.02, BARREL_TIP - 0.005), (0, -0.02, BARREL_TIP + 0.012), 0.020, sides, dark, 0.2)
-    if not lod:
-        barrel.cylinder(brass, (0, -0.06, 0.34), (0, -0.06, 0.40), 0.026, 8, brass, 0.2)
+    sides = 10 if lod else 16
+    # Breech ring, cylindrical recoil cradle, brass shoulder piece & elevation sector gear
+    breech.box(steel, (-0.13, -0.11, -0.34), (0.13, 0.12, 0.14), 0.25)
+    breech.cylinder(dark, (0.0, -0.09, -0.18), (0.0, -0.09, 0.42), 0.052, sides, dark, 0.20)
+    breech.cylinder(brass, (-0.15, 0.0, 0.0), (0.15, 0.0, 0.0), 0.055, sides, brass, 0.20)
+    breech.box(dark, (-0.16, -0.18, -0.44), (-0.11, 0.06, -0.12), 0.20)
+    # Semi-cylindrical armoured gun shield rotating with the mount
+    breech.cylinder(steel, (0.0, 0.0, -0.06), (0.0, 0.0, 0.12), 0.22, sides, steel, 0.25)
+
+    # Tapered 57 mm barrel (0 -> BARREL_TIP=1.15 m) with reinforce step and muzzle flare
+    for (z0, r0), (z1, r1) in [
+        ((-0.06, 0.058), (0.18, 0.054)),
+        ((0.18, 0.050), (0.58, 0.043)),
+        ((0.58, 0.043), (BARREL_TIP - 0.08, 0.036)),
+        ((BARREL_TIP - 0.08, 0.042), (BARREL_TIP, 0.040)),
+    ]:
+        barrel.cylinder(steel, (0.0, 0.0, z0), (0.0, 0.0, z1), 0.5 * (r0 + r1), sides, steel, 0.25)
+    barrel.cylinder(dark, (0.0, 0.0, BARREL_TIP - 0.02), (0.0, 0.0, BARREL_TIP + 0.005), 0.026, sides, dark, 0.15)
     return breech, barrel
 
 
-def frame_mesh(paint, steel, brass, side: int, lod: bool) -> Mesh:
-    """Riveted track-frame armour enclosing the running gear (early British practice)."""
+def frame_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> Mesh:
+    """Authentic British Mark I rhomboidal armored track frame:
+    - Outer armored cheek (x = side * FRAME_OUT = +-1.58) completely encloses the small road rollers!
+    - Track links (width 0.48 m around x = +-1.50) run exposed along the top, front horn, bottom and rear horn.
+    - Real 3D riveted butt-straps, front idler screw-tensioner slide box, rear final-drive sprocket dome,
+      lower girder beam with 3 mud-chute openings and 6 axle oil-boxes."""
     m = Mesh()
-    profile = [(0.13, -2.30), (0.74, -3.20), (2.27, -3.20),
-               (2.27, 3.20), (0.74, 3.20), (0.13, 2.30)]
-    pts = [(side * FRAME_IN, y, z) for y, z in profile] + [(side * FRAME_OUT, y, z) for y, z in reversed(profile)]
+    s = float(side)
+    profile = [
+        (0.18, -2.38),
+        (0.80, -3.22),
+        (2.22, -3.22),
+        (2.22, 3.22),
+        (0.80, 3.22),
+        (0.18, 2.38),
+    ]
+    pts = [(s * FRAME_IN, y, z) for y, z in profile] + [(s * FRAME_OUT, y, z) for y, z in reversed(profile)]
     n = len(profile)
     for i in range(n):
         a, b = i, (i + 1) % n
-        m.face(paint, [pts[a], pts[b], pts[n + b], pts[n + a]], 0.6)
+        m.face(steel, [pts[a], pts[b], pts[n + b], pts[n + a]], 0.8)
     panels = [
-        [(0.74, -3.20), (2.27, -3.20), (2.27, -2.30), (0.13, -2.30)],
-        [(0.13, -2.30), (2.27, -2.30), (2.27, 2.30), (0.13, 2.30)],
-        [(0.13, 2.30), (2.27, 2.30), (2.27, 3.20), (0.74, 3.20)],
+        [(0.80, -3.22), (2.22, -3.22), (2.22, -2.38), (0.18, -2.38)],
+        [(0.18, -2.38), (2.22, -2.38), (2.22, 2.38), (0.18, 2.38)],
+        [(0.18, 2.38), (2.22, 2.38), (2.22, 3.22), (0.80, 3.22)],
     ]
-    for x, sgn in (( side * FRAME_IN, -1.0), (side * FRAME_OUT, 1.0)):
+    for x, sgn in ((s * FRAME_IN, -1.0), (s * FRAME_OUT, 1.0)):
         for pan in panels:
             q = [(x, y, z) for y, z in pan]
             nn = _n3(q[:3])
-            if nn[0] * side * sgn < 0:
+            if nn[0] * s * sgn < 0:
                 q = list(reversed(q))
-            m.face(paint, q, 1.4)
-    # axle bosses break the flat plate: big discs at sprocket/idler, small ones at the road wheels
-    for cy, cz, r in ((1.20, -3.20, 0.50), (1.20, 3.20, 0.50)):
-        m.cylinder(steel, (side * (FRAME_OUT - 0.01), cy, cz), (side * (FRAME_OUT + 0.035), cy, cz), r, 14, steel, 0.35)
-        m.cylinder(brass, (side * (FRAME_OUT + 0.035), cy, cz), (side * (FRAME_OUT + 0.06), cy, cz), 0.09, 8, brass, 0.2)
+            m.face(paint, q, 1.6)
+
+    x0 = min(s * (FRAME_OUT - 0.005), s * (FRAME_OUT + 0.022))
+    x1 = max(s * (FRAME_OUT - 0.005), s * (FRAME_OUT + 0.022))
+    # 1) Upper & lower longitudinal angle-iron flanges bordering the track runs
+    m.box(steel, (x0, 2.15, -3.22), (x1, 2.23, 3.22), 0.5)
+    m.box(steel, (x0, 0.18, -2.38), (x1, 0.28, 2.38), 0.5)
+    # 2) Vertical and horizontal 3D riveted butt-straps (joining the armour plates of the rhomb)
+    for z_seam in (-2.38, -1.18, 0.0, 1.18, 2.38):
+        m.box(highlight, (x0, 0.22, z_seam - 0.045), (x1, 2.20, z_seam + 0.045), 0.5)
+    m.box(highlight, (x0, 1.18, -3.18), (x1, 1.26, 3.18), 0.5)
+
+    # 3) Front idler tensioner slide box & adjustment screw on the nose horn (z = +2.45 .. +3.18)
+    bx0 = min(s * (FRAME_OUT - 0.01), s * (FRAME_OUT + 0.055))
+    bx1 = max(s * (FRAME_OUT - 0.01), s * (FRAME_OUT + 0.055))
+    m.box(steel, (bx0, 0.96, 2.48), (bx1, 1.44, 3.18), 0.35)
+    m.box(dark, (bx0, 1.06, 2.56), (bx1 + s * 0.01 if s > 0 else bx0 - 0.01, 1.34, 3.10), 0.3)
+    m.cylinder(brass, (s * (FRAME_OUT + 0.03), 1.20, 2.32), (s * (FRAME_OUT + 0.03), 1.20, 2.52), 0.045, 10, brass, 0.2)
+    m.cylinder(steel, (s * (FRAME_OUT - 0.01), 1.20, 3.00), (s * (FRAME_OUT + 0.08), 1.20, 3.00), 0.18, 14, steel, 0.25)
+
+    # 4) Rear final-drive sprocket housing dome & bolted ring on the tail horn (z = -3.05, y = 1.20)
+    m.cylinder(steel, (s * (FRAME_OUT - 0.01), 1.20, -2.98), (s * (FRAME_OUT + 0.05), 1.20, -2.98), 0.38, 16, steel, 0.3)
+    m.cylinder(dark, (s * (FRAME_OUT + 0.05), 1.20, -2.98), (s * (FRAME_OUT + 0.09), 1.20, -2.98), 0.19, 14, dark, 0.25)
+    m.cylinder(brass, (s * (FRAME_OUT + 0.09), 1.20, -2.98), (s * (FRAME_OUT + 0.11), 1.20, -2.98), 0.07, 10, brass, 0.2)
+
+    # 5) Lower suspension beam with 3 mud-relief chutes & 6 roller axle oil-boxes (no exposed modern wheels!)
+    m.box(steel, (bx0, 0.26, -2.28), (bx1, 0.56, 2.28), 0.4)
+    for cz in (-1.55, 0.0, 1.55):
+        m.box(dark, (min(s * (FRAME_OUT - 0.01), s * (FRAME_OUT + 0.065)), 0.32, cz - 0.26),
+              (max(s * (FRAME_OUT - 0.01), s * (FRAME_OUT + 0.065)), 0.50, cz + 0.26), 0.25)
     for i in range(6):
-        z = -1.78 + i * 0.70
-        m.cylinder(steel, (side * (FRAME_OUT - 0.01), ROAD_WHEEL_CENTER_Y, z),
-                   (side * (FRAME_OUT + 0.02), ROAD_WHEEL_CENTER_Y, z), 0.10, 10, steel, 0.25)
-    # external exhaust stack along the side, above the sponson line - reads in a side silhouette
-    m.cylinder(steel, (side * 1.20, 1.98, 0.90), (side * 1.20, 1.98, -2.50), 0.05, 10, steel, 0.25)
-    m.cylinder(steel, (side * 1.20, 1.98, -2.50), (side * 1.16, 1.90, -2.66), 0.056, 10, steel, 0.25)
+        z = -1.75 + i * 0.70
+        m.box(brass, (min(s * (FRAME_OUT + 0.01), s * (FRAME_OUT + 0.07)), 0.34, z - 0.07),
+              (max(s * (FRAME_OUT + 0.01), s * (FRAME_OUT + 0.07)), 0.48, z + 0.07), 0.2)
+
     if not lod:
-        m.box(steel, (side * (FRAME_OUT - 0.01), 0.62, -1.20), (side * (FRAME_OUT + 0.03), 1.02, -0.80), 0.30)
-        for y in (0.34, 2.14):
-            rivet_row(m, brass, (side * FRAME_OUT, y, -2.9), (side * FRAME_OUT, y, 2.7), 18)
-        for z in (-2.6, 2.6):
-            rivet_row(m, brass, (side * FRAME_OUT, 0.5, z), (side * FRAME_OUT, 2.0, z), 8)
-        for bz in (0.5, -0.8, -2.0):
-            m.box(steel, (side * 1.16, 1.90, bz - 0.05), (side * 1.24, 1.98, bz + 0.05), 0.15)
+        for y in (0.30, 1.22, 2.12):
+            rivet_row(m, brass, (s * (FRAME_OUT + 0.022), y, -3.05), (s * (FRAME_OUT + 0.022), y, 3.05), 24)
+        for z in (-2.38, -1.18, 1.18, 2.38):
+            rivet_row(m, brass, (s * (FRAME_OUT + 0.022), 0.34, z), (s * (FRAME_OUT + 0.022), 2.08, z), 11)
     return m
 
 
@@ -476,7 +507,7 @@ def build(path: Path, lod=False) -> tuple[int, float]:
         for i in range(TRACK_LINKS):
             y, z, rx = loop_point(i * pitch)
             shoe = Mesh()
-            shoe.oriented_box(track, (0, 0, 0), (0.24, 0, 0), (0, TRACK_HALF_THICKNESS, 0), (0, 0, pitch * 0.495))
+            shoe.oriented_box(track, (0, 0, 0), (0.28, 0, 0), (0, TRACK_HALF_THICKNESS, 0), (0, 0, pitch * 0.495))
             if not lod:
                 # two grouser bars and the central guide horn that runs in the track race
                 shoe.oriented_box(grouser, (0, -0.005, 0.018), (0.036, 0, 0), (0, 0.024, 0), (0, 0, pitch * 0.30))
@@ -495,14 +526,14 @@ def build(path: Path, lod=False) -> tuple[int, float]:
         children.append(b.add_node("track_links_" + name, children=kids))
         track_animations.append(("track_" + name, channels))
         children.append(b.add_node("track_frame_" + name,
-                                   b.add_mesh("track_frame_" + name, frame_mesh(paint, steel, brass, side, lod))))
+                                   b.add_mesh("track_frame_" + name, frame_mesh(paint, highlight, steel, dark, brass, side, lod))))
         for i in range(6):
             z = -1.78 + i * 0.70
-            children.append(b.add_node(f"rw_{name}_{i}", wheel_i, (side * 1.38, ROAD_WHEEL_CENTER_Y, z)))
+            children.append(b.add_node(f"rw_{name}_{i}", wheel_i, (side * 1.35, ROAD_WHEEL_CENTER_Y, z)))
         for i, z in enumerate((-2.0, 0.0, 2.0)):
-            children.append(b.add_node(f"rr_{name}_{i}", roller_i, (side * 1.38, RETURN_ROLLER_CENTER_Y, z)))
-        children.append(b.add_node("spk_" + name, sprocket_i, (side * 1.38, 1.20, -3.20)))
-        children.append(b.add_node("idl_" + name, sprocket_i, (side * 1.38, 1.20, 3.20)))
+            children.append(b.add_node(f"rr_{name}_{i}", roller_i, (side * 1.35, RETURN_ROLLER_CENTER_Y, z)))
+        children.append(b.add_node("spk_" + name, sprocket_i, (side * 1.35, 1.20, -3.20)))
+        children.append(b.add_node("idl_" + name, sprocket_i, (side * 1.35, 1.20, 3.20)))
 
     for tag, sx, rot in (("right", -SPONSON_X, -math.pi / 2), ("left", SPONSON_X, math.pi / 2)):
         suf = "" if tag == "right" else "_left"

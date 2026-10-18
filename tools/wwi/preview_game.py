@@ -60,7 +60,7 @@ overrideHeight:800
         "gamemode creative TestPlayer",
         "fill -32 -61 -32 32 -61 40 minecraft:grass_block",
         "fill -4 -61 4 4 -61 26 minecraft:coarse_dirt",
-        "tp TestPlayer -4.2 -59.5 12.8 -55 4",
+        "tp TestPlayer -4.8 -59.0 21.4 -137 6",
         "clear TestPlayer",
     ]:
         game.command(cmd)
@@ -81,13 +81,13 @@ overrideHeight:800
     )
     time.sleep(3)
     game.command("realwar damage @e[type=aiarsenal:mark_i,x=-20,y=-60,z=-20,distance=..4] fire")
-    game.command("tp TestPlayer -13.5 -58.6 -13.5 135 10")
+    game.command("tp TestPlayer -25.0 -58.8 -14.5 -137 8")
     time.sleep(7)
     game.key("key", "F1")
     time.sleep(2)
     game.screenshot("mark-i-burning")
     game.key("key", "F1")
-    game.command("tp TestPlayer -6 -59 11 -50 2")
+    game.command("tp TestPlayer -4.8 -59.0 21.4 -137 6")
     time.sleep(2)
 
     for cmd in [

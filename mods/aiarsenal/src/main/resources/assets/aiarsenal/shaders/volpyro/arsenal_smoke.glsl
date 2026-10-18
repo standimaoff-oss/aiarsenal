@@ -4,21 +4,22 @@ vec2 arsenalSmokeField(vec3 local, vec4 timing, vec4 material, vec4 orientation)
     float age=timing.y, life=max(timing.z,0.1), seed=timing.w;
     float radius=max(material.z,0.025);
     if(material.w>6.5) {
-        float R=max(radius,0.35);
-        float nf=billowFbm(local*(2.4/R)+vec3(seed*13.0,-uTime*3.6-age*2.4,seed*7.0));
-        float nf2=billowFbm(local*(5.2/R)+vec3(seed*5.0,-uTime*6.0-age*3.8,seed*19.0));
-        float y=(local.y+R*0.55)/(R*1.55);
-        if(y<0.0 || y>1.15) return vec2(0.0,290.0);
+        float R=max(radius,0.40);
+        float nf=billowFbm(local*(1.15/R)+vec3(seed*9.0,-uTime*2.2-age*1.6,seed*5.0));
+        float nf2=billowFbm(local*(2.10/R)+vec3(seed*3.0,-uTime*3.4-age*2.2,seed*11.0));
+        float y=(local.y+R*0.65)/(R*1.65);
+        if(y<0.0 || y>1.08) return vec2(0.0,290.0);
         float fy=clamp(y,0.0,1.0);
-        vec2 sway=vec2(nf-0.5,nf2-0.5)*R*0.30*fy;
+        vec2 sway=vec2(nf-0.5,nf2-0.5)*R*0.24*fy;
         float rad=length(local.xz+sway);
-        float coneR=R*mix(0.62,0.18,pow(fy,0.75))*(0.78+0.48*nf);
-        float flame=clamp(1.0-rad/max(coneR,1e-3)+(nf2-0.46)*0.58,0.0,1.0);
-        float vert=smoothstep(0.0,0.10,fy)*(1.0-smoothstep(0.74,1.14,y));
-        float fade=1.0-smoothstep(life*0.65,life,age);
-        float rho=material.x*flame*vert*fade*1.65;
-        float core=clamp(1.0-rad/max(coneR*0.78,1e-3),0.0,1.0)*(1.0-0.38*fy);
-        float temp=1350.0+(2350.0*core+750.0*nf2)*(1.0-0.20*age/life);
+        float coneR=R*mix(0.68,0.22,pow(fy,0.70))*(0.84+0.32*nf);
+        float rn=rad/max(coneR,1e-3);
+        float flame=exp(-2.1*rn*rn)*clamp(0.78+0.45*(nf2-0.35),0.0,1.0);
+        float vert=smoothstep(0.0,0.20,fy)*(1.0-smoothstep(0.58,1.05,y));
+        float fade=(1.0-smoothstep(life*0.55,life,age))*smoothstep(0.0,0.08,age);
+        float rho=material.x*flame*vert*fade*1.15;
+        float core=exp(-3.2*rn*rn)*(1.0-0.35*fy);
+        float temp=1450.0+(2200.0*core+550.0*nf)*(1.0-0.18*age/life);
         return vec2(rho,temp);
     }
     vec3 q=local/radius;
@@ -40,5 +41,5 @@ vec3 arsenalSmokeAlbedo(float profile) {
     if(profile<4.5) return vec3(0.49,0.51,0.52); // running engine: thin exhaust haze
     if(profile<5.5) return vec3(0.52,0.46,0.36); // solid roundshot impact dust
     if(profile<6.5) return vec3(0.30,0.31,0.32); // ordinary explosive blast: darker rolling smoke
-    return vec3(0.10,0.06,0.03);                 // volumetric fire soot fringe
+    return vec3(0.16,0.09,0.04);                 // volumetric fire warm soot fringe
 }

@@ -62,6 +62,55 @@ public final class GunRenderer {
         LocalPlayer p = mc.player;
         if (p == null || p.getVehicle() != null) return;
         ItemStack st = p.getMainHandItem();
+        if (st.getItem() instanceof ru.aiforge.realwar.wwi.GrenadeItem
+                || st.getItem() instanceof ru.aiforge.realwar.wwi.FlamethrowerItem) {
+            ResourceLocation key = ForgeRegistries.ITEMS.getKey(st.getItem());
+            if (key != null) {
+                String eqId = key.getPath();
+                GlbAssets.Loaded eqLm = GlbAssets.get(glb(eqId));
+                if (eqLm != null) {
+                    e.setCanceled(true);
+                    if (e.getHand() != InteractionHand.MAIN_HAND) return;
+                    boolean isWex = eqId.equals("wex");
+                    PoseStack ps = e.getPoseStack();
+                    ps.pushPose();
+                    Matrix4f base = new Matrix4f(ps.last().pose());
+                    ps.pushPose();
+                    float pt = e.getPartialTick();
+                    var motion = ru.aiforge.realwar.client.WeaponMotionClient.frame(p, pt, 0f, false, !isWex);
+                    ps.translate(motion.x(), motion.y(), motion.z());
+                    ps.mulPose(Axis.XP.rotationDegrees(motion.pitch()));
+                    ps.mulPose(Axis.YP.rotationDegrees(motion.yaw()));
+                    ps.mulPose(Axis.ZP.rotationDegrees(motion.roll()));
+                    if (isWex) {
+                        ps.translate(0.22f, -0.18f - 0.45f * e.getEquipProgress(), -0.44f);
+                        ps.mulPose(Axis.YP.rotationDegrees(174f));
+                        ps.mulPose(Axis.XP.rotationDegrees(4f));
+                    } else if (eqId.equals("stielhandgranate")) {
+                        ps.translate(0.26f, -0.17f - 0.45f * e.getEquipProgress(), -0.42f);
+                        ps.mulPose(Axis.YP.rotationDegrees(155f));
+                        ps.mulPose(Axis.ZP.rotationDegrees(-10f));
+                        ps.mulPose(Axis.XP.rotationDegrees(8f));
+                    } else {
+                        ps.translate(0.25f, -0.18f - 0.45f * e.getEquipProgress(), -0.38f);
+                        ps.mulPose(Axis.YP.rotationDegrees(150f));
+                        ps.mulPose(Axis.ZP.rotationDegrees(-8f));
+                        ps.mulPose(Axis.XP.rotationDegrees(10f));
+                    }
+                    Pose pose = eqLm.scratch();
+                    pose.compute();
+                    int light = e.getPackedLight();
+                    GlbRenderer.render(eqLm, pose, ps, e.getMultiBufferSource(), light, OverlayTexture.NO_OVERLAY);
+                    Vector3f hr = anchor(eqLm, pose, ps, base, eqId + ".arm_r");
+                    Vector3f hl = anchor(eqLm, pose, ps, base, eqId + ".arm_l");
+                    ps.popPose();
+                    if (hr != null) arm(mc, p, ps, e.getMultiBufferSource(), light, hr, true, isWex ? 0.95f : 0.85f);
+                    if (hl != null) arm(mc, p, ps, e.getMultiBufferSource(), light, hl, false, 0.95f);
+                    ps.popPose();
+                    return;
+                }
+            }
+        }
         if (!(st.getItem() instanceof FirearmItem g)) return;
         e.setCanceled(true); // custom firearm hands; pistol support hand is used only during reload
         if (e.getHand() != InteractionHand.MAIN_HAND || GunClient.scoped()) return;
