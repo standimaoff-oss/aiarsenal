@@ -14,6 +14,10 @@ mods/aiarsenal/src/main/resources/**/*.glb
 !mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/mark_i.glb
 !mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/mark_i_lod1.glb
 !mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/gewehr98.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/wwi_fuel.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/wex.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/stielhandgranate.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/mills_bomb.glb
 mods/aiarsenal/volpyro-*.jar
 
 # local Python environment used to run tools/deck + tools/wwi (numpy, scipy)

@@ -255,8 +255,8 @@ def build_mills_glb() -> None:
 
     mesh_i = b.add_mesh("mills_bomb_mesh", m)
     root = b.add_node("mills_bomb")
-    body = b.add_node("mills_bomb.body", mesh_i)
-    arm_r = b.add_node("mills_bomb.arm_r", translation=(0.0, -0.022, -0.018))
+    body = b.add_node("mills_bomb.body", mesh_i, translation=(0.0, 0.032, 0.0), scale=(1.42, 1.42, 1.42))
+    arm_r = b.add_node("mills_bomb.arm_r", translation=(0.0, -0.095, -0.018))
     b.set_children(root, [body, arm_r])
     b.save(MODEL_DIR / "mills_bomb.glb", [root])
 
@@ -310,8 +310,8 @@ def build_stiel_glb() -> None:
 
     mesh_i = b.add_mesh("stielhandgranate_mesh", m)
     root = b.add_node("stielhandgranate")
-    body = b.add_node("stielhandgranate.body", mesh_i)
-    arm_r = b.add_node("stielhandgranate.arm_r", translation=(0.0, -0.055, -0.012))
+    body = b.add_node("stielhandgranate.body", mesh_i, translation=(0.0, 0.028, 0.0), scale=(1.30, 1.30, 1.30))
+    arm_r = b.add_node("stielhandgranate.arm_r", translation=(0.0, -0.105, -0.015))
     b.set_children(root, [body, arm_r])
     b.save(MODEL_DIR / "stielhandgranate.glb", [root])
 
@@ -380,9 +380,9 @@ def build_wex_glb() -> None:
 
     mesh_i = b.add_mesh("wex_mesh", m)
     root = b.add_node("wex")
-    body = b.add_node("wex.body", mesh_i)
-    arm_r = b.add_node("wex.arm_r", translation=(0.0, -0.048, -0.088))
-    arm_l = b.add_node("wex.arm_l", translation=(0.0, -0.048, 0.212))
+    body = b.add_node("wex.body", mesh_i, translation=(0.0, 0.035, 0.0), scale=(1.22, 1.22, 1.22))
+    arm_r = b.add_node("wex.arm_r", translation=(0.0, -0.098, -0.088))
+    arm_l = b.add_node("wex.arm_l", translation=(0.0, -0.088, 0.212))
     b.set_children(root, [body, arm_r, arm_l])
     b.save(MODEL_DIR / "wex.glb", [root])
 

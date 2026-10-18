@@ -155,7 +155,7 @@ public final class VolumetricFxManager {
     /** r32: a licking flame tongue - a hot buoyant volume (the shader glows it by temperature). */
     public static synchronized void addFire(Vec3 pos, float radius, float seconds, float seed) {
         float r = Math.max(0.25f, Math.min(4.0f, radius));
-        VolumeInstance v = new VolumeInstance(11, pos, r * 1.25f, 1.55f, 3200.0f, r * 0.95f, 7.0f,
+        VolumeInstance v = new VolumeInstance(11, pos, Math.max(r * 1.85f, 0.85f), 0.95f, 3200.0f, r * 0.95f, 7.0f,
                 Vec3.ZERO, 0.0f, Math.max(0.55f, seconds), seed, nextKey++);
         v.profile = 7;
         v.velocity = new Vec3(((seed * 7.3f) % 0.24f) - 0.12f, 0.8f + 0.9f * ((seed * 3.1f) % 0.5f), ((seed * 5.7f) % 0.24f) - 0.12f);

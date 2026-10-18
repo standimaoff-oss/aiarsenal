@@ -83,19 +83,19 @@ public final class GunRenderer {
                     ps.mulPose(Axis.YP.rotationDegrees(motion.yaw()));
                     ps.mulPose(Axis.ZP.rotationDegrees(motion.roll()));
                     if (isWex) {
-                        ps.translate(0.22f, -0.18f - 0.45f * e.getEquipProgress(), -0.44f);
-                        ps.mulPose(Axis.YP.rotationDegrees(174f));
-                        ps.mulPose(Axis.XP.rotationDegrees(4f));
+                        ps.translate(0.20f, -0.14f - 0.45f * e.getEquipProgress(), -0.40f);
+                        ps.mulPose(Axis.YP.rotationDegrees(166f));
+                        ps.mulPose(Axis.XP.rotationDegrees(6f));
                     } else if (eqId.equals("stielhandgranate")) {
-                        ps.translate(0.26f, -0.17f - 0.45f * e.getEquipProgress(), -0.42f);
-                        ps.mulPose(Axis.YP.rotationDegrees(155f));
-                        ps.mulPose(Axis.ZP.rotationDegrees(-10f));
-                        ps.mulPose(Axis.XP.rotationDegrees(8f));
-                    } else {
-                        ps.translate(0.25f, -0.18f - 0.45f * e.getEquipProgress(), -0.38f);
-                        ps.mulPose(Axis.YP.rotationDegrees(150f));
+                        ps.translate(0.22f, -0.13f - 0.45f * e.getEquipProgress(), -0.36f);
+                        ps.mulPose(Axis.YP.rotationDegrees(152f));
                         ps.mulPose(Axis.ZP.rotationDegrees(-8f));
                         ps.mulPose(Axis.XP.rotationDegrees(10f));
+                    } else {
+                        ps.translate(0.21f, -0.13f - 0.45f * e.getEquipProgress(), -0.33f);
+                        ps.mulPose(Axis.YP.rotationDegrees(145f));
+                        ps.mulPose(Axis.ZP.rotationDegrees(-6f));
+                        ps.mulPose(Axis.XP.rotationDegrees(12f));
                     }
                     Pose pose = eqLm.scratch();
                     pose.compute();
