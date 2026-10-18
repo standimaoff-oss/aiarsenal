@@ -124,6 +124,32 @@ overrideHeight:800
     game.screenshot("wex-flame")
     game.key("mouseup", "3")
 
+    # Place each real item renderer in a staged Minecraft item_display. Tiny 1:1
+    # hand grenades are otherwise only a few pixels wide at the player's hand.
+    # F2 files remain untouched captures from the running client; per-item scale
+    # keeps the full, metre-scale meshes legible without editing the screenshots.
+    game.command("tp TestPlayer 20 -60 0 0 0")
+    game.key("key", "F1")
+    display_scales = {
+        "mills_bomb": 8.0,
+        "stielhandgranate": 3.2,
+        "wex": 2.0,
+        "wwi_fuel": 3.6,
+    }
+    for item, scale in display_scales.items():
+        game.command("kill @e[type=minecraft:item_display]")
+        scalar = f"{scale:g}f"
+        summon = (
+            f'summon minecraft:item_display 20 -58.38 3 '
+            f'{{item:{{id:"aiarsenal:{item}",Count:1b}},item_display:"fixed",'
+            f'transformation:{{scale:[{scalar},{scalar},{scalar}]}}}}'
+        )
+        game.command(summon, "Summoned new entity.minecraft.item_display")
+        time.sleep(2)
+        game.screenshot(item+"-showcase")
+    game.command("kill @e[type=minecraft:item_display]")
+    game.key("key", "F1")
+
     if client.poll() is not None or server.poll() is not None:
         raise RuntimeError("Minecraft exited during preview capture")
 

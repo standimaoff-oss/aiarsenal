@@ -21,6 +21,6 @@ python3 tools/wwi/verify_assets.py
 
 The offline test checks GLB structure, required named parts, triangle budgets, metre-scale dimensions, item wrappers, recipes, translations, and GLB-renderer hooks. `tools/wwi/requirements.txt` pins NumPy/SciPy/Pillow so the voxel collision-deck rebuild is reproducible as well. `render_preview.py` is a geometry-only inspection aid: it applies back-face culling, but it is **not** a Minecraft screenshot and does not validate Minecraft lighting or item transforms.
 
-## Game verification still required
+## In-game verification and screenshots
 
-The asset pass is not complete until the Minecraft client shows the four new GLB-rendered items in inventory/hand and the WWI gametest passes. This checkout has no local Java runtime; the delivery workflow must provide those checks and fresh, unedited in-game F2 captures. Existing captures in `previews/` predate this pass and are not evidence for it.
+This checkout has no local Java runtime, so the delivery workflow is the authoritative build and Minecraft/GameTest check. It captures unedited F2 images from the running client. It also saves first-person views for QA; the public item portraits use actual Minecraft `item_display` entities, scaled in-world so that metre-accurate handheld equipment remains legible at screenshot resolution. That is in-game staging, not image compositing or post-processing. The workflow replaces `previews/` only with files captured in the current run, after asset regeneration, build, and regression checks; older images are not evidence for a new change.
