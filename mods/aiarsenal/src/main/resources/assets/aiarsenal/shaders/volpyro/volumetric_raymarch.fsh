@@ -100,18 +100,38 @@ vec2 evaluateVolume(vec3 p, vec4 h0, vec4 h1, vec4 h2, vec4 h3) {
     float density=0.0, temperature=290.0;
     float n=billowFbm(local*1.45 + vec3(seed*17.0, -age*0.32, seed*7.0));
     if (type == 1) {
-        float height=max(h2.z,0.5);
-        float h=local.y;
-        if (h >= 0.0 && h <= height*1.25) {
-            float f=clamp(h/height,0.0,1.0);
-            float width=h0.w*(0.13+0.19*f) + height*0.035;
-            float radial=length(local.xz);
-            float plume=exp(-radial*radial/max(width*width*1.6,1e-3));
-            float wisps=clamp(0.46+0.94*(n-0.42),0.05,1.25);
-            density=h2.x*plume*wisps*smoothstep(0.0,0.09,f)*exp(-f*0.45);
-            temperature=290.0+(h2.y-290.0)*exp(-age*0.25)*exp(-f*1.65);
+        if (h2.w > 0.5) {
+            // ---- Volumetric fire tongue: turbulent rising flame with white-yellow core, orange body and soot tips ----
+            float R = max(h0.w, 0.45);
+            float nf = billowFbm(local * (2.6 / R) + vec3(seed * 13.0, -uTime * 3.4 - age * 2.2, seed * 7.0));
+            float nf2 = billowFbm(local * (5.4 / R) + vec3(seed * 5.0, -uTime * 5.8 - age * 3.5, seed * 19.0));
+            float y = (local.y + R * 0.45) / (R * 1.45);
+            if (y >= 0.0 && y <= 1.15) {
+                float fy = clamp(y, 0.0, 1.0);
+                vec2 sway = vec2(nf - 0.5, nf2 - 0.5) * R * 0.28 * fy;
+                float rad = length(local.xz + sway);
+                float coneR = R * mix(0.52, 0.14, pow(fy, 0.75)) * (0.78 + 0.45 * nf);
+                float flame = clamp(1.0 - rad / max(coneR, 1e-3) + (nf2 - 0.48) * 0.55, 0.0, 1.0);
+                float vert = smoothstep(0.0, 0.12, fy) * (1.0 - smoothstep(0.72, 1.12, y));
+                float fade = 1.0 - smoothstep(lifetime * 0.65, lifetime, age);
+                density = h2.x * flame * vert * fade * 1.35;
+                float core = clamp(1.0 - rad / max(coneR * 0.72, 1e-3), 0.0, 1.0) * (1.0 - 0.42 * fy);
+                temperature = 1150.0 + (2250.0 * core + 650.0 * nf2) * (1.0 - 0.25 * age / lifetime);
+            }
+        } else {
+            float height=max(h2.z,0.5);
+            float h=local.y;
+            if (h >= 0.0 && h <= height*1.25) {
+                float f=clamp(h/height,0.0,1.0);
+                float width=h0.w*(0.13+0.19*f) + height*0.035;
+                float radial=length(local.xz);
+                float plume=exp(-radial*radial/max(width*width*1.6,1e-3));
+                float wisps=clamp(0.46+0.94*(n-0.42),0.05,1.25);
+                density=h2.x*plume*wisps*smoothstep(0.0,0.09,f)*exp(-f*0.45);
+                temperature=290.0+(h2.y-290.0)*exp(-age*0.25)*exp(-f*1.65);
+            }
+            density *= 1.0-smoothstep(lifetime*0.82,lifetime,age);
         }
-        density *= 1.0-smoothstep(lifetime*0.82,lifetime,age);
     } else if (type == 2) {
         // ---- Conventional explosion: fast fireball -> rolling smoke puff that rises, spreads and thins ----
         float scale=max(h2.z,0.5);
@@ -469,7 +489,7 @@ void main() {
             temp=max(temp,field.y);
             hotWeight+=tw;
             int vtype=int(h1.x+0.5);
-            if (vtype==1) albedo=vec3(0.24,0.25,0.26);
+            if (vtype==1) { albedo=(h2.w>0.5) ? vec3(0.08,0.05,0.03) : vec3(0.24,0.25,0.26); if (h2.w>0.5) emitGain=6.5; }
             else if (vtype==3) albedo=vec3(0.80,0.76,0.70);
             else if (vtype==6) {
                 // per-variant cloud colour: tan dust bases for the land bursts, white spray underwater

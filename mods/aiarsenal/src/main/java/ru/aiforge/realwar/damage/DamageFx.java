@@ -28,8 +28,8 @@ public final class DamageFx {
         if (s.broken(ENGINE) && t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), eng, r, 0.4, 0.06);
         if (s.burning()) {
             // r32: the fire body is a volumetric flame volume; a few flat sparks stay for detail
-            if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), eng, r, 0.5, 0.5);
-            puff(l, ParticleTypes.FLAME, eng, r, 0.6, 0.03);
+            puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), eng, r, 0.5, 0.6);
+            if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), eng.add(0, 0.3, 0), r, 0.4, 0.5);
             if (t % 3 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), eng.add(0, 0.5, 0), r, 0.4, 0.07);
             if (r.nextInt(6) == 0) puff(l, ParticleTypes.LAVA, eng, r, 0.5, 0);
         }
@@ -37,8 +37,8 @@ public final class DamageFx {
             Vec3 top = g.yp() != null ? v.localToWorld(g.yp()[0], g.yp()[1] + 0.3, g.yp()[2]) : v.localToWorld(0, g.cy() + g.hy(), g.cz());
             if (t % 3 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), top, r, 0.5, 0.05);
             if (s.broken(TURRET_GONE) && s.burning()) {
-                if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), top, r, 0.8, 0.6);
-                puff(l, ParticleTypes.FLAME, top, r, 0.6, 0.06);
+                puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), top, r, 0.8, 0.7);
+                if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), top.add(0, 0.4, 0), r, 0.6, 0.6);
             }
         }
         if (s.repairMod >= 0 && !s.burning() && t % 8 == 0 && Math.abs(v.speedMs) < 0.3) {

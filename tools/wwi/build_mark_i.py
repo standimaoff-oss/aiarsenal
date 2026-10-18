@@ -70,66 +70,47 @@ def _noise_grid(rng: random.Random, n: int, cells: int) -> list[list[float]]:
 
 
 def atlas() -> bytes:
-    """512 px khaki armour plate: panel seams, rivet shadows, blotches, mud streaks."""
-    key = ("atlas",)
+    """512 px painted armour: even khaki-grey paint, deep panel seams with a lit edge,
+    rows of rivet heads along every seam. No streaks/patchwork - they read as wood in game."""
+    key = ("atlas33",)
     if key in _CACHE:
         return _CACHE[key]
     n = 512
     rng = random.Random(41)
-    blotch = _noise_grid(rng, n, 9)
-    grain = _noise_grid(rng, n, 64)
+    blotch = _noise_grid(rng, n, 12)
+    grain = _noise_grid(rng, n, 96)
     pix = [(0, 0, 0, 255)] * (n * n)
-    seams_y = [70, 190, 330, 452]          # horizontal plate seams
+    seams_y = [64, 192, 320, 448]
     seams_x = [128, 384]
-    patches = [(30, 60, 150, 185, 1.10), (200, 75, 325, 185, 0.90), (340, 200, 470, 325, 1.08),
-               (60, 340, 120, 448, 0.92), (395, 335, 500, 448, 1.06), (140, 200, 250, 325, 0.94)]
-    rivets = [(x, y) for y in (62, 78, 182, 198, 322, 338, 444, 460)
-              for x in range(24, n, 48)]
     for y in range(n):
-        streak = 0.0
         for x in range(n):
             b = blotch[y][x]
             g = grain[y][x]
-            r, gg, bb = 96 + 24 * b, 92 + 22 * b, 78 + 16 * b
-            for px0, py0, px1, py1, pf in patches:            # replaced-plate patchwork
-                if px0 <= x < px1 and py0 <= y < py1:
-                    r, gg, bb = r * pf, gg * pf, bb * pf
-            if any(abs(y - s) <= 1 for s in seams_y) or any(abs(x - s) <= 1 for s in seams_x):
-                r, gg, bb = r * 0.42, gg * 0.42, bb * 0.40      # seam groove
-            elif any(abs(y - s) <= 3 for s in seams_y) or any(abs(x - s) <= 3 for s in seams_x):
-                r, gg, bb = r * 1.14, gg * 1.14, bb * 1.10      # lit edge under the seam
-            for rx, ry in ((x, y),):
-                pass
-            streak += 0.0
-            v = 0.90 + 0.20 * g
+            r, gg, bb = 92 + 14 * b, 90 + 13 * b, 76 + 11 * b
+            seam = any(abs(y - s_) <= 1 for s_ in seams_y) or any(abs(x - s_) <= 1 for s_ in seams_x)
+            lite = any(2 <= y - s_ <= 3 for s_ in seams_y) or any(2 <= x - s_ <= 3 for s_ in seams_x)
+            if seam:
+                r, gg, bb = r * 0.38, gg * 0.38, bb * 0.36
+            elif lite:
+                r, gg, bb = r * 1.18, gg * 1.18, bb * 1.14
+            v = 0.94 + 0.12 * g
             pix[y * n + x] = (int(min(255, r * v)), int(min(255, gg * v)), int(min(255, bb * v)), 255)
-    # rivet heads: bright dome + dark crescent under it
-    for rx, ry in rivets:
-        for dy in range(-3, 4):
-            for dx in range(-3, 4):
+    # rivet heads: bright dome, dark rim crescent, spaced along both seam directions
+    riv = [(x, y) for y in (56, 72, 184, 200, 312, 328, 440, 456) for x in range(16, n, 32)]
+    riv += [(x, y) for x in (120, 136, 376, 392) for y in range(16, n, 32)]
+    for rx, ry in riv:
+        for dy in range(-4, 5):
+            for dx in range(-4, 5):
                 d = math.hypot(dx, dy)
-                if d > 3.2:
+                if d > 4.2:
                     continue
                 i = ((ry + dy) % n) * n + ((rx + dx) % n)
                 base = pix[i]
-                if d < 2.2:
-                    f = 1.28 - 0.10 * d
+                if d < 2.6:
+                    f = 1.45 - 0.12 * d
                     pix[i] = (int(min(255, base[0] * f)), int(min(255, base[1] * f)), int(min(255, base[2] * f)), 255)
-                elif dy > 0:
-                    pix[i] = (int(base[0] * 0.62), int(base[1] * 0.62), int(base[2] * 0.60), 255)
-    # mud streaks running down from the seams
-    for s in seams_y:
-        for k in range(46):
-            x0 = rng.randrange(n)
-            ln = rng.randrange(24, 96)
-            w = rng.choice((1, 1, 2))
-            for y in range(s, min(n, s + ln)):
-                a = 1.0 - (y - s) / ln
-                for dx in range(w):
-                    i = y * n + ((x0 + dx) % n)
-                    base = pix[i]
-                    f = 1.0 - 0.30 * a
-                    pix[i] = (int(base[0] * f), int(base[1] * f * 0.97), int(base[2] * f * 0.9), 255)
+                elif dy > 0 or dx > 2:
+                    pix[i] = (int(base[0] * 0.55), int(base[1] * 0.55), int(base[2] * 0.52), 255)
     png = png_rgba(n, n, pix)
     _CACHE[key] = png
     return png
@@ -300,11 +281,12 @@ def hull_mesh(paint, highlight, steel, dark, brass, wood, lod: bool) -> Mesh:
     cab = [
         [(-0.60, 2.00, 0.72), (0.60, 2.00, 0.72), (0.60, 2.00, 1.78), (-0.60, 2.00, 1.78)],
         [(-0.55, 2.38, 0.80), (0.55, 2.38, 0.80), (0.55, 2.38, 1.70), (-0.55, 2.38, 1.70)],
-        [(-0.38, 2.50, 0.94), (0.38, 2.50, 0.94), (0.38, 2.50, 1.56), (-0.38, 2.50, 1.56)],
+        [(-0.52, 2.50, 1.00), (0.52, 2.50, 1.00), (0.52, 2.50, 1.52), (-0.52, 2.50, 1.52)],
     ]
     loft_rings(m, highlight, cab, 0.4)
     m.box(dark, (-0.36, 2.28, 1.56), (0.36, 2.40, 1.64), 0.2)          # visor slit
     m.box(steel, (-0.40, 2.26, 1.52), (0.40, 2.44, 1.68), 0.2)         # slit frame
+    m.box(highlight, (-0.44, 2.42, 1.50), (0.44, 2.48, 1.74), 0.2)    # visor rain hood
     # ---- roof furniture: two manhole coamings with lids, ventilator dome
     for cz, r in ((0.10, 0.30), (-1.30, 0.26)):
         m.cylinder(highlight, (0.0, 1.98, cz), (0.0, 2.10, cz), r, sides, highlight, 0.3)
@@ -345,16 +327,18 @@ def sponson_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> 
     """Octagonal side casemate: chamfered top/bottom, raked front corners, gun port."""
     m = Mesh()
     s = side
-    plan = [(1.02, 1.10), (1.02, 1.52), (0.70, SPONSON_OUT), (-0.70, SPONSON_OUT),
-            (-1.02, 1.52), (-1.02, 1.10)]
+    plan = [(1.05, 1.10), (1.05, 1.52), (0.70, SPONSON_OUT), (-0.70, SPONSON_OUT),
+            (-1.05, 1.52), (-1.05, 1.10)]
     secs = []
-    for y, inset in ((0.90, 0.24), (1.06, 0.0), (1.72, 0.0), (1.92, 0.26)):
+    for y, inset in ((0.88, 0.35), (1.06, 0.0), (1.74, 0.0), (1.94, 0.35)):
         ring = [(s * (x - inset * 0.9) if x > 1.2 else s * x, y, z * (1.0 - inset * 0.28)) for z, x in plan]
         secs.append([(px, py, pz) for px, py, pz in ring])
     loft_rings(m, paint, secs, 0.5)
     # gun port: recessed dark disc, mantlet ring and the embrasure frame on the outer face
     m.cylinder(dark, (s * (SPONSON_OUT - 0.06), 1.38, 0.0), (s * (SPONSON_OUT + 0.01), 1.38, 0.0), 0.17, 12, dark, 0.3)
-    m.cylinder(steel, (s * (SPONSON_OUT - 0.02), 1.38, 0.0), (s * (SPONSON_OUT + 0.03), 1.38, 0.0), 0.21, 12, steel, 0.3)
+    m.cylinder(steel, (s * (SPONSON_OUT - 0.02), 1.38, 0.0), (s * (SPONSON_OUT + 0.10), 1.38, 0.0), 0.21, 14, steel, 0.3)
+    m.slab(highlight, [(s * 1.30, 1.94, -0.98), (s * (SPONSON_OUT + 0.05), 1.94, -0.98),
+                       (s * (SPONSON_OUT + 0.05), 1.94, 0.98), (s * 1.30, 1.94, 0.98)], 0.05, 0.4)
     # vision slits in the raked front corners, inspection hatch on the side
     for zc in (-0.80, 0.80):
         m.box(dark, (s * 1.60, 1.44, zc - 0.10), (s * 1.72, 1.52, zc + 0.10), 0.15)
@@ -371,8 +355,9 @@ def wheel_mesh(steel, rubber, radius: float, teeth: int = 0) -> Mesh:
     m = Mesh()
     sides = 14
     m.cylinder(steel, (-0.09, 0, 0), (0.09, 0, 0), radius, sides, steel, 0.4)      # rim
-    m.cylinder(rubber, (-0.11, 0, 0), (0.11, 0, 0), radius * 0.86, sides, rubber, 0.4)
+    m.cylinder(rubber, (-0.115, 0, 0), (0.115, 0, 0), radius * 0.92, sides, rubber, 0.4)
     m.cylinder(steel, (-0.13, 0, 0), (0.13, 0, 0), radius * 0.34, 10, steel, 0.3)  # hub
+    m.cylinder(rubber, (-0.15, 0, 0), (0.15, 0, 0), radius * 0.16, 8, rubber, 0.2)
     for i in range(8):
         a = i * math.tau / 8
         m.cylinder(steel, (-0.10, math.sin(a) * radius * 0.55, math.cos(a) * radius * 0.55),
@@ -398,7 +383,7 @@ def gun_mesh(steel, dark, brass, lod: bool):
     barrel = Mesh()
     sides = 10 if not lod else 6
     secs = []
-    for z, r in ((-0.06, 0.048), (0.10, 0.042), (0.34, 0.038), (0.62, 0.033), (BARREL_TIP - 0.09, 0.028),
+    for z, r in ((-0.06, 0.052), (0.10, 0.046), (0.34, 0.040), (0.62, 0.034), (BARREL_TIP - 0.09, 0.029),
                  (BARREL_TIP - 0.09, 0.033), (BARREL_TIP, 0.031), (BARREL_TIP, 0.023)):
         ring = []
         for i in range(sides):
@@ -415,8 +400,8 @@ def gun_mesh(steel, dark, brass, lod: bool):
 def frame_mesh(paint, steel, brass, side: int, lod: bool) -> Mesh:
     """Riveted track-frame armour enclosing the running gear (early British practice)."""
     m = Mesh()
-    profile = [(0.20, -2.36), (0.78, -3.16), (2.20, -3.16),
-               (2.20, 3.16), (0.78, 3.16), (0.20, 2.36)]
+    profile = [(0.13, -2.30), (0.74, -3.20), (2.27, -3.20),
+               (2.27, 3.20), (0.74, 3.20), (0.13, 2.30)]
     pts = [(side * FRAME_IN, y, z) for y, z in profile] + [(side * FRAME_OUT, y, z) for y, z in reversed(profile)]
     n = len(profile)
     for i in range(n):
@@ -486,7 +471,7 @@ def build(path: Path, lod=False) -> tuple[int, float]:
         for i in range(TRACK_LINKS):
             y, z, rx = loop_point(i * pitch)
             shoe = Mesh()
-            shoe.oriented_box(track, (0, 0, 0), (0.24, 0, 0), (0, TRACK_HALF_THICKNESS, 0), (0, 0, pitch * 0.46))
+            shoe.oriented_box(track, (0, 0, 0), (0.24, 0, 0), (0, TRACK_HALF_THICKNESS, 0), (0, 0, pitch * 0.495))
             if not lod:
                 # two grouser bars and the central guide horn that runs in the track race
                 shoe.oriented_box(grouser, (0, -0.005, 0.018), (0.036, 0, 0), (0, 0.024, 0), (0, 0, pitch * 0.30))
