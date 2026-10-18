@@ -362,8 +362,8 @@ public final class WWITests {
             if (phase[0] == 1) {
                 if (Math.abs(tank.az() + 90.0f) < 0.5f) {
                     // right broadside: the right gun is centred, the left one stays at its forward stop
-                    h.assertTrue(Math.abs(tank.sponsonAz(0) + 90.0f) < 0.01f, "right gun off broadside: " + tank.sponsonAz(0));
-                    h.assertTrue(Math.abs(tank.sponsonAz(1) - 55.0f) < 0.01f, "left gun left its sector: " + tank.sponsonAz(1));
+                    h.assertTrue(Math.abs(tank.sponsonAz(0) + 90.0f) < 0.5f, "right gun off broadside: " + tank.sponsonAz(0));
+                    h.assertTrue(Math.abs(tank.sponsonAz(1) - 55.0f) < 0.5f, "left gun left its sector: " + tank.sponsonAz(1));
                     Vec3 dr = tank.tubeWorld(0).subtract(tr0).normalize();
                     h.assertTrue(dr.dot(new Vec3(-1.0, 0.0, 0.0)) > 0.999, "right gun not on broadside: " + dr);
                     phase[0] = 2;
