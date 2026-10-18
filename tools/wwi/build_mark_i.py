@@ -41,7 +41,7 @@ ROAD_WHEEL_CENTER_Y = TRACK_PATH[0][0] + TRACK_HALF_THICKNESS + ROAD_WHEEL_RADIU
 RETURN_ROLLER_CENTER_Y = TRACK_PATH[2][0] - TRACK_HALF_THICKNESS - RETURN_ROLLER_RADIUS
 SPONSON_X = 1.41
 SPONSON_Y = 1.22
-BARREL_TIP = 2.23  # 6-pdr muzzle, metres ahead of the sponson face; see VehicleDamage.tubeWorld
+BARREL_TIP = 1.15  # 6-pdr muzzle, metres from the trunnion (0.74 m proud of the sponson face)
 
 
 _TEXTURE_CACHE: dict[tuple, bytes] = {}
@@ -356,7 +356,7 @@ def wheel_mesh(steel: int, rubber: int, radius=0.31) -> Mesh:
 def gun_mesh(steel: int, dark: int, brass: int, lod=False) -> tuple[int, int]:
     """Two local meshes: the fixed cradle/breech and the recoiling QF 6-pdr tube.
 
-    Barrel axis is +z in launcher_pitch space; the muzzle sits at z=2.23 m, exactly where
+    Barrel axis is +z in launcher_pitch space; the muzzle sits at z=1.15 m, exactly where
     VehicleDamage.tubeWorld puts the hit tube, and Armour.tubeRadius gives it 49 mm.
     """
     breech = Mesh()
@@ -366,8 +366,8 @@ def gun_mesh(steel: int, dark: int, brass: int, lod=False) -> tuple[int, int]:
         breech.box(dark, (side * 0.155, -0.13, 0.02), (side * 0.245, 0.13, 0.28), 0.40)
     # Hydraulic buffer and spring recuperator housings, fixed to the cradle.
     for y, r in ((0.135, 0.052), (-0.135, 0.048)):
-        breech.cylinder(steel, (0, y, 0.28), (0, y, 1.44), r, 10, dark, 0.40)
-        for z in (0.36, 0.90, 1.38):
+        breech.cylinder(steel, (0, y, 0.28), (0, y, 0.40), r, 10, dark, 0.40)
+        for z in (0.36,):
             breech.cylinder(dark, (0, y, z), (0, y, z + 0.06), r + 0.008, 10, dark, 0.40)
     # Breech ring, block and the casing behind it.
     breech.cylinder(steel, (0, 0, -0.02), (0, 0, 0.30), 0.115, 12, steel, 0.40)
@@ -384,14 +384,14 @@ def gun_mesh(steel: int, dark: int, brass: int, lod=False) -> tuple[int, int]:
 
     barrel = Mesh()
     # Chase, reinforcing ring and the swelled muzzle; 16-gon so it reads round in game.
-    barrel.cylinder(steel, (0, 0, 0.28), (0, 0, 1.02), 0.056, 16, steel, 0.40)
-    barrel.cylinder(dark, (0, 0, 0.98), (0, 0, 1.12), 0.063, 16, dark, 0.40)
-    barrel.cylinder(steel, (0, 0, 1.12), (0, 0, 2.06), 0.048, 16, steel, 0.40)
-    barrel.cylinder(steel, (0, 0, 2.04), (0, 0, 2.16), 0.057, 16, steel, 0.40)
-    barrel.cylinder(dark, (0, 0, 2.16), (0, 0, BARREL_TIP), 0.051, 16, dark, 0.40)
+    barrel.cylinder(steel, (0, 0, 0.28), (0, 0, 0.62), 0.056, 16, steel, 0.40)
+    barrel.cylinder(dark, (0, 0, 0.58), (0, 0, 0.70), 0.063, 16, dark, 0.40)
+    barrel.cylinder(steel, (0, 0, 0.70), (0, 0, 1.05), 0.048, 16, steel, 0.40)
+    barrel.cylinder(steel, (0, 0, 1.03), (0, 0, 1.10), 0.057, 16, steel, 0.40)
+    barrel.cylinder(dark, (0, 0, 1.10), (0, 0, BARREL_TIP), 0.051, 16, dark, 0.40)
     # Piston rods of the buffer and recuperator, travelling with the gun.
     for y, r in ((0.135, 0.021), (-0.135, 0.019)):
-        barrel.cylinder(dark, (0, y, 0.30), (0, y, 1.46), r, 8, dark, 0.40)
+        barrel.cylinder(dark, (0, y, 0.30), (0, y, 0.44), r, 8, dark, 0.40)
     # Iron front blade and rear notch; no modern optic.
     barrel.box(steel, (-0.025, 0.050, 1.96), (0.025, 0.100, 2.01), 0.30)
     barrel.box(steel, (-0.07, 0.075, 0.42), (0.07, 0.095, 0.48), 0.30)

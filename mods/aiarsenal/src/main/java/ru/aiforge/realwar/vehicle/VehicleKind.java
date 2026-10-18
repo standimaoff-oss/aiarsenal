@@ -66,7 +66,7 @@ public enum VehicleKind {
     /** British Mark I Male (1916): 28.4 t, 78 kW, 6.4 km/h, two independently loaded QF 6-pdr sponson guns. */
     // traverse 125 deg: the shared aim line must reach into both sponson sectors (-125..-55 and 55..125);
     // each gun then follows it inside its own +/-35 deg arc about the broadside rest
-    MARK_I(Specs.MARK_I, 420, 28400.0f, 78.0f, 6.4f, 0.55f, 2, 100, 60, 125.0f, -10.0f, 20.0f, 2.23f, 0.0f, 0.42f);
+    MARK_I(Specs.MARK_I, 420, 28400.0f, 78.0f, 6.4f, 0.55f, 2, 100, 60, 125.0f, -10.0f, 20.0f, 1.15f, 0.0f, 0.42f);
 
     public final VehicleSpec spec;
     public final int hp;

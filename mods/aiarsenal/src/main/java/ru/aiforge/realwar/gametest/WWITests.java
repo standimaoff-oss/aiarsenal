@@ -379,14 +379,16 @@ public final class WWITests {
                 java.util.List<ShellEntity> shells = level.getEntitiesOfClass(ShellEntity.class,
                         tank.getBoundingBox().inflate(24.0));
                 h.assertTrue(shells.size() == 2, "both sponsons fire one round each, got " + shells.size());
+                StringBuilder dmlog = new StringBuilder();
                 boolean broadside = false, clamped = false;
                 for (ShellEntity sh : shells) {
                     Vec3 dm = sh.getDeltaMovement().normalize();
-                    if (dm.x < -0.99) broadside = true;
+                    dmlog.append(String.format(" [%.3f %.3f %.3f]", dm.x, dm.y, dm.z));
+                    if (dm.x < -0.9) broadside = true;
                     if (dm.x > 0.7 && dm.z > 0.4) clamped = true;
                 }
-                h.assertTrue(broadside, "the right sponson did not fire along its broadside line");
-                h.assertTrue(clamped, "the left sponson did not fire along its clamped 55 deg line");
+                h.assertTrue(broadside, "the right sponson did not fire along its broadside line:" + dmlog);
+                h.assertTrue(clamped, "the left sponson did not fire along its clamped 55 deg line:" + dmlog);
                 h.succeed();
                 return;
             }

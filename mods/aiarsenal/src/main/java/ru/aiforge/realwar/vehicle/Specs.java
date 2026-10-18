@@ -198,7 +198,7 @@ public final class Specs {
                     {1.41f, 1.23f, 0.0f, 0.41f, 0.43f, 0.87f},
                     {-1.41f, 1.23f, 0.0f, 0.41f, 0.43f, 0.87f}},
             new String[]{"body", "engine", "door_driver", "door_gunner", "sponson_L", "sponson_R"},
-            new float[][]{{0.0f, 0.0f, 2.23f}, {0.0f, 0.0f, 2.23f}}, new float[0][],
+            new float[][]{{0.0f, 0.0f, 1.15f}, {0.0f, 0.0f, 1.15f}}, new float[0][],
             new float[]{0.0f, 1.22f, 0.0f}, new float[]{0.0f, 0.0f, 0.0f}, new float[0][]);
 
     private Specs() {

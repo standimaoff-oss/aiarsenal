@@ -181,9 +181,11 @@ def validate_mark_i_running_gear(js: dict) -> dict:
               f"Mark I GLB: {name} does not start facing outward")
         bind_yaw[name] = 2.0 * math.atan2(rotation[1], rotation[3])
     launcher_source = (ROOT / "mods/aiarsenal/src/main/java/ru/aiforge/realwar/vehicle/LauncherVehicle.java").read_text(encoding="utf-8")
-    check(re.search(r'pose\.rotate\("launcher_yaw",\s*\(float\)Math\.toRadians\(az\s*\+\s*90\.0f\)', launcher_source)
-          and re.search(r'pose\.rotate\("launcher_yaw_left",\s*\(float\)Math\.toRadians\(az\s*-\s*90\.0f\)', launcher_source),
-          "LauncherVehicle.applyPose Mark I yaw offsets differ from the generated bind rotations")
+    check(re.search(r'pose\.rotate\("launcher_yaw",\s*\(float\)Math\.toRadians\(azR\s*\+\s*90\.0f\)', launcher_source)
+          and re.search(r'pose\.rotate\("launcher_yaw_left",\s*\(float\)Math\.toRadians\(azL\s*-\s*90\.0f\)', launcher_source)
+          and re.search(r'float azR = this\.kind\.sponsonAz\(0, az\), azL = this\.kind\.sponsonAz\(1, az\)', launcher_source),
+          "LauncherVehicle.applyPose Mark I yaw offsets differ from the generated bind rotations "
+          "(must counter-rotate the clamped sponson azimuths azR/azL by the bind +-90 deg)")
     for azimuth in (-180.0, -90.0, 0.0, 45.0, 135.0, 180.0):
         az = math.radians(azimuth)
         expected = (math.sin(az), 0.0, math.cos(az))
