@@ -83,3 +83,29 @@ poses all derive from the same clamped angles, and
 `WWITests.mark_i_sponsons_traverse_only_their_historical_sector` fires both sponsons in a
 gametest and checks each projectile's flight direction against its own line.
 Released as [v1.0.1-alpha.27](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.27).
+
+## Component armour, spall physics and HE bursts (rounds 30-31)
+
+Rounds 30-31 answer the player's damage-model complaints (per-component armour, spall,
+HE detonating "against almost anything"):
+
+* **Component zones** (`alpha.30`): `VIEW` / `HATCH` / `FUEL` / `RING` ride on top of the
+  12 plate zones. `Specs.componentBoxes` places hull-frame windows on the faces of the
+  *armour* boxes (not the visual model - a CI failure taught us the entry point of `solve()`
+  lies on the Geo face, so a window that misses it silently degrades to the plate zone).
+  Visors keep `max(6, 0.6 x hull front)`, lids keep roof thickness; fuel windows map hits to
+  the FIRE module, the turret ring to the TURRET module. 16 zone labels in both locales.
+* **Running-gear band**: the "track +20 mm" bonus only applies inside the real track band
+  (`entry.y <= rgTop`: 0.35 m on the Mark I, 0.9 m on the others).
+* **Directional spall** (`alpha.37`): `Armour.centreBoost` (up to x1.8 crew damage for a
+  round through the middle of the fighting compartment) and `Armour.crossesEngine`
+  (the engine block halves the fragment count and the per-fragment crew damage).
+* **HE anywhere**: a non-penetrating HE burst over a lid, a visor or a thin plate it almost
+  got through (`nominal <= 30 && pen/eff >= 0.5`) concusses the crew behind it - even the
+  6-pdr's 0.1 kg filler. A ground burst next to the belly registers `HitContext.Blast`
+  in `ShellEntity.impact`; since vehicles are `Damageable` (not `LivingEntity`),
+  `VehicleDamage.blastNear` consumes it and resolves the full directional armour model
+  through the nearest plate, aimed at the hull *centre* (aiming at the feet made the ray
+  graze under the floor). Three new `rw_pen` gametests cover all of it;
+  run 39133628822 is green with zero annotations.
+  Released as [v1.0.1-alpha.37](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.37).
