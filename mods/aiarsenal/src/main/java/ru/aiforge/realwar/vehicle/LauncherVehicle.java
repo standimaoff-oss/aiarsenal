@@ -64,11 +64,21 @@ public abstract class LauncherVehicle
 extends VehicleEntity {
     protected static final EntityDataAccessor<Integer> LOADED_LO = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> LOADED_HI = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
+    /** r28: which round type each ready slot actually holds, 2 bits per slot (word i covers slots 16i..16i+15).
+     *  Before this the rack was a bare bit mask: the loader took any ammunition item, the fired type was decided by
+     *  the selector at the moment of the shot, and the HUD showed the same count for HE and AP - so one shot "ate"
+     *  both round types. */
+    protected static final EntityDataAccessor<Integer> TYPES_A = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> TYPES_B = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> TYPES_C = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> TYPES_D = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Float> AZ = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> EL = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> JACK = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Integer> RELOAD_TUBE = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> RELOAD_T = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
+    /** r28: the running reload is a round exchange inside the ready rack (no ammunition item is consumed). */
+    protected static final EntityDataAccessor<Boolean> RELOAD_SWAP = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> FIRED_SEQ = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> FIRED_TUBE = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Boolean> AUTO = SynchedEntityData.defineId(LauncherVehicle.class, (EntityDataSerializer)EntityDataSerializers.BOOLEAN);
@@ -97,6 +107,11 @@ extends VehicleEntity {
         super.defineSynchedData();
         this.entityData.define(LOADED_LO, 0);
         this.entityData.define(LOADED_HI, 0);
+        this.entityData.define(TYPES_A, 0);
+        this.entityData.define(TYPES_B, 0);
+        this.entityData.define(TYPES_C, 0);
+        this.entityData.define(TYPES_D, 0);
+        this.entityData.define(RELOAD_SWAP, false);
         this.entityData.define(AZ, Float.valueOf(0.0f));
         this.entityData.define(EL, Float.valueOf(0.0f));
         this.entityData.define(JACK, Float.valueOf(0.0f));
@@ -168,6 +183,83 @@ extends VehicleEntity {
 
     public void fillMagazine() {
         this.setLoadedMask(this.kind.magazine >= 64 ? -1L : (1L << this.kind.magazine) - 1L);
+        for (int k = 0; k < this.kind.magazine; ++k) {
+            this.setSlotType(k, this.loadType());
+        }
+    }
+
+    /** r28: fill the ready rack with one round type (gametests, /realwar spawn). */
+    public void fillMagazine(int type) {
+        this.setLoadedMask(this.kind.magazine >= 64 ? -1L : (1L << this.kind.magazine) - 1L);
+        for (int k = 0; k < this.kind.magazine; ++k) {
+            this.setSlotType(k, type);
+        }
+    }
+
+    private static EntityDataAccessor<Integer> typeWord(int word) {
+        return switch (word) {
+            case 0 -> TYPES_A;
+            case 1 -> TYPES_B;
+            case 2 -> TYPES_C;
+            default -> TYPES_D;
+        };
+    }
+
+    /** r28: the round type sitting in ready slot k (0 = the primary round of the gun, 1 = the secondary one). */
+    public int slotType(int k) {
+        if (k < 0 || k >= 64) {
+            return 0;
+        }
+        return (this.entityData.get(typeWord(k >>> 4)).intValue() >>> ((k & 15) * 2)) & 3;
+    }
+
+    public void setSlotType(int k, int type) {
+        if (k < 0 || k >= 64) {
+            return;
+        }
+        EntityDataAccessor<Integer> word = typeWord(k >>> 4);
+        int shift = (k & 15) * 2;
+        int raw = this.entityData.get(word).intValue() & ~(3 << shift) | (type & 3) << shift;
+        this.entityData.set(word, Integer.valueOf(raw));
+    }
+
+    /** r28: how many ready rounds of that type the loader has actually seated. */
+    public int loadedOfType(int type) {
+        long m = this.loadedMask();
+        int n = 0;
+        for (int k = 0; k < this.kind.magazine; ++k) {
+            if ((m >>> k & 1L) != 0L && this.slotType(k) == type) {
+                ++n;
+            }
+        }
+        return n;
+    }
+
+    /** First ready slot holding that round type, or -1 when the breech holds something else. */
+    public int firstLoadedOfType(int type) {
+        long m = this.loadedMask();
+        for (int k = 0; k < this.kind.magazine; ++k) {
+            if ((m >>> k & 1L) != 0L && this.slotType(k) == type) {
+                return k;
+            }
+        }
+        return -1;
+    }
+
+    /** First ready slot holding a DIFFERENT round type, or -1. */
+    public int firstLoadedNot(int type) {
+        long m = this.loadedMask();
+        for (int k = 0; k < this.kind.magazine; ++k) {
+            if ((m >>> k & 1L) != 0L && this.slotType(k) != type) {
+                return k;
+            }
+        }
+        return -1;
+    }
+
+    /** Round type the loader seats next. Guns override this with the selected round; launchers have one type. */
+    public int loadType() {
+        return 0;
     }
 
     public int reloadTube() {
@@ -384,10 +476,10 @@ extends VehicleEntity {
 
     @Override
     protected void onRearClick(ServerPlayer p) {
-        if (this.loadedCount() >= this.kind.magazine) {
+        if (this.loadedCount() >= this.kind.magazine && this.loadedOfType(this.loadType()) > 0) {
             return;
         }
-        if (!this.hasAmmo(p)) {
+        if (!this.hasAmmo(p) && this.loadedOfType(this.loadType()) > 0) {
             p.displayClientMessage((Component)Component.translatable((String)"hud.aiarsenal.rw.no_ammo"), true);
             return;
         }
@@ -398,7 +490,7 @@ extends VehicleEntity {
 
     @Override
     protected boolean onItemUse(ServerPlayer p, ItemStack st) {
-        if (this.isAmmo(st) && this.loadedCount() < this.kind.magazine) {
+        if (this.isAmmo(st) && (this.loadedCount() < this.kind.magazine || this.loadedOfType(this.loadType()) == 0)) {
             this.extReloader = p.getUUID();
             this.extRef = new java.lang.ref.WeakReference<>(p);
         this.extRef = new java.lang.ref.WeakReference<>(p);
@@ -429,19 +521,32 @@ extends VehicleEntity {
             rp = ep;
         }
         if (rt < 0) {
-            if (rp != null && this.mayReload() && this.loadedCount() < this.kind.magazine && this.hasAmmo(rp)) {
-                this.entityData.set(RELOAD_TUBE, this.firstEmpty());
-                this.entityData.set(RELOAD_T, 0);
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 1.0f, 0.85f);
+            if (rp != null && this.mayReload()) {
+                int want = this.loadType();
+                int slot = this.loadedCount() < this.kind.magazine ? this.firstEmpty() : -1;
+                // r28: the rack is full, but of the OTHER round - exchange one round for the selected type. The
+                // exchanged round goes back to the stowage, so no ammunition item is spent on the swap.
+                boolean swap = false;
+                if (slot < 0 && this.loadedOfType(want) == 0) {
+                    slot = this.firstLoadedNot(want);
+                    swap = slot >= 0;
+                }
+                if (slot >= 0 && (swap || this.hasAmmo(rp))) {
+                    this.entityData.set(RELOAD_SWAP, Boolean.valueOf(swap));
+                    this.entityData.set(RELOAD_TUBE, slot);
+                    this.entityData.set(RELOAD_T, 0);
+                    this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 1.0f, 0.85f);
+                }
             }
             return;
         }
+        boolean swap = ((Boolean)this.entityData.get(RELOAD_SWAP)).booleanValue();
         // Client render stalls / packet jitter must not erase a 20-second
         // loading operation every 200 ms. Do NOT advance or consume ammunition
         // during the gap. Explicit key release, dismount or >5s silence cancels.
         if (rp == null && op != null && this.reloadInputInGrace(this.operatorSeat())
-                && this.mayReload() && this.hasAmmo(op)) return;
-        if (rp == null || !this.mayReload() || !this.hasAmmo(rp)) {
+                && this.mayReload() && (swap || this.hasAmmo(op))) return;
+        if (rp == null || !this.mayReload() || !swap && !this.hasAmmo(rp)) {
             this.entityData.set(RELOAD_TUBE, -1);
             this.entityData.set(RELOAD_T, 0);
             return;
@@ -449,7 +554,8 @@ extends VehicleEntity {
         if (ru.aiforge.realwar.damage.VehicleDamage.slowReload(this) && this.tickCount % 2 == 0) return;   // r21: loader out
         int t = this.reloadTicks() + 1;
         if (t >= this.kind.reloadTicks) {
-            if (this.takeAmmo(rp)) {
+            if (swap || this.takeAmmo(rp)) {
+                this.setSlotType(rt, this.loadType());
                 this.setLoadedMask(this.loadedMask() | 1L << rt);
                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 1.2f, 1.15f);
                 if (this.extReloader != null) {
@@ -579,6 +685,11 @@ extends VehicleEntity {
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setLoadedMask(tag.contains("loaded") ? tag.getLong("loaded") : 0L);
+        // r28: the round type of every ready slot; a world saved before r28 keeps type 0 (the primary round)
+        for (int w = 0; w < 4; ++w) {
+            this.entityData.set(typeWord(w), Integer.valueOf(tag.getInt("rdtype" + w)));
+        }
+        this.entityData.set(RELOAD_SWAP, Boolean.valueOf(false));
         this.entityData.set(AZ, Float.valueOf(tag.getFloat("az")));
         this.entityData.set(EL, Float.valueOf(tag.contains("el") ? tag.getFloat("el") : this.kind.elMin));
         this.entityData.set(JACK, Float.valueOf(0.0f));
@@ -590,6 +701,9 @@ extends VehicleEntity {
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putLong("loaded", this.loadedMask());
+        for (int w = 0; w < 4; ++w) {
+            tag.putInt("rdtype" + w, this.entityData.get(typeWord(w)).intValue());
+        }
         tag.putFloat("az", this.az());
         tag.putFloat("el", this.el());
     }

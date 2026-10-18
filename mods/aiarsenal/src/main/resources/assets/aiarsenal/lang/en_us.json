@@ -315,6 +315,7 @@
   "hud.aiarsenal.rw.range": "RANGE",
   "hud.aiarsenal.rw.rate": "Dose rate: %s R/h",
   "hud.aiarsenal.rw.ready": "READY",
+  "hud.aiarsenal.rw.gun.wrong_round": "OTHER ROUND IN THE BREECH - [R] TO RELOAD",
   "hud.aiarsenal.rw.reloading": "LOADING",
   "hud.aiarsenal.rw.rounds": "ROUNDS",
   "hud.aiarsenal.rw.seat_driver": "Driver",

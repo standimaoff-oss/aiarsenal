@@ -409,6 +409,7 @@ public class GunVehicle extends LauncherVehicle {
         }
         int n = (Math.floorMod(this.sel(), nm) + 1) % nm;
         this.entityData.set(SEL, n);
+        this.rememberMainMode(this.mode());
         this.directTick = -100;
         p.displayClientMessage(Component.translatable("hud.aiarsenal.rw.gun.sel." + this.roundKey()), true);
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 0.7f, 1.3f);
@@ -473,9 +474,26 @@ public class GunVehicle extends LauncherVehicle {
         int nm = this.cfg.modes().length;
         if (slot < 0 || slot >= nm || slot == Math.floorMod(this.sel(), nm)) return;
         this.entityData.set(SEL, slot);
+        this.rememberMainMode(this.mode());
         this.directTick = -100;
         p.displayClientMessage(Component.translatable("hud.aiarsenal.rw.gun.sel." + this.roundKey()), true);
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 0.7f, 1.3f);
+    }
+
+    /** r28: the round type the loader seats next = the selected main-gun round. The coaxial MG and the second gun
+     *  have their own counters, so switching to them keeps loading the last selected main-gun round. */
+    @Override
+    public int loadType() {
+        int m = this.mode();
+        return m <= 1 ? m : this.lastMainMode;
+    }
+
+    private int lastMainMode = 0;
+
+    private void rememberMainMode(int m) {
+        if (m <= 1) {
+            this.lastMainMode = m;
+        }
     }
 
     /** lang key suffix of the selected round. */
@@ -811,6 +829,15 @@ public class GunVehicle extends LauncherVehicle {
             this.notifyOp("hud.aiarsenal.rw.no_ammo");
             return;
         }
+        int want = this.loadType();
+        if (this.firstLoadedOfType(want) < 0) {
+            // r28: the breech holds the other round. Before this the shot simply used whatever sat in the rack, so a
+            // player who selected AP fired HE (and the counter of BOTH round types dropped).
+            if (this.tickCount % 20 == 0) {
+                this.notifyOp("hud.aiarsenal.rw.gun.wrong_round");
+            }
+            return;
+        }
         if (this.outOfSector) {
             this.notifyOp("hud.aiarsenal.rw.out_of_sector");
             return;
@@ -819,7 +846,7 @@ public class GunVehicle extends LauncherVehicle {
             return;
         }
         Ballistics.Profile prof = this.profile();
-        int k = this.firstLoaded();
+        int k = this.firstLoadedOfType(want);
         Vec3 dir = this.launchDir();
         Vec3 muzzle;
         if (this.perTube()) {
@@ -839,7 +866,7 @@ public class GunVehicle extends LauncherVehicle {
         if (this.kind == VehicleKind.MARK_I) {
             int second = -1;
             for (int slot = 0; slot < this.kind.magazine; ++slot) {
-                if (slot != k && this.isLoaded(slot)) { second = slot; break; }
+                if (slot != k && this.isLoaded(slot) && this.slotType(slot) == want) { second = slot; break; }
             }
             Vec3 m0 = this.tubeWorld(k);
             ShellEntity.fire(sl, prof, m0.add(d.scale(0.2)), d, this.getId());
@@ -859,7 +886,7 @@ public class GunVehicle extends LauncherVehicle {
             this.markFired(k);
             if (this.cfg.alternate) {
                 // r11: twin mount (Ratte 2 x 28 cm SK C/34) - both barrels fire as one salvo, then both reload
-                int k2 = this.firstLoaded();
+                int k2 = this.firstLoadedOfType(want);
                 if (k2 >= 0) {
                     Vec3 m2 = this.tubeWorld(1);
                     Vec3 d2 = dir.add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();

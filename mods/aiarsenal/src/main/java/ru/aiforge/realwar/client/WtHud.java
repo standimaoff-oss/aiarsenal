@@ -426,9 +426,11 @@ public final class WtHud {
             if (cycling) rl = cyc;
             for (int m : modes) {
                 Slot s = switch (m) {
-                    case 0 -> new Slot(gv.cfg.primary().kinetic() ? 1 : 0, gv.loadedCount(), gv.kind.magazine, cur == 0, rl,
+                    // r28: each slot shows the rounds of ITS OWN type that the loader actually seated. The rack used
+                    // to be one typeless counter shown twice, so firing one HE round also emptied the AP slot.
+                    case 0 -> new Slot(gv.cfg.primary().kinetic() ? 1 : 0, gv.loadedOfType(0), gv.kind.magazine, cur == 0, rl,
                             tr("hud.aiarsenal.rw.gun.round." + gv.cfg.primary().name().toLowerCase(java.util.Locale.ROOT)));
-                    case 1 -> new Slot(gv.cfg.secondary().kinetic() ? 1 : 0, gv.loadedCount(), gv.kind.magazine, cur == 1, rl,
+                    case 1 -> new Slot(gv.cfg.secondary().kinetic() ? 1 : 0, gv.loadedOfType(1), gv.kind.magazine, cur == 1, rl,
                             tr("hud.aiarsenal.rw.gun.round." + gv.cfg.secondary().name().toLowerCase(java.util.Locale.ROOT)));
                     case 2 -> new Slot(gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY ? 3 : 0, gv.thirdRounds(), gv.thirdMax(), cur == 2, 0f,
                             gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY ? "TOW" : tr("hud.aiarsenal.rw.gun.round." + gv.cfg.third().name().toLowerCase(java.util.Locale.ROOT)));
@@ -441,8 +443,8 @@ public final class WtHud {
             if ((gv.reloadTube() >= 0 || cycling) && !gv.coaxSelected() && !gv.thirdSelected()) {
                 b.append("  \u00b7  ").append(tr("hud.aiarsenal.rw.gun.loading")).append(" ").append(Math.round((1f - rl) * 100)).append("%");
                 infoCol = AMB;
-            } else if (gv.loadedCount() == 0 && !gv.coaxSelected() && !gv.thirdSelected()) {
-                b.append("  \u00b7  ").append(tr("hud.aiarsenal.rw.no_ammo"));
+            } else if (!gv.coaxSelected() && !gv.thirdSelected() && gv.loadedOfType(gv.loadType()) == 0) {
+                b.append("  \u00b7  ").append(tr(gv.loadedCount() == 0 ? "hud.aiarsenal.rw.no_ammo" : "hud.aiarsenal.rw.gun.wrong_round"));
                 infoCol = REDC;
             }
             float r = gv.lase();

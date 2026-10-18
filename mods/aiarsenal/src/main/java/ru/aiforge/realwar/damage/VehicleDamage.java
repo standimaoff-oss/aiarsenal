@@ -35,6 +35,37 @@ public final class VehicleDamage {
     private static final double[][] MARK_I_TRACK_PATH = {{0.13, -2.45}, {0.82, -3.28}, {2.28, -3.28},
             {2.28, 3.28}, {0.82, 3.28}, {0.13, 2.45}}; // (height, forward) from tools/wwi/build_mark_i.py
     private static final double MARK_I_TRACK_X = 1.50;
+    /** Half width of a track shoe and the radius the belt is tested with (build_mark_i.py: 0.25 m wide shoes). */
+    private static final double MARK_I_TRACK_R = 0.17;
+    /** r28: the closed belt as 12 capsules (one per side and path edge) so a shot meets it with an exact
+     *  ray/capsule solution instead of a 0.05 m march through {@link #zone}. */
+    private static final ru.aiforge.realwar.damage.Armour.Tube[] MARK_I_BELT = markIBelt();
+
+    private static ru.aiforge.realwar.damage.Armour.Tube[] markIBelt() {
+        java.util.List<ru.aiforge.realwar.damage.Armour.Tube> out = new java.util.ArrayList<>();
+        for (double side : new double[]{-MARK_I_TRACK_X, MARK_I_TRACK_X}) {
+            for (int i = 0; i < MARK_I_TRACK_PATH.length; ++i) {
+                double[] a = MARK_I_TRACK_PATH[i], b = MARK_I_TRACK_PATH[(i + 1) % MARK_I_TRACK_PATH.length];
+                double dy = b[0] - a[0], dz = b[1] - a[1];
+                double len = Math.sqrt(dy * dy + dz * dz);
+                if (len < 1e-6) continue;
+                out.add(new ru.aiforge.realwar.damage.Armour.Tube(
+                        new org.joml.Vector3d(side, a[0], a[1]),
+                        new org.joml.Vector3d(0, dy / len, dz / len), len, MARK_I_TRACK_R, 0.0));
+            }
+        }
+        return out.toArray(new ru.aiforge.realwar.damage.Armour.Tube[0]);
+    }
+
+    /** r28: entry distance of the hull-frame ray o + t*d (t in 0..maxT) into the Mark I link belt, or -1. */
+    public static double markITrackHit(org.joml.Vector3d o, org.joml.Vector3d d, double maxT) {
+        double best = -1;
+        for (ru.aiforge.realwar.damage.Armour.Tube t : MARK_I_BELT) {
+            double tt = ru.aiforge.realwar.damage.Armour.tubeHit(o, d, t, maxT);
+            if (tt >= 0 && (best < 0 || tt < best)) best = tt;
+        }
+        return best;
+    }
 
     private VehicleDamage() {
     }
@@ -121,36 +152,14 @@ public final class VehicleDamage {
 
     /** r20: entity-free form (armour model, client hit camera). */
     public static int zone(Geo g, VehicleKind kind, boolean turretGone, double x, double y, double z, float[] ang) {
-        if (kind == VehicleKind.MARK_I) {
-            // The 6-pdrs sit in two sponsons at x=+/-1.41 m and share the current hand-laid aim line.
-            if (!turretGone && g.tube > 0.5f) {
-                double az = Math.toRadians(ang[0]), el = Math.toRadians(ang[1]);
-                double sa = Math.sin(az), ca = Math.cos(az);
-                double fz = kind.fireAxisZ();
-                double dx = sa * Math.cos(el) * fz, dy = Math.sin(el) * fz, dz = ca * Math.cos(el) * fz;
-                for (double side : new double[]{-1.0, 1.0}) {
-                    double ax = side * 1.41, ay = 1.22, azz = 0.0;
-                    double t = (x - ax) * dx + (y - ay) * dy + (z - azz) * dz;
-                    if (t > 0.65 && t < g.tube) {
-                        double px = ax + dx * t - x, py = ay + dy * t - y, pz = azz + dz * t - z;
-                        if (px * px + py * py + pz * pz < 0.18 * 0.18) return BARREL;
-                    }
-                }
-            }
-            if (Math.abs(Math.abs(x) - MARK_I_TRACK_X) < 0.17 && nearMarkITrack(y, z)) return x > 0 ? TRACK_L : TRACK_R;
-            if (Math.abs(Math.abs(x) - 1.41) < 0.42 && y > 0.80 && y < 1.66 && Math.abs(z) < 0.87) return AMMO;
+        // r28: the barrel test is the same finite-cylinder collider the hit resolution and the client reticle use,
+        // with the real tube radius of each gun instead of a 0.18 / 0.24 m one-size-fits-all cylinder.
+        for (ru.aiforge.realwar.damage.Armour.Tube tube : ru.aiforge.realwar.damage.Armour.tubes(g, kind, turretGone, ang)) {
+            if (tube.contains(x, y, z)) return BARREL;
         }
-        if (g.turret && g.tube > 0.5f && !turretGone) {
-            double az = Math.toRadians(ang[0]), el = Math.toRadians(ang[1]);
-            double sa = Math.sin(az), ca = Math.cos(az);
-            double ax = g.yp[0] + g.pp[0] * ca + g.pp[2] * sa, ay = g.yp[1] + g.pp[1], azz = g.yp[2] - g.pp[0] * sa + g.pp[2] * ca;
-            double fz = kind.fireAxisZ();
-            double dx = sa * Math.cos(el) * fz, dy = Math.sin(el) * fz, dz = ca * Math.cos(el) * fz;
-            double t = (x - ax) * dx + (y - ay) * dy + (z - azz) * dz;
-            if (t > 0.9 && t < g.tube) {
-                double px = ax + dx * t - x, py = ay + dy * t - y, pz = azz + dz * t - z;
-                if (px * px + py * py + pz * pz < 0.24 * 0.24) return BARREL;
-            }
+        if (kind == VehicleKind.MARK_I) {
+            if (Math.abs(Math.abs(x) - MARK_I_TRACK_X) < MARK_I_TRACK_R && nearMarkITrack(y, z)) return x > 0 ? TRACK_L : TRACK_R;
+            if (Math.abs(Math.abs(x) - 1.41) < 0.42 && y > 0.80 && y < 1.66 && Math.abs(z) < 0.87) return AMMO;
         }
         if (g.turret && !turretGone) {
             double dx = x - g.yp[0], dz = z - g.yp[2];

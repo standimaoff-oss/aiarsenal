@@ -290,7 +290,7 @@ public final class ImpactReticle {
                 add(shell(lv, gv.cfg.third(), m.add(d.scale(0.2)), d, gv));
                 return;
             }
-            empty = gv.loadedCount() == 0 && !reloading;
+            empty = gv.loadedOfType(gv.loadType()) == 0 && !reloading;   // r28: the selected round type, not the whole rack
             Vec3 d = gv.launchDir();
             add(shell(lv, gv.profile(), gv.tubeWorld(0).add(d.scale(0.2)), d, gv));
             if (gv.twinSalvo()) add(shell(lv, gv.profile(), gv.tubeWorld(1).add(d.scale(0.2)), d, gv));

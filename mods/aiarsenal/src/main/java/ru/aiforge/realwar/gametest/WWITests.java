@@ -183,7 +183,9 @@ public final class WWITests {
                             "both barrels must launch the selected QF 6-pdr HE profile");
                     firstSalvo[0] = true;
                     seq[0] = tank.firedSeq();
-                    tank.fillMagazine();
+                    // r28: the ready rack now remembers the round type of every slot, so the AP salvo needs AP rounds
+                    tank.fillMagazine(1);
+                    h.assertTrue(tank.loadedOfType(1) == 2 && tank.loadedOfType(0) == 0, "the rack holds two AP rounds");
                     tank.selectSlot(operator, 1);
                     h.assertTrue(tank.profile() == Ballistics.Profile.QF6_AP, "weapon selector changes the live profile to AP");
                 } else {
@@ -208,6 +210,55 @@ public final class WWITests {
             } else if (ticks[0] > 550) {
                 h.fail("Mark I firing/reload failed: loaded=" + tank.loadedCount() + " reloadTube=" + tank.reloadTube()
                         + " az=" + tank.az() + " el=" + tank.el());
+            }
+        });
+    }
+
+    /** r28 (player report "one shot eats both round types"): every ready slot keeps the type the loader seated, so a
+     *  selected AP round cannot be fired from an HE rack, the HE counter does not drop with it, and holding [R]
+     *  exchanges the rounds in the rack without spending ammunition. */
+    @GameTest(template = "arena", batch = "rw_wwi", timeoutTicks = 400)
+    public static void ready_rack_keeps_the_round_type_of_every_slot(GameTestHelper h) {
+        ServerLevel level = h.getLevel();
+        BlockPos c = h.absolutePos(new BlockPos(2, 0, 2));
+        int y = clearRunway(level, c, 8);
+        GunVehicle tank = spawn(level, ModEntities.MARK_I.get(), c.getX() + 0.5, y, c.getZ() + 0.5, 0.0f);
+        ServerPlayer operator = mock(h);
+        h.assertTrue(tank.enterSeat(operator, 0), "seat 0 is the Mark I driver/operator");
+        tank.fillMagazine(0);
+        h.assertTrue(tank.loadedOfType(0) == 2 && tank.loadedOfType(1) == 0, "two HE rounds seated: HE="
+                + tank.loadedOfType(0) + " AP=" + tank.loadedOfType(1));
+        h.assertTrue(tank.profile() == Ballistics.Profile.QF6_HE, "HE is the initial selected round");
+        tank.selectSlot(operator, 1);
+        h.assertTrue(tank.profile() == Ballistics.Profile.QF6_AP, "the selector changes the live profile to AP");
+        h.assertTrue(tank.firstLoadedOfType(1) < 0, "the HE rack must not offer an AP round");
+        h.assertTrue(tank.loadedOfType(0) == 2, "selecting AP must not consume the HE rounds");
+        int seq = tank.firedSeq();
+        int[] tick = {0};
+        h.onEachTick(() -> {
+            tick[0]++;
+            tank.handleControl(operator, 0, 0, true, true, 0);
+            h.assertTrue(tank.firedSeq() == seq, "the gun fired from a rack that holds the wrong round");
+            h.assertTrue(tank.loadedOfType(0) + tank.loadedOfType(1) == 2, "rounds disappeared while exchanging");
+            int ap = tank.loadedOfType(1);
+            if (ap == 2) {
+                int items = 0;
+                for (net.minecraft.world.item.ItemStack st : operator.getInventory().items)
+                    if (st.is(ModItems.SHELLS_57.get())) items += st.getCount();
+                h.assertTrue(items == 0, "exchanging rounds inside the rack must not spend ammunition: " + items);
+                h.assertTrue(tank.firstLoadedOfType(1) >= 0, "both AP rounds are ready to fire");
+                CompoundTag saved = tank.saveWithoutId(new CompoundTag());
+                GunVehicle restored = ModEntities.MARK_I.get().create(level);
+                restored.load(saved);
+                h.assertTrue(restored.loadedOfType(1) == 2 && restored.loadedOfType(0) == 0,
+                        "the round type of every slot survives save/load");
+                operator.stopRiding();
+                tank.discard();
+                restored.discard();
+                h.succeed();
+            } else if (tick[0] > 350) {
+                h.fail("round exchange stalled: HE=" + tank.loadedOfType(0) + " AP=" + ap
+                        + " tube=" + tank.reloadTube() + " t=" + tank.reloadTicks());
             }
         });
     }

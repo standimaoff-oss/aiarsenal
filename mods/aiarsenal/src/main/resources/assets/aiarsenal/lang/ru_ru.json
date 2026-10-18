@@ -315,6 +315,7 @@
   "hud.aiarsenal.rw.range": "ДАЛЬНОСТЬ",
   "hud.aiarsenal.rw.rate": "Мощность дозы: %s Р/ч",
   "hud.aiarsenal.rw.ready": "ГОТОВ",
+  "hud.aiarsenal.rw.gun.wrong_round": "В КАЗЁННИКЕ ДРУГОЙ СНАРЯД - [R] ПЕРЕЗАРЯДИТЬ",
   "hud.aiarsenal.rw.reloading": "ЗАРЯЖАНИЕ",
   "hud.aiarsenal.rw.rounds": "ПАТРОНОВ",
   "hud.aiarsenal.rw.seat_driver": "Водитель",

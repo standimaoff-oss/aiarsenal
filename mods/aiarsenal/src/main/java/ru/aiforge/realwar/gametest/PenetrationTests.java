@@ -109,6 +109,78 @@ public final class PenetrationTests {
         h.succeed();
     }
 
+    /** r28 (player report "the barrel has a huge hitbox, the shot lands on the barrel next to the circle"): the gun is
+     *  tested as the finite tube of its real calibre, so a round 30 cm off the axis reaches the plate behind it while a
+     *  round 3 cm off the axis really is stopped by the steel. The client reticle, the server hit test and the hit
+     *  camera all read this one collider. */
+    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 60)
+    public static void barrel_hitbox_is_the_real_tube(GameTestHelper h) {
+        h.assertTrue(Math.abs(Armour.tubeRadius(VehicleKind.TIGER) - 0.074) < 1e-6, "8.8 cm KwK 36 tube radius");
+        h.assertTrue(Math.abs(Armour.tubeRadius(VehicleKind.MARK_I) - 0.049) < 1e-6, "QF 6-pdr tube radius");
+        h.assertTrue(Math.abs(Armour.tubeRadius(VehicleKind.T90M) - 0.100) < 1e-6, "2A46M-4 tube radius");
+        VehicleDamage.Geo g = VehicleDamage.geo(VehicleKind.TIGER, true, true);
+        Armour.Tube[] tubes = Armour.tubes(g, VehicleKind.TIGER, false, ZERO);
+        h.assertTrue(tubes.length == 1, "у Тигра одна пушка, получено " + tubes.length);
+        Armour.Tube t = tubes[0];
+        h.assertTrue(Math.abs(t.len() - 3.932) < 0.11, "ствол заканчивается у дульного среза модели, а не дальше: " + t.len());
+        float[] tb = Armour.turretBox(g, VehicleKind.TIGER);
+        h.assertTrue(tb != null, "нет коробки башни Тигра");
+        double front = tb[2] + tb[5] + 0.01;                 // a shot arriving at the turret front plate
+        Armour.Ammo ap = Armour.Ammo.of(Ballistics.Profile.K88_AP);
+        double v = ap.v0();
+        // 30 cm beside the axis: the old 0.24 m cylinder swallowed this round, the real 74 mm tube does not
+        Vector3d off = new Vector3d(t.o().x + 0.30, t.o().y, front);
+        Armour.Result r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, off, new Vector3d(0, 0, -1), ap, v, 0.99);
+        h.assertTrue(r.module() != DamageState.BARREL, "выстрел в 30 см от оси ствола съеден стволом: " + s(r));
+        // 3 cm beside the axis: the barrel really is in the way
+        Vector3d on = new Vector3d(t.o().x + 0.03, t.o().y, front);
+        r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, on, new Vector3d(0, 0, -1), ap, v, 0.99);
+        h.assertTrue(r.result() == Armour.MODULE && r.module() == DamageState.BARREL,
+                "выстрел в 3 см от оси ствола не остановлен стволом: " + s(r));
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.TIGER, false,
+                        t.o().x + 0.03, t.o().y, t.o().z + t.len() * 0.6, ZERO) == DamageState.BARREL
+                        && VehicleDamage.zone(g, VehicleKind.TIGER, false,
+                        t.o().x + 0.30, t.o().y, t.o().z + t.len() * 0.6, ZERO) != DamageState.BARREL,
+                "модульная модель и броневой солвер disagree about the barrel");
+        // the Mark I: both sponson guns are separate tubes of the 57 mm calibre
+        VehicleDamage.Geo mi = VehicleDamage.geo(VehicleKind.MARK_I, true, true);
+        Armour.Tube[] mt = Armour.tubes(mi, VehicleKind.MARK_I, false, ZERO);
+        h.assertTrue(mt.length == 2 && Math.abs(mt[0].o().x + 1.41) < 1e-6 && Math.abs(mt[1].o().x - 1.41) < 1e-6,
+                "два спонсонных орудия на своих цапфах");
+        h.assertTrue(Armour.tubes(g, VehicleKind.TIGER, true, ZERO).length == 0, "башни нет - ствола нет");
+        h.succeed();
+    }
+
+    /** r28: the server hit test now stops a round on the barrel it crosses, exactly like the client reticle. */
+    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 60)
+    public static void rounds_crossing_the_barrel_stop_on_the_barrel(GameTestHelper h) {
+        ServerLevel l = h.getLevel();
+        BlockPos c = h.absolutePos(new BlockPos(15, 0, 15));
+        TestChunks.force(l, Vec3.atCenterOf(c));
+        int top = l.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX(), c.getZ());
+        GunVehicle t = vehicle(l, ModEntities.TIGER.get(), c.getX() + 0.5, top, c.getZ() + 0.5);
+        h.runAfterDelay(10, () -> {
+            VehicleDamage.Geo g = VehicleDamage.geo(t);
+            Vec3 muz = t.tubeWorld(0);
+            Vec3 d = t.launchDir();
+            Vec3 a = muz.add(d.scale(6.0)), b = muz.add(d.scale(-6.0));
+            Vec3 hit = ru.aiforge.realwar.damage.VehicleHit.clip(t, a, b);
+            h.assertTrue(hit != null, "выстрел вдоль ствола не зарегистрирован");
+            org.joml.Matrix4d inv = new org.joml.Matrix4d(t.bodyFrame()).invert();
+            Vector3d lp = inv.transformPosition(new Vector3d(hit.x, hit.y, hit.z));
+            h.assertTrue(lp.z > g.cz() + g.hz(), "точка попадания за корпусом, а не на стволе: " + lp);
+            // 40 cm to the side of the barrel: no hit at all in front of the hull
+            Vec3 sa = muz.add(new Vec3(0.40, 0, 0)).add(d.scale(6.0)), sb = muz.add(new Vec3(0.40, 0, 0)).add(d.scale(-6.0));
+            Vec3 wide = ru.aiforge.realwar.damage.VehicleHit.clip(t, sa, sb);
+            if (wide != null) {
+                Vector3d wp = inv.transformPosition(new Vector3d(wide.x, wide.y, wide.z));
+                h.assertTrue(wp.z < g.cz() + g.hz() + 0.05, "ствол поймал выстрел в 40 см от оси: " + wp);
+            }
+            t.discard();
+            h.succeed();
+        });
+    }
+
     @SuppressWarnings("unchecked")
     private static <T extends VehicleEntity> T vehicle(ServerLevel level, EntityType<?> type, double x, double y, double z) {
         VehicleEntity e = (VehicleEntity) type.create((Level) level);

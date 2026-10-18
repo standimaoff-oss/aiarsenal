@@ -192,6 +192,124 @@ public final class Armour {
         return new float[]{g.yp()[0], g.yp()[1] + 0.3f, g.yp()[2], 0.95f, 0.4f, 1.1f};
     }
 
+    // ============================================================================================ gun tube collider
+
+    /**
+     * r28: the gun barrel as the finite cylinder it really is: {@code o} = trunnion, {@code dir} = aim direction,
+     * {@code len} = tube length, {@code r} = outer radius of the tube, {@code t0} = the first metre of the axis that
+     * sits inside the mantlet / sponson box (that region belongs to the turret plate, not to the barrel).
+     * The Mark I has two of them (one per sponson), turreted vehicles one.
+     */
+    public record Tube(Vector3d o, Vector3d dir, double len, double r, double t0) {
+        /** True when the hull-frame point is inside the tube (used by the module damage model). */
+        public boolean contains(double x, double y, double z) {
+            double wx = x - this.o.x, wy = y - this.o.y, wz = z - this.o.z;
+            double ax = wx * this.dir.x + wy * this.dir.y + wz * this.dir.z;
+            if (ax < this.t0 || ax > this.len) return false;
+            double px = wx - this.dir.x * ax, py = wy - this.dir.y * ax, pz = wz - this.dir.z * ax;
+            return px * px + py * py + pz * pz < this.r * this.r;
+        }
+    }
+
+    /** Outer tube radius (m) of the real gun: bore/2 plus the wall, checked against published ordnance drawings.
+     *  The old model used one 0.24 m (Mark I: 0.18 m) radius for every vehicle, i.e. a 48 cm thick virtual barrel
+     *  that swallowed rounds aimed at the plate next to it. */
+    public static double tubeRadius(VehicleKind k) {
+        return switch (k) {
+            case T90M -> 0.100;              // 125 mm 2A46M-4
+            case ABRAMS -> 0.098;            // 120 mm M256
+            case BMP3 -> 0.083;              // 100 mm 2A70
+            case MSTA -> 0.112;              // 152 mm 2A64
+            case D30 -> 0.092;               // 122 mm 2A18
+            case M777 -> 0.113;              // 155 mm M777
+            case PZ2 -> 0.033;               // 2 cm KwK 30
+            case PZ4 -> 0.068;               // 7.5 cm KwK 40 L/48
+            case TIGER -> 0.074;             // 8.8 cm KwK 36 L/56
+            case STURMTIGER -> 0.215;        // 38 cm RW 61
+            case MAUS -> 0.094;              // 12.8 cm KwK 44 L/55
+            case RATTE -> 0.185;             // 28 cm SK C/34
+            case T34 -> 0.068;               // 85 mm ZiS-S-53
+            case KV2 -> 0.112;               // 152 mm M-10T
+            case IS2 -> 0.093;               // 122 mm D-25T
+            case KV5 -> 0.084;               // 107 mm ZiS-6
+            case BRADLEY -> 0.032;           // 25 mm M242 Bushmaster
+            case TOS1A -> 0.122;             // 220 mm thermobaric tube
+            case MARK_I -> 0.049;            // QF 6-pdr Hotchkiss (57 mm, 8.6 kg barrel section)
+            case ZU23 -> 0.028;              // 23 mm AZP-23
+            default -> 0.060;
+        };
+    }
+
+    /** The barrels of a vehicle in the hull frame (0, 1 or 2), or an empty array when the turret is gone. */
+    public static Tube[] tubes(VehicleDamage.Geo g, VehicleKind k, boolean turretGone, float[] ang) {
+        if (turretGone || g.tube() <= 0.5f) return new Tube[0];
+        double az = Math.toRadians(ang[0]), el = Math.toRadians(ang[1]);
+        double sa = Math.sin(az), ca = Math.cos(az), ce = Math.cos(el), se = Math.sin(el);
+        double fz = k.fireAxisZ();
+        Vector3d dir = new Vector3d(sa * ce * fz, se * fz, ca * ce * fz);
+        if (dir.lengthSquared() < 1e-9) return new Tube[0];
+        dir.normalize();
+        double r = tubeRadius(k);
+        // The collider ends at the real muzzle of the model (spec tube), never at the longer ballistic barrel length:
+        // the Tiger's tubeLen is 4.93 m while its KwK 36 muzzle sits 3.93 m from the trunnion, and that extra metre of
+        // invisible steel is what swallowed rounds in front of the turret.
+        double len = g.tube();
+        float[][] spec = k.spec.tubes();
+        if (spec != null && spec.length > 0) {
+            float[] q = spec[0];
+            double model = Math.sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2]);
+            if (model > 0.5) len = Math.min(len, model + 0.10);
+        }
+        if (k == VehicleKind.MARK_I) {
+            // the two QF 6-pdrs turn about their own sponson trunnions (tools/wwi/build_mark_i.py)
+            return new Tube[]{new Tube(new Vector3d(-1.41, 1.22, 0.0), dir, len, r, 0.65),
+                    new Tube(new Vector3d(1.41, 1.22, 0.0), dir, len, r, 0.65)};
+        }
+        if (!g.turret() || g.yp() == null || g.pp() == null) return new Tube[0];
+        Vector3d o = new Vector3d(g.yp()[0] + g.pp()[0] * ca + g.pp()[2] * sa,
+                g.yp()[1] + g.pp()[1],
+                g.yp()[2] - g.pp()[0] * sa + g.pp()[2] * ca);
+        return new Tube[]{new Tube(o, dir, len, r, Math.min(0.9, len * 0.5))};
+    }
+
+    /**
+     * Entry distance of the ray o+t*d (t in 0..maxT) into the tube, or -1. Exact solution of the quadratic for the
+     * cylinder side plus the two flat caps: one square root per barrel instead of the 0.05 m march of 200
+     * {@code zone()} calls the hit resolution used before.
+     */
+    public static double tubeHit(Vector3d ro, Vector3d rd, Tube t, double maxT) {
+        double dw = ro.x - t.o.x, ey = ro.y - t.o.y, ez = ro.z - t.o.z;
+        double wd = dw * t.dir.x + ey * t.dir.y + ez * t.dir.z;
+        double rdAx = rd.x * t.dir.x + rd.y * t.dir.y + rd.z * t.dir.z;
+        double ax = rd.x - t.dir.x * rdAx, ay = rd.y - t.dir.y * rdAx, az = rd.z - t.dir.z * rdAx;
+        double bx = dw - t.dir.x * wd, by = ey - t.dir.y * wd, bz = ez - t.dir.z * wd;
+        double A = ax * ax + ay * ay + az * az;
+        double best = -1;
+        if (A > 1e-12) {
+            double B = 2 * (ax * bx + ay * by + az * bz);
+            double C = bx * bx + by * by + bz * bz - t.r * t.r;
+            double disc = B * B - 4 * A * C;
+            if (disc >= 0) {
+                double sq = Math.sqrt(disc);
+                double r0 = (-B - sq) / (2 * A), r1 = (-B + sq) / (2 * A);
+                for (double tt : new double[]{Math.min(r0, r1), Math.max(r0, r1)}) {
+                    if (tt < 0 || tt > maxT) continue;
+                    double along = wd + rdAx * tt;
+                    if (along >= t.t0 && along <= t.len) return tt;      // ascending roots: the first hit wins
+                }
+            }
+        }
+        if (Math.abs(rdAx) > 1e-9) {
+            for (double along : new double[]{t.t0, t.len}) {
+                double tt = (along - wd) / rdAx;
+                if (tt < 0 || tt > maxT) continue;
+                double qx = bx + ax * tt, qy = by + ay * tt, qz = bz + az * tt;
+                if (qx * qx + qy * qy + qz * qz <= t.r * t.r && (best < 0 || tt < best)) best = tt;
+            }
+        }
+        return best;
+    }
+
     /** Rotates a hull-frame vector by the turret azimuth (deg) about +y (same convention as VehicleDamage.zone). */
     static Vector3d rot(Vector3d v, double azDeg) {
         double a = Math.toRadians(azDeg), sa = Math.sin(a), ca = Math.cos(a);
@@ -274,20 +392,23 @@ public final class Armour {
             }
         }
         // External modules (barrels, plus Mark I track belts) are resolved before the armour plate behind them.
+        // r28: exact ray/tube and ray/belt solutions instead of a 0.05 m march through zone() - up to 200 module
+        // lookups per round, and the barrel is now the real calibre tube, so a round aimed at the plate next to the
+        // gun is no longer swallowed by a 48 cm virtual cylinder. The client reticle, the server and the hit camera
+        // call exactly this geometry.
+        double limit = Math.min(tHit, 12.0);
         double tModule = -1;
         int hitModule = -1;
         boolean externalTrackHit = false;
-        for (double s = 0; s < Math.min(tHit, 10.0); s += 0.05) {
-            Vector3d q = new Vector3d(o).add(new Vector3d(d).mul(s));
-            int m = VehicleDamage.zone(g, k, turretGone, q.x, q.y, q.z, ang);
-            if (m == DamageState.BARREL) {
-                tModule = s;
-                hitModule = m;
-                break;
+        for (Tube tube : tubes(g, k, turretGone, ang)) {
+            double tt = tubeHit(o, d, tube, limit);
+            if (tt >= 0 && (tModule < 0 || tt < tModule)) {
+                tModule = tt;
+                hitModule = DamageState.BARREL;
             }
-            if (k == VehicleKind.MARK_I && (m == DamageState.TRACK_L || m == DamageState.TRACK_R)) {
-                externalTrackHit = true; // the link belt takes module damage and adds spaced armour, but the shell continues
-            }
+        }
+        if (k == VehicleKind.MARK_I && VehicleDamage.markITrackHit(o, d, limit) >= 0) {
+            externalTrackHit = true;   // the link belt takes module damage and adds spaced armour, but the shell continues
         }
         if (tModule >= 0) {
             Vector3d e = new Vector3d(o).add(new Vector3d(d).mul(tModule));

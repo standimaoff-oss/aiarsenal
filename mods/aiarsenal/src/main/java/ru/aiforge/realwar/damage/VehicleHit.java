@@ -10,6 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4d;
 import org.joml.Vector3d;
 import ru.aiforge.realwar.vehicle.VehicleEntity;
+import ru.aiforge.realwar.vehicle.VehicleKind;
 
 /**
  * r20: projectile hit-test against the REAL vehicle shape instead of the entity AABB. Minecraft entity boxes are
@@ -56,6 +57,17 @@ public final class VehicleHit {
             Vector3d ld = Armour.unrot(new Vector3d(d), az);
             double[] t = Armour.slab(lo.x, lo.y, lo.z, ld.x, ld.y, ld.z, tb[3], tb[4], tb[5]);
             if (t != null) best = Math.min(best, Math.max(0, t[0]));
+        }
+        // r28: the gun barrels and the Mark I link belt belong to the real silhouette. Before this the barrel was only
+        // discovered afterwards, inside the armour solver, so a round could stop on a gun the crosshair never showed.
+        float[] ang = VehicleDamage.turretAngles(v);
+        for (Armour.Tube tube : Armour.tubes(g, v.kind, v.dmg.broken(DamageState.TURRET_GONE), ang)) {
+            double t = Armour.tubeHit(la, d, tube, len);
+            if (t >= 0) best = Math.min(best, t);
+        }
+        if (v.kind == VehicleKind.MARK_I) {
+            double t = VehicleDamage.markITrackHit(la, d, len);
+            if (t >= 0) best = Math.min(best, t);
         }
         Vec3 res = null;
         if (best <= len) {

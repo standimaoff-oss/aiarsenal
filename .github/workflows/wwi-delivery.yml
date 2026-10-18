@@ -2,7 +2,7 @@ name: WWI build, tests and game previews
 on:
   push:
     branches:
-      - arena/19004024-aiarsenal
+      - arena/9b3be652-aiarsenal
 permissions:
   contents: write
 concurrency:
@@ -92,8 +92,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add previews/
           git commit -m 'Publish in-game mod previews' || exit 0
-          git pull --rebase origin arena/19004024-aiarsenal
-          git push origin HEAD:arena/19004024-aiarsenal
+          git pull --rebase origin arena/9b3be652-aiarsenal
+          git push origin HEAD:arena/9b3be652-aiarsenal
       - name: Publish verified build and screenshots
         env:
           GH_TOKEN: ${{ github.token }}
