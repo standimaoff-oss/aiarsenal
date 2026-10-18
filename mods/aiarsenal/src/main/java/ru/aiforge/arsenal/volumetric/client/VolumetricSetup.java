@@ -26,6 +26,11 @@ public final class VolumetricSetup {
                 return null;
             });
         }
+        event.registerSpecial(VolumetricParticles.FIRE.get(), (type, level, x, y, z, vx, vy, vz) -> {
+            if (!VolumetricEffects.fire(x, y, z, 0.55f + (float)Math.min(1.2, Math.abs(vy) * 4.0), 0.9f, (float)(x * 0.37 + z * 0.61)))
+                Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.FLAME, x, y, z, vx, vy, vz);
+            return null;
+        });
         event.registerSpecial(VolumetricParticles.SMOKE.get(), (type, level, x, y, z, vx, vy, vz) -> {
             if (!VolumetricEffects.smoke(x, y, z, 1.6f, 5f))
                 Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, vx, vy, vz);

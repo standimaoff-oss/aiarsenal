@@ -50,6 +50,14 @@ public final class VolumetricEffects {
         return true;
     }
 
+    /** r32: volumetric flame tongue at a burning point; false when the renderer is off (caller falls back). */
+    public static boolean fire(double x, double y, double z, float radius, float seconds, float seed) {
+        if (!active() || !Float.isFinite(radius)) return false;
+        VolumetricFxManager.addFire(new Vec3(x, y, z), radius, seconds, seed);
+        if (Boolean.getBoolean("aiarsenal.visualQa")) AiArsenal.LOGGER.info("FX FIRE pos={},{},{} r={}", x, y, z, radius);
+        return true;
+    }
+
     public static boolean blast(double x, double y, double z, float radius, long seed) {
         if (!active() || !Float.isFinite(radius)) return false;
         VolumetricFxManager.arsenalBlast(new Vec3(x, y, z), Math.max(1f, Math.min(radius, 30f)), seed);

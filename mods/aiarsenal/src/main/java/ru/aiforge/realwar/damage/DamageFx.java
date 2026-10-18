@@ -27,14 +27,19 @@ public final class DamageFx {
         if (s.hurtBit(ENGINE) && t % 3 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), eng, r, 0.4, 0.05);
         if (s.broken(ENGINE) && t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), eng, r, 0.4, 0.06);
         if (s.burning()) {
-            for (int i = 0; i < 2; i++) puff(l, ParticleTypes.FLAME, eng, r, 0.6, 0.03);
+            // r32: the fire body is a volumetric flame volume; a few flat sparks stay for detail
+            if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), eng, r, 0.5, 0.5);
+            puff(l, ParticleTypes.FLAME, eng, r, 0.6, 0.03);
             if (t % 3 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), eng.add(0, 0.5, 0), r, 0.4, 0.07);
             if (r.nextInt(6) == 0) puff(l, ParticleTypes.LAVA, eng, r, 0.5, 0);
         }
         if (s.dead()) {
             Vec3 top = g.yp() != null ? v.localToWorld(g.yp()[0], g.yp()[1] + 0.3, g.yp()[2]) : v.localToWorld(0, g.cy() + g.hy(), g.cz());
             if (t % 3 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), top, r, 0.5, 0.05);
-            if (s.broken(TURRET_GONE) && s.burning()) for (int i = 0; i < 3; i++) puff(l, ParticleTypes.FLAME, top, r, 0.6, 0.06);
+            if (s.broken(TURRET_GONE) && s.burning()) {
+                if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), top, r, 0.8, 0.6);
+                puff(l, ParticleTypes.FLAME, top, r, 0.6, 0.06);
+            }
         }
         if (s.repairMod >= 0 && !s.burning() && t % 8 == 0 && Math.abs(v.speedMs) < 0.3) {
             Vec3 p = v.localToWorld((r.nextDouble() - 0.5) * g.hx() * 2, g.cy() + g.hy(), g.cz() + (r.nextDouble() - 0.5) * g.hz() * 2);
@@ -55,7 +60,8 @@ public final class DamageFx {
         if (s.broken(ENGINE)) puff(l, big ? ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get() : ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), eng, r, sp, 0.05);
         if (s.burning()) {
             Vec3 fp = c.localToWorld(CraftDamage.firePoint(c));
-            for (int i = 0; i < (big ? 6 : 2); i++) puff(l, ParticleTypes.FLAME, fp, r, big ? 3.0 : 0.5, 0.04);
+            if (t % 2 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), fp, r, big ? 2.2 : 0.6, big ? 0.9 : 0.5);
+            for (int i = 0; i < (big ? 4 : 1); i++) puff(l, ParticleTypes.FLAME, fp, r, big ? 3.0 : 0.5, 0.04);
             puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), fp, r, big ? 3.0 : 0.5, 0.08);
             if (t % 3 == 0) puff(l, ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), fp, r, big ? 3.0 : 0.3, 0.1);
         }

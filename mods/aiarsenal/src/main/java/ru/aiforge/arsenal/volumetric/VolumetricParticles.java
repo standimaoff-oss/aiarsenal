@@ -15,5 +15,7 @@ public final class VolumetricParticles {
     public static final RegistryObject<SimpleParticleType> CANNON = TYPES.register("volume_cannon", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> EXHAUST = TYPES.register("volume_exhaust", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> IMPACT = TYPES.register("volume_impact", () -> new SimpleParticleType(true));
+  /** r32: burning fuel / wrecks: a hot (1400-1600 K) buoyant volume, rendered as volumetric flame. */
+  public static final RegistryObject<SimpleParticleType> FIRE = TYPES.register("volume_fire", () -> new SimpleParticleType(true));
     private VolumetricParticles() {}
 }

@@ -708,6 +708,7 @@ public final class VehicleDamage {
             // blow-out panels: the bustle vents upwards, the crew compartment survives; the stowed rounds are lost
             Vec3 b = v.localToWorld(0, yp1 + 0.6, (g.yp != null ? g.yp[2] : 0) - 2.0);
             sl.sendParticles(ParticleTypes.FLAME, b.x, b.y, b.z, 80, 0.5, 0.2, 0.5, 0.35);
+            sl.sendParticles(ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(), b.x, b.y + 0.4, b.z, 26, 0.6, 0.5, 0.6, 0.10);
             sl.sendParticles(ParticleTypes.LAVA, b.x, b.y, b.z, 20, 0.5, 0.3, 0.5, 0);
             sl.sendParticles(ru.aiforge.arsenal.volumetric.VolumetricParticles.SMOKE.get(), b.x, b.y + 1, b.z, 40, 0.6, 1.5, 0.6, 0.08);
             sl.playSound(null, b.x, b.y, b.z, SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 4f, 1.2f);
