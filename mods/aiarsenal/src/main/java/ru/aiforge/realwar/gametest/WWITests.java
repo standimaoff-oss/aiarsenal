@@ -338,24 +338,35 @@ public final class WWITests {
                 "aim az 0 must clamp to the sector ends: " + tank.sponsonAz(0) + "/" + tank.sponsonAz(1));
         org.joml.Vector3d tr = tank.bodyFrame().transformPosition(new org.joml.Vector3d(-1.41, 1.22, 0.0));
         Vec3 tr0 = new Vec3(tr.x, tr.y, tr.z);
-        Vec3 d0 = tank.tubeWorld(0).subtract(tr0).normalize();
-        h.assertTrue(d0.z < 0.75, "the right gun still points along the hull: " + d0);
-        h.assertTrue(d0.dot(new Vec3(-0.81915, 0.0, 0.57358)) > 0.999, "right gun off its clamped line: " + d0);
-        operator.setYRot(-90.0f);
-        operator.setXRot(0.0f);
         int[] tick = {0};
         int[] phase = {0};
         int[] seq = {tank.firedSeq()};
         h.onEachTick(() -> {
             tick[0]++;
             if (phase[0] == 0) {
+                // the spawn seed holds el at elMin until the first aim tick; wait for the laid aim first
+                if (Math.abs(tank.az()) < 0.5f && Math.abs(tank.el()) < 0.5f) {
+                    Vec3 d0 = tank.tubeWorld(0).subtract(tr0).normalize();
+                    h.assertTrue(d0.z < 0.75, "the right gun still points along the hull: " + d0);
+                    h.assertTrue(d0.dot(new Vec3(-0.81915, 0.0, 0.57358)) > 0.999,
+                            "right gun off its clamped line: " + d0);
+                    operator.setYRot(-90.0f);
+                    operator.setXRot(0.0f);
+                    tick[0] = 0;
+                    phase[0] = 1;
+                } else if (tick[0] > 20) {
+                    h.fail("the laid aim never settled at az/el 0: " + tank.az() + "/" + tank.el());
+                }
+                return;
+            }
+            if (phase[0] == 1) {
                 if (Math.abs(tank.az() + 90.0f) < 0.5f) {
                     // right broadside: the right gun is centred, the left one stays at its forward stop
                     h.assertTrue(Math.abs(tank.sponsonAz(0) + 90.0f) < 0.01f, "right gun off broadside: " + tank.sponsonAz(0));
                     h.assertTrue(Math.abs(tank.sponsonAz(1) - 55.0f) < 0.01f, "left gun left its sector: " + tank.sponsonAz(1));
                     Vec3 dr = tank.tubeWorld(0).subtract(tr0).normalize();
                     h.assertTrue(dr.dot(new Vec3(-1.0, 0.0, 0.0)) > 0.999, "right gun not on broadside: " + dr);
-                    phase[0] = 1;
+                    phase[0] = 2;
                     tick[0] = 0;
                 } else if (tick[0] > 20) {
                     h.fail("the aim never reached right broadside: az " + tank.az());
