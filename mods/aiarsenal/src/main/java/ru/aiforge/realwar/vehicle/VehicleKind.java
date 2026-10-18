@@ -66,7 +66,15 @@ public enum VehicleKind {
     /** British Mark I Male (1916): 28.4 t, 78 kW, 6.4 km/h, two independently loaded QF 6-pdr sponson guns. */
     // traverse 125 deg: the shared aim line must reach into both sponson sectors (-125..-55 and 55..125);
     // each gun then follows it inside its own +/-35 deg arc about the broadside rest
-    MARK_I(Specs.MARK_I, 420, 28400.0f, 78.0f, 6.4f, 0.55f, 2, 100, 60, 125.0f, -10.0f, 20.0f, 1.15f, 0.0f, 0.42f);
+    MARK_I(Specs.MARK_I, 420, 28400.0f, 78.0f, 6.4f, 0.55f, 2, 100, 60, 125.0f, -10.0f, 20.0f, 1.15f, 0.0f, 0.42f),
+    /** Flakpanzer IV "Wirbelwind" (1944): 22 t, Maybach HL 120 TRM 300 PS, 38 km/h; quad 2 cm Flakvierling 38 L/65 + SAM rails. */
+    WIRBELWIND(Specs.WIRBELWIND, 520, 22000.0f, 220.0f, 38.0f, 1.1f, 60, 70, 2, 180.0f, -10.0f, 85.0f, 2.15f, 0.0f, 0.02f),
+    /** ZSU-37 (1944): 11.5 t (SU-76M chassis), 2x GAZ-202 140 hp, 45 km/h; 37 mm 61-K AA autocannon + SAM rails. */
+    ZSU37(Specs.ZSU37, 460, 11500.0f, 103.0f, 45.0f, 1.25f, 60, 65, 4, 180.0f, -5.0f, 85.0f, 2.75f, 0.0f, 0.04f),
+    /** Flakpanzer Gepard 1A2 (Leopard 1 chassis): 47.5 t, MTU MB 838 CaM-500 830 PS, 65 km/h; twin 35 mm Oerlikon KDA + Stinger pods. */
+    GEPARD(Specs.GEPARD, 720, 47500.0f, 610.0f, 65.0f, 1.65f, 60, 80, 2, 180.0f, -10.0f, 85.0f, 3.15f, 0.0f, 0.11f),
+    /** ZSU-23-4M4 "Shilka-M4": 21 t (GM-575 chassis), V-6R-1 280 hp, 50 km/h; quad 23 mm AZP-23 "Amur" + Igla/Strela pods. */
+    SHILKA(Specs.SHILKA, 580, 21000.0f, 206.0f, 50.0f, 1.45f, 60, 75, 1, 180.0f, -4.0f, 85.0f, 2.25f, 0.0f, 0.02f);
 
     public final VehicleSpec spec;
     public final int hp;
@@ -110,8 +118,12 @@ public enum VehicleKind {
         return this == S400;
     }
 
+    public boolean isSpaag() {
+        return this == WIRBELWIND || this == ZSU37 || this == GEPARD || this == SHILKA;
+    }
+
     public boolean selfRadar() {
-        return false;
+        return this.isSpaag();
     }
 
     public boolean isRadar() {
@@ -125,7 +137,7 @@ public enum VehicleKind {
     public boolean tracked() {
         return this == T90M || this == ABRAMS || this == BMP3 || this == MSTA || this == PZ2 || this == PZ4 || this == TIGER
                 || this == STURMTIGER || this == MAUS || this == RATTE || this == T34 || this == KV2 || this == IS2 || this == KV5
-                || this == BRADLEY || this == TOS1A || this == MARK_I;
+                || this == BRADLEY || this == TOS1A || this == MARK_I || this.isSpaag();
     }
 
     public boolean artillery() {
@@ -134,7 +146,7 @@ public enum VehicleKind {
 
     /** Second World War vehicle (reply 8): MG coax instead of the 30 mm, WW2 sights in the HUD. */
     public boolean ww2() {
-        return this.ordinal() >= PZ2.ordinal() && this.ordinal() <= BM13.ordinal();
+        return this.ordinal() >= PZ2.ordinal() && this.ordinal() <= BM13.ordinal() || this == WIRBELWIND || this == ZSU37;
     }
 
     public boolean isMlrs() {

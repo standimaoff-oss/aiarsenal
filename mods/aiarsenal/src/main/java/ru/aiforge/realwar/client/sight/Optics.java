@@ -48,8 +48,8 @@ public final class Optics {
     /** 0 = day only, 1 = + NV, 2 = + NV + thermal. */
     public static int channels(VehicleKind k) {
         return switch (k) {
-            case T90M, ABRAMS, BMP3, BRADLEY, MSTA, TOS1A -> 2;
-            case GRAD, SMERCH, S400, RADAR_MOBILE, YARS, ZU23 -> 1;
+            case T90M, ABRAMS, BMP3, BRADLEY, MSTA, TOS1A, GEPARD -> 2;
+            case GRAD, SMERCH, S400, RADAR_MOBILE, YARS, ZU23, SHILKA -> 1;
             default -> 0;
         };
     }

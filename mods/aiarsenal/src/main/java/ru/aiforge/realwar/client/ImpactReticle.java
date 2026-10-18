@@ -276,12 +276,13 @@ public final class ImpactReticle {
                 add(bullet(lv, gv.tubeWorld(ct), gv.launchDir().scale(12.0), gv));
                 return;
             }
-            if (mode == 2 && gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY) {
-                guided = true;                       // TOW: SACLOS - the missile goes where the crosshair stays
-                tag = "TOW";
+            if (mode == 2 && (gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY || gv.kind.isSpaag())) {
+                guided = true;                       // TOW / radar-guided SPAAG SAM
+                tag = gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY ? "TOW" : "SAM";
                 empty = gv.thirdRounds() <= 0;
-                curAmmo = ru.aiforge.realwar.damage.Armour.Ammo.of(Ballistics.Profile.TOW2B);
-                add(lookPoint(lv, p, 3750));
+                curAmmo = ru.aiforge.realwar.damage.Armour.Ammo.of(gv.cfg.third());
+                Entity rTgt = gv.kind.isSpaag() ? gv.flakTarget() : null;
+                add(rTgt != null ? rTgt.getBoundingBox().getCenter() : lookPoint(lv, p, 3750));
                 return;
             }
             if (mode == 2 && gv.cfg.third() != null) {

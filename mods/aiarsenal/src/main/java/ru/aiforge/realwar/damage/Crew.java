@@ -36,10 +36,10 @@ public final class Crew {
 
     public static int[] roles(VehicleKind k) {
         return switch (k) {
-            case T90M, BMP3, BRADLEY, TOS1A, PZ2 -> new int[]{DRIVER, GUNNER, COMMANDER};
+            case T90M, BMP3, BRADLEY, TOS1A, PZ2, GEPARD -> new int[]{DRIVER, GUNNER, COMMANDER};
             case MARK_I -> new int[]{DRIVER, GUNNER, GUNNER, LOADER, LOADER, COMMANDER};
-            case ABRAMS, IS2, MSTA -> new int[]{DRIVER, GUNNER, COMMANDER, LOADER};
-            case PZ4, TIGER, T34, STURMTIGER, KV5 -> new int[]{DRIVER, GUNNER, COMMANDER, LOADER, RADIO};
+            case ABRAMS, IS2, MSTA, SHILKA, ZSU37 -> new int[]{DRIVER, GUNNER, COMMANDER, LOADER};
+            case PZ4, TIGER, T34, STURMTIGER, KV5, WIRBELWIND -> new int[]{DRIVER, GUNNER, COMMANDER, LOADER, RADIO};
             case KV2, MAUS, RATTE -> new int[]{DRIVER, GUNNER, COMMANDER, LOADER, LOADER, RADIO};
             case GRAD, SMERCH, S400, RADAR_MOBILE, YARS, BM13 -> new int[]{DRIVER, GUNNER, COMMANDER};
             case URAL -> new int[]{DRIVER, COMMANDER};

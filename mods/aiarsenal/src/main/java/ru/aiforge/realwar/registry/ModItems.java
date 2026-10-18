@@ -264,6 +264,10 @@ public final class ModItems {
     public static final RegistryObject<Item> URAL_VEHICLE = ITEMS.register("ural_vehicle", () -> new VehicleItem(VehicleKind.URAL, new Item.Properties().stacksTo(1)));
     // WWI Mark I item is appended with the model and double-sponson simulation.
     public static final RegistryObject<Item> MARK_I_VEHICLE = ITEMS.register("mark_i_vehicle", () -> new VehicleItem(VehicleKind.MARK_I, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> WIRBELWIND_VEHICLE = ITEMS.register("wirbelwind_vehicle", () -> new VehicleItem(VehicleKind.WIRBELWIND, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> ZSU37_VEHICLE = ITEMS.register("zsu37_vehicle", () -> new VehicleItem(VehicleKind.ZSU37, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> GEPARD_VEHICLE = ITEMS.register("gepard_vehicle", () -> new VehicleItem(VehicleKind.GEPARD, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> SHILKA_VEHICLE = ITEMS.register("shilka_vehicle", () -> new VehicleItem(VehicleKind.SHILKA, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SHELLS_20 = ModItems.item("shells_20", 0.0, 16);
     public static final RegistryObject<Item> SHELLS_57 = ModItems.item("shells_57", 0.0, 8);
     public static final RegistryObject<Item> SHELLS_75 = ModItems.item("shells_75", 0.0, 16);
@@ -368,6 +372,10 @@ public final class ModItems {
             case TOS1A -> TOS1A_VEHICLE;
             case URAL -> URAL_VEHICLE;
             case MARK_I -> MARK_I_VEHICLE;
+            case WIRBELWIND -> WIRBELWIND_VEHICLE;
+            case ZSU37 -> ZSU37_VEHICLE;
+            case GEPARD -> GEPARD_VEHICLE;
+            case SHILKA -> SHILKA_VEHICLE;
         };
     }
 

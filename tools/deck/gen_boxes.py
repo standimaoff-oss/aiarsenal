@@ -23,7 +23,8 @@ MODELS = M0 + ['models/glb/ah64.glb', 'models/glb/ka52.glb', 'glb/tu95ms.glb', '
                  # reply 11: WW2 aeroplanes (moving surfaces / gear / bombs / turrets are not walkable)
                  'models/glb/bf109.glb', 'models/glb/yak3.glb', 'models/glb/he111.glb', 'models/glb/pe8.glb',
                  # reply 12: Su-57
-                 'models/glb/su57.glb', 'models/glb/bradley.glb', 'models/glb/tos1a.glb', 'models/glb/ural.glb']
+                 'models/glb/su57.glb', 'models/glb/bradley.glb', 'models/glb/tos1a.glb', 'models/glb/ural.glb',
+                 'models/glb/wirbelwind.glb', 'models/glb/zsu37.glb', 'models/glb/gepard.glb', 'models/glb/shilka.glb']
 
 OUTDIR = ROOT + 'deck/'
 SKIP = re.compile(r'rotor|blade|prop_|antenna|_ant\b|_ant_|whip|rocket_load|plume|flame|disc$|chute|_lens|decal|^(h|f|l|q)\d+_|^rf_|arado|rudder|^gear_[LRT]$|^bomb[xkf]?_\d|^tur_\d|^bay_[LR]$|^ail_|^flap_|^elev$|^rud$|^elev_[LR]$|^rud_[LR]$|^levcon_|^noz|^ab|^glow_|^pod_\d|^kh38_\d|^fab_\d|^gear_N$|^gear_door', re.I)

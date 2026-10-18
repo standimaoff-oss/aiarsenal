@@ -71,8 +71,8 @@ public final class GunTests {
     /** Every gun vehicle GLB: turret chain, muzzle reachable, tracked hulls carry wheels + track clips. */
     @GameTest(template = "arena", batch = "rw_gun", timeoutTicks = 40)
     public static void gun_models_rigged(GameTestHelper h) {
-        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.TOS1A, VehicleKind.MARK_I};
-        VehicleSpec[] ss = {Specs.T90M, Specs.ABRAMS, Specs.BMP3, Specs.MSTA, Specs.D30, Specs.M777, Specs.PZ2, Specs.PZ4, Specs.TIGER, Specs.STURMTIGER, Specs.MAUS, Specs.RATTE, Specs.T34, Specs.KV2, Specs.IS2, Specs.KV5, Specs.BRADLEY, Specs.TOS1A, Specs.MARK_I};
+        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.TOS1A, VehicleKind.MARK_I, VehicleKind.WIRBELWIND, VehicleKind.ZSU37, VehicleKind.GEPARD, VehicleKind.SHILKA};
+        VehicleSpec[] ss = {Specs.T90M, Specs.ABRAMS, Specs.BMP3, Specs.MSTA, Specs.D30, Specs.M777, Specs.PZ2, Specs.PZ4, Specs.TIGER, Specs.STURMTIGER, Specs.MAUS, Specs.RATTE, Specs.T34, Specs.KV2, Specs.IS2, Specs.KV5, Specs.BRADLEY, Specs.TOS1A, Specs.MARK_I, Specs.WIRBELWIND, Specs.ZSU37, Specs.GEPARD, Specs.SHILKA};
         for (int i = 0; i < ks.length; ++i) {
             VehicleKind k = ks[i];
             GunVehicle.Cfg c = GunVehicle.cfg(k);
@@ -82,6 +82,11 @@ public final class GunTests {
                 GlbModel m = GlbModel.read(in);
                 for (String n : new String[]{"launcher_yaw", "launcher_pitch", "barrel"}) {
                     h.assertTrue(m.nodeIndex(n) >= 0, ss[i].id() + ": node " + n);
+                }
+                if (k.isSpaag()) {
+                    for (String n : new String[]{"radar_dish", "sam_l", "sam_r"}) {
+                        h.assertTrue(m.nodeIndex(n) >= 0, ss[i].id() + ": spaag node " + n);
+                    }
                 }
                 if (k == VehicleKind.MARK_I) {
                     for (String n : new String[]{"launcher_yaw_left", "launcher_pitch_left", "barrel_left", "MarkI_link_L_00", "MarkI_link_R_00"})
@@ -341,7 +346,7 @@ public final class GunTests {
     /** Spec geometry and kind table agree for all six gun vehicles (muzzle in front of pivot, seats present). */
     @GameTest(template = "arena", batch = "rw_gun", timeoutTicks = 40)
     public static void gun_specs_consistent(GameTestHelper h) {
-        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.MARK_I};
+        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.MARK_I, VehicleKind.WIRBELWIND, VehicleKind.ZSU37, VehicleKind.GEPARD, VehicleKind.SHILKA};
         for (VehicleKind k : ks) {
             VehicleSpec s = k.spec;
             h.assertTrue(k.isGun(), k + " isGun");
@@ -457,5 +462,39 @@ public final class GunTests {
                 h.succeed();
             }
         });
+    }
+
+    /** 4 SPAAGs (Wirbelwind, ZSU-37, Gepard, Shilka): independent HE/AP ammo belts + radar-slaved SAMs seduced by flares. */
+    @GameTest(template = "arena", batch = "rw_gun", timeoutTicks = 100)
+    public static void spaag_dual_belts_and_radar_sam(GameTestHelper h) {
+        ServerLevel level = h.getLevel();
+        BlockPos c = h.absolutePos(new BlockPos(5, 0, 5));
+        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX(), c.getZ());
+        for (VehicleKind k : new VehicleKind[]{VehicleKind.WIRBELWIND, VehicleKind.ZSU37, VehicleKind.GEPARD, VehicleKind.SHILKA}) {
+            h.assertTrue(k.isSpaag() && k.isGun() && k.tracked() && k.selfRadar(), k + ": SPAAG flags");
+            GunVehicle.Cfg cfg = GunVehicle.cfg(k);
+            h.assertTrue(cfg.modes().length == 3, k + ": 3 modes (HE belt, AP belt, SAM)");
+            h.assertTrue(!cfg.primary().kinetic() && cfg.secondary().kinetic(), k + ": HE + AP belts");
+            h.assertTrue(cfg.third() == Ballistics.Profile.AA_SAM, k + ": radar SAM mode");
+        }
+        GunVehicle shilka = spawn(level, ModEntities.SHILKA.get(), c.getX() + 0.5, y, c.getZ() + 0.5, 0.0f);
+        shilka.fillMagazine();
+        h.assertTrue(shilka.isDualBelt() && shilka.beltCapacity() == 30, "Shilka dual belt capacity");
+        h.assertTrue(shilka.loadedOfType(0) == 30 && shilka.loadedOfType(1) == 30, "both belts initially loaded 30/30");
+        ServerPlayer gunner = mock(h);
+        h.assertTrue(shilka.enterSeat(gunner, shilka.operatorSeat()), "enter Shilka");
+        // Fire 1 burst on HE belt (slot 0): only HE belt decreases; AP belt stays at 30
+        shilka.handleControl(gunner, 0, 0, true, false, 0);
+        h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 30,
+                "HE shot must not consume AP belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
+        // Switch to AP belt (slot 1) and fire: only AP belt decreases; HE belt stays at 29
+        shilka.selectSlot(gunner, 1);
+        shilka.fireCd = 0;
+        shilka.handleControl(gunner, 0, 0, true, false, 0);
+        h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 29,
+                "AP shot must not consume HE belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
+        gunner.stopRiding();
+        shilka.discard();
+        h.succeed();
     }
 }

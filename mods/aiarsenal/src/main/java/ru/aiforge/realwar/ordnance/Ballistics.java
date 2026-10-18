@@ -199,7 +199,15 @@ public final class Ballistics {
         TOS220("MO.1.01.04M", 217.0, 30.0, 1.2, 1900.0, 0.42, 0.220, 0.0, 0.0, 90.0, 1.6),
         // ---- WWI vertical slice: QF 6-pdr 6 cwt sponson cannon, 57 mm / 6 lb shell, ~538 m/s.
         QF6_HE("QF 6-pdr HE", 2.72, 0.0, 0.001, 0.0, 0.42, 0.057, 0.0, 538.0, 0.10, 0.8),
-        QF6_AP("QF 6-pdr AP", 2.72, 0.0, 0.001, 0.0, 0.48, 0.057, 0.0, 538.0, 0.0, 0.0);
+        QF6_AP("QF 6-pdr AP", 2.72, 0.0, 0.001, 0.0, 0.48, 0.057, 0.0, 538.0, 0.0, 0.0),
+        // ---- WW2 & Modern SPAAG dual-belt AA shells + short-range radar-slaved SAM mode
+        AA37_HE("37mm OR-167", 0.735, 0.0, 0.001, 0.0, 0.34, 0.037, 0.0, 880.0, 0.037, 0.65),
+        AA37_AP("37mm BR-167", 0.770, 0.0, 0.001, 0.0, 0.38, 0.037, 0.0, 880.0, 0.0, 0.0),
+        AA35_HE("35mm HEI-T", 0.550, 0.0, 0.001, 0.0, 0.31, 0.035, 0.0, 1175.0, 0.112, 0.75),
+        AA35_AP("35mm FAPDS-T", 0.380, 0.0, 0.001, 0.0, 0.48, 0.035, 0.0, 1385.0, 0.0, 0.0),
+        AA23_HE("23mm OFZT", 0.188, 0.0, 0.001, 0.0, 0.35, 0.023, 0.0, 970.0, 0.019, 0.55),
+        AA23_AP("23mm BZT", 0.190, 0.0, 0.001, 0.0, 0.40, 0.023, 0.0, 970.0, 0.0, 0.0),
+        AA_SAM("9M333 / FIM-92", 11.8, 0.0, 0.001, 0.0, 0.25, 0.072, 0.0, 620.0, 1.8, 0.7);
 
         public boolean isShell() {
             return this.mp <= 0.0;   // no motor = gun projectile (r8: rocket profiles may follow shells in the enum)

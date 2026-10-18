@@ -59,6 +59,9 @@ public final class Armour {
                 case T120_AP -> new Ammo(p.title, Type.APFSDS, 790, p.ejectSpeed, cal, 0);        // M829A4
                 case QF6_AP -> new Ammo(p.title, Type.AP, 55, p.ejectSpeed, cal, 0);               // QF 6-pdr AP shot, Mark I-era armour
                 case M242_AP -> new Ammo(p.title, Type.APFSDS, 110, p.ejectSpeed, cal, 0);        // M919 (DU rod)
+                case AA35_AP -> new Ammo(p.title, Type.APFSDS, 115, p.ejectSpeed, cal, 0);        // 35 mm Oerlikon FAPDS-T
+                case AA37_AP -> new Ammo(p.title, Type.AP, 65, p.ejectSpeed, cal, 0);             // 37 mm 61-K BR-167
+                case AA23_AP -> new Ammo(p.title, Type.AP, 42, p.ejectSpeed, cal, 0);             // 23 mm AZP-23 BZT
                 case KW20_AP -> new Ammo(p.title, Type.APCR, 52, p.ejectSpeed, cal, 0);           // 2 cm Pzgr 40
                 case K75_AP -> new Ammo(p.title, Type.APHE, 140, p.ejectSpeed, cal, 0.018);       // KwK 40 L/48 Pzgr 39
                 case K88_AP -> new Ammo(p.title, Type.APHE, 165, p.ejectSpeed, cal, 0.059);       // KwK 36 Pzgr 39
@@ -120,6 +123,10 @@ public final class Armour {
             case MARK_I -> t(12, 12, 8, 8, 6, 6, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1f);
             case PZ2 -> t(35, 35, 15, 15, 10, 5, 30, 15, 15, 10, 10, 20, 0, 0, 10, 22, 22, 1f);
             case PZ4 -> t(80, 80, 30, 20, 12, 10, 50, 30, 30, 18, 10, 14, 0, 10, 10, 25, 15, 1f);
+            case WIRBELWIND -> t(80, 80, 30, 20, 12, 10, 16, 16, 16, 8, 10, 14, 0, 10, 25, 25, 25, 1f);
+            case ZSU37 -> t(35, 25, 15, 15, 10, 8, 15, 15, 15, 8, 50, 30, 0, 0, 20, 20, 20, 1f);
+            case GEPARD -> t(70, 50, 35, 25, 20, 15, 35, 25, 25, 15, 60, 45, 0, 10, 30, 20, 15, 1f);
+            case SHILKA -> t(15, 15, 15, 10, 10, 8, 10, 10, 10, 8, 55, 35, 15, 0, 25, 20, 15, 1f);
             case TIGER -> t(100, 100, 80, 80, 25, 25, 120, 80, 80, 25, 10, 24, 0, 8, 0, 0, 0, 1f);
             case STURMTIGER -> t(150, 100, 82, 82, 40, 25, 150, 82, 82, 40, 47, 24, 0, 10, 47, 20, 10, 1f);
             case MAUS -> t(200, 200, 180, 160, 50, 50, 240, 200, 200, 60, 55, 35, 0, 30, 0, 30, 15, 1f);
@@ -235,6 +242,10 @@ public final class Armour {
             case BRADLEY -> 0.032;           // 25 mm M242 Bushmaster
             case TOS1A -> 0.122;             // 220 mm thermobaric tube
             case MARK_I -> 0.049;            // QF 6-pdr Hotchkiss (57 mm, 8.6 kg barrel section)
+            case WIRBELWIND -> 0.032;        // 2 cm Flakvierling 38
+            case ZSU37 -> 0.042;             // 37 mm 61-K
+            case GEPARD -> 0.044;            // 35 mm Oerlikon KDA
+            case SHILKA -> 0.034;            // 23 mm AZP-23 Amur
             case ZU23 -> 0.028;              // 23 mm AZP-23
             default -> 0.060;
         };

@@ -75,6 +75,10 @@ extends TooltipItem {
             case TOS1A -> (EntityType)ModEntities.TOS1A.get();
             case URAL -> (EntityType)ModEntities.URAL.get();
             case MARK_I -> (EntityType)ModEntities.MARK_I.get();
+            case WIRBELWIND -> (EntityType)ModEntities.WIRBELWIND.get();
+            case ZSU37 -> (EntityType)ModEntities.ZSU37.get();
+            case GEPARD -> (EntityType)ModEntities.GEPARD.get();
+            case SHILKA -> (EntityType)ModEntities.SHILKA.get();
         };
     }
 

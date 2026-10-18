@@ -92,6 +92,10 @@ public final class VehicleDamage {
             case STURMTIGER -> new float[]{0, 60, 0, SPONSON};
             case TOS1A -> new float[]{12, 30, 0, PACK};
             case MARK_I -> new float[]{0, 2.72f, 0, SPONSON};
+            case WIRBELWIND -> new float[]{2.5f, 0.8f, 0, SPONSON};
+            case ZSU37 -> new float[]{1.8f, 1.0f, 0, SPONSON};
+            case GEPARD -> new float[]{12.0f, 1.8f, 0, CAROUSEL};
+            case SHILKA -> new float[]{4.5f, 1.4f, 0, CAROUSEL};
             default -> new float[]{0, 5, 0, CAROUSEL};
         };
     }

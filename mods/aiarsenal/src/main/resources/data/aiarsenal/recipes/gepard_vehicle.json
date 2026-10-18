@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "CMC",
+    "BBB"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "C": {
+      "item": "minecraft:repeater"
+    },
+    "M": {
+      "item": "minecraft:observer"
+    },
+    "B": {
+      "item": "minecraft:iron_block"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:gepard_vehicle",
+    "count": 1
+  }
+}

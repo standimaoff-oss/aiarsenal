@@ -84,6 +84,14 @@ extends RocketEntity {
             }
             return;
         }
+        if (sub == 0 && !this.level().isClientSide && !(tg instanceof ru.aiforge.realwar.craft.CraftOrdnance)) {
+            Entity decoy = ru.aiforge.realwar.craft.Flares.decoyFor(this, tg);
+            if (decoy != null) {
+                this.entityData.set(TARGET, decoy.getId());
+                this.targetUid = decoy.getUUID();
+                tg = decoy;
+            }
+        }
         double k = Ballistics.scaleK();
         double tickReal = (double)Ballistics.substeps() * Ballistics.dtStep();
         Vec3 c = SamMissileEntity.center(tg);

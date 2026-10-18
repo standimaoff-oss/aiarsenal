@@ -417,10 +417,11 @@ public final class VehicleClient {
             } else if (fx == -2 && gv.kind == VehicleKind.MARK_I) {
                 for (int tube = 0; tube < 2; ++tube) TrailFx.gunBlast(level, gv.tubeWorld(tube), gv.sponsonDir(tube), false, false);
             } else if (fx >= 0) {
-                boolean big = gv.kind != VehicleKind.BMP3 && gv.kind != VehicleKind.BRADLEY;
+                boolean big = gv.kind != VehicleKind.BMP3 && gv.kind != VehicleKind.BRADLEY && !gv.kind.isSpaag();
                 if (gv.kind == VehicleKind.MARK_I) TrailFx.gunBlast(level, gv.tubeWorld(fx), gv.sponsonDir(fx), false, false);
                 else {
-                    TrailFx.gunBlast(level, gv.tubeWorld(0), gv.launchDir(), big, gv.kind.artillery());
+                    int tIdx = gv.kind.isSpaag() && gv.gunTubeCount() > 1 ? Math.floorMod(gv.firedSeq(), gv.gunTubeCount()) : 0;
+                    TrailFx.gunBlast(level, gv.tubeWorld(tIdx), gv.launchDir(), big, gv.kind.artillery());
                     if (gv.twinSalvo()) TrailFx.gunBlast(level, gv.tubeWorld(1), gv.launchDir(), big, gv.kind.artillery());
                 }
             }

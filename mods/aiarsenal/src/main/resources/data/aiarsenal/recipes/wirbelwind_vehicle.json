@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "CMC",
+    "BBB"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:iron_block"
+    },
+    "C": {
+      "item": "minecraft:repeater"
+    },
+    "M": {
+      "item": "minecraft:crossbow"
+    },
+    "B": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "result": {
+    "item": "aiarsenal:wirbelwind_vehicle",
+    "count": 1
+  }
+}

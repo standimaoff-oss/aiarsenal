@@ -212,6 +212,49 @@ public final class Specs {
             new float[][]{{0.0f, 0.0f, 1.15f}, {0.0f, 0.0f, 1.15f}}, new float[0][],
             new float[]{0.0f, 1.22f, 0.0f}, new float[]{0.0f, 0.0f, 0.0f}, new float[0][]);
 
+    // ---- WW2 & Modern SPAAGs (dual-belt shells + radar-guided SAM mode)
+    public static final VehicleSpec WIRBELWIND = new VehicleSpec("wirbelwind", 2.88f, 2.76f, 5.89f, 2.76f, new float[0][],
+            new float[][]{{0.0f, 2.35f, -0.35f}, {0.55f, 1.17f, 1.95f}}, new String[]{"driver", "gunner"},
+            new float[][]{{0.55f, 1.77f, 1.95f, 0.35f, 0.2f, 0.35f},
+                    {0.0f, 2.20f, -0.35f, 1.18f, 0.48f, 1.18f},
+                    {0.0f, 1.0f, -2.85f, 1.1f, 0.45f, 0.3f},
+                    {0.0f, 1.15f, 0.0f, 1.44f, 0.57f, 2.85f}},
+            new String[]{"door_driver", "door_gunner", "rear", "body"},
+            new float[][]{{-0.22f, 0.14f, 2.15f}, {0.22f, 0.14f, 2.15f}, {-0.22f, -0.10f, 2.15f}, {0.22f, -0.10f, 2.15f},
+                    {0.88f, 0.18f, 0.85f}, {-0.88f, 0.18f, 0.85f}}, new float[0][],
+            new float[]{0.0f, 1.72f, -0.35f}, new float[]{0.0f, 0.42f, 0.25f}, new float[0][]);
+
+    public static final VehicleSpec ZSU37 = new VehicleSpec("zsu37", 2.74f, 2.45f, 5.25f, 2.45f, new float[0][],
+            new float[][]{{0.0f, 2.10f, -0.75f}, {0.42f, 1.05f, 1.65f}}, new String[]{"driver", "gunner"},
+            new float[][]{{0.0f, 1.38f, 1.85f, 0.32f, 0.2f, 0.32f},
+                    {0.0f, 1.92f, -0.75f, 0.98f, 0.44f, 1.04f},
+                    {0.0f, 0.95f, -2.55f, 1.0f, 0.42f, 0.28f},
+                    {0.0f, 1.02f, 0.0f, 1.34f, 0.46f, 2.55f}},
+            new String[]{"door_driver", "door_gunner", "rear", "body"},
+            new float[][]{{0.0f, 0.0f, 2.75f}, {0.82f, 0.16f, 0.75f}, {-0.82f, 0.16f, 0.75f}}, new float[0][],
+            new float[]{0.0f, 1.48f, -0.75f}, new float[]{0.0f, 0.38f, 0.30f}, new float[0][]);
+
+    public static final VehicleSpec GEPARD = new VehicleSpec("gepard", 3.37f, 3.29f, 7.68f, 3.29f, new float[0][],
+            new float[][]{{-0.52f, 1.15f, 2.45f}, {-0.30f, 2.25f, 0.05f}}, new String[]{"driver", "gunner"},
+            new float[][]{{-0.52f, 1.68f, 2.45f, 0.35f, 0.2f, 0.35f},
+                    {0.0f, 2.22f, 0.05f, 1.25f, 0.50f, 1.45f},
+                    {0.0f, 1.15f, -3.65f, 1.3f, 0.50f, 0.3f},
+                    {0.0f, 1.12f, 0.0f, 1.68f, 0.56f, 3.65f}},
+            new String[]{"door_driver", "door_gunner", "rear", "body"},
+            new float[][]{{0.92f, 0.0f, 3.15f}, {-0.92f, 0.0f, 3.15f}, {1.22f, 0.18f, 0.85f}, {-1.22f, 0.18f, 0.85f}}, new float[0][],
+            new float[]{0.0f, 1.72f, 0.05f}, new float[]{0.0f, 0.48f, 0.20f}, new float[0][]);
+
+    public static final VehicleSpec SHILKA = new VehicleSpec("shilka", 3.12f, 2.75f, 6.54f, 2.75f, new float[0][],
+            new float[][]{{0.45f, 1.15f, 2.10f}, {-0.35f, 2.05f, -0.10f}}, new String[]{"driver", "gunner"},
+            new float[][]{{0.45f, 1.56f, 2.10f, 0.35f, 0.2f, 0.35f},
+                    {0.0f, 1.92f, -0.15f, 1.24f, 0.42f, 1.35f},
+                    {0.0f, 1.05f, -3.18f, 1.2f, 0.45f, 0.3f},
+                    {0.0f, 1.02f, 0.0f, 1.52f, 0.48f, 3.18f}},
+            new String[]{"door_driver", "door_gunner", "rear", "body"},
+            new float[][]{{-0.24f, 0.12f, 2.25f}, {0.24f, 0.12f, 2.25f}, {-0.24f, -0.10f, 2.25f}, {0.24f, -0.10f, 2.25f},
+                    {1.05f, 0.25f, 0.35f}, {-1.05f, 0.25f, 0.35f}}, new float[0][],
+            new float[]{0.0f, 1.50f, -0.10f}, new float[]{0.0f, 0.38f, 0.55f}, new float[0][]);
+
     private Specs() {
     }
 }

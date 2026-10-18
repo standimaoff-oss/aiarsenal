@@ -58,6 +58,10 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<ru.aiforge.realwar.vehicle.TruckEntity>> URAL = ModEntities.vehicle("ural", (t, l) -> new ru.aiforge.realwar.vehicle.TruckEntity(t, l, VehicleKind.URAL), VehicleKind.URAL);
     // WWI Mark I: reuse the established tracked gun-vehicle simulation, with its own no-turret profile and twin sponsons.
     public static final RegistryObject<EntityType<ru.aiforge.realwar.vehicle.GunVehicle>> MARK_I = ModEntities.vehicle("mark_i", (t, l) -> new ru.aiforge.realwar.vehicle.GunVehicle(t, l, VehicleKind.MARK_I), VehicleKind.MARK_I);
+    public static final RegistryObject<EntityType<ru.aiforge.realwar.vehicle.GunVehicle>> WIRBELWIND = ModEntities.vehicle("wirbelwind", (t, l) -> new ru.aiforge.realwar.vehicle.GunVehicle(t, l, VehicleKind.WIRBELWIND), VehicleKind.WIRBELWIND);
+    public static final RegistryObject<EntityType<ru.aiforge.realwar.vehicle.GunVehicle>> ZSU37 = ModEntities.vehicle("zsu37", (t, l) -> new ru.aiforge.realwar.vehicle.GunVehicle(t, l, VehicleKind.ZSU37), VehicleKind.ZSU37);
+    public static final RegistryObject<EntityType<ru.aiforge.realwar.vehicle.GunVehicle>> GEPARD = ModEntities.vehicle("gepard", (t, l) -> new ru.aiforge.realwar.vehicle.GunVehicle(t, l, VehicleKind.GEPARD), VehicleKind.GEPARD);
+    public static final RegistryObject<EntityType<ru.aiforge.realwar.vehicle.GunVehicle>> SHILKA = ModEntities.vehicle("shilka", (t, l) -> new ru.aiforge.realwar.vehicle.GunVehicle(t, l, VehicleKind.SHILKA), VehicleKind.SHILKA);
     public static final RegistryObject<EntityType<MlrsEntity>> GRAD = ModEntities.vehicle("grad", (t, l) -> new MlrsEntity(t, l, VehicleKind.GRAD), VehicleKind.GRAD);
     public static final RegistryObject<EntityType<MlrsEntity>> SMERCH = ModEntities.vehicle("smerch", (t, l) -> new MlrsEntity(t, l, VehicleKind.SMERCH), VehicleKind.SMERCH);
     public static final RegistryObject<EntityType<SamLauncherEntity>> S400 = ModEntities.vehicle("s400", (t, l) -> new SamLauncherEntity(t, l, VehicleKind.S400), VehicleKind.S400);

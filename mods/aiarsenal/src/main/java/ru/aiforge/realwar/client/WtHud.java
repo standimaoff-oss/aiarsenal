@@ -428,11 +428,11 @@ public final class WtHud {
                 Slot s = switch (m) {
                     // r28: each slot shows the rounds of ITS OWN type that the loader actually seated. The rack used
                     // to be one typeless counter shown twice, so firing one HE round also emptied the AP slot.
-                    case 0 -> new Slot(gv.cfg.primary().kinetic() ? 1 : 0, gv.loadedOfType(0), gv.kind.magazine, cur == 0, rl,
+                    case 0 -> new Slot(gv.cfg.primary().kinetic() ? 1 : 0, gv.loadedOfType(0), gv.beltCapacity(), cur == 0, rl,
                             tr("hud.aiarsenal.rw.gun.round." + gv.cfg.primary().name().toLowerCase(java.util.Locale.ROOT)));
-                    case 1 -> new Slot(gv.cfg.secondary().kinetic() ? 1 : 0, gv.loadedOfType(1), gv.kind.magazine, cur == 1, rl,
+                    case 1 -> new Slot(gv.cfg.secondary().kinetic() ? 1 : 0, gv.loadedOfType(1), gv.beltCapacity(), cur == 1, rl,
                             tr("hud.aiarsenal.rw.gun.round." + gv.cfg.secondary().name().toLowerCase(java.util.Locale.ROOT)));
-                    case 2 -> new Slot(gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY ? 3 : 0, gv.thirdRounds(), gv.thirdMax(), cur == 2, 0f,
+                    case 2 -> new Slot(gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY || gv.kind.isSpaag() ? 3 : 0, gv.thirdRounds(), gv.thirdMax(), cur == 2, 0f,
                             gv.kind == ru.aiforge.realwar.vehicle.VehicleKind.BRADLEY ? "TOW" : tr("hud.aiarsenal.rw.gun.round." + gv.cfg.third().name().toLowerCase(java.util.Locale.ROOT)));
                     default -> new Slot(gv.cfg.coax30() ? 0 : 2, gv.coaxRounds(), GunVehicle.COAX_MAX, cur == 3, 0f,
                             tr("hud.aiarsenal.rw.gun.round." + (gv.cfg.coax30() ? "coax30" : "coax_mg")));
@@ -451,6 +451,9 @@ public final class WtHud {
             if (r > 0f) {
                 double m = r * Ballistics.scaleK();
                 b.append("  \u00b7  ").append(m >= 10000 ? String.format("%.1f %s", m / 1000, tr("hud.aiarsenal.rw.km")) : String.format("%d m", Math.round(m / 10.0) * 10));
+            }
+            if (gv.kind.isSpaag() && gv.flakTarget() != null) {
+                b.append("  \u00b7  ").append(tr("hud.aiarsenal.rw.radar_lock"));
             }
             if (gv.autoAim()) b.append("  \u00b7  ").append(tr("hud.aiarsenal.rw.gun.auto"));
             b.append("  \u00b7  ").append(String.format("%+.1f\u00b0", gv.el()));

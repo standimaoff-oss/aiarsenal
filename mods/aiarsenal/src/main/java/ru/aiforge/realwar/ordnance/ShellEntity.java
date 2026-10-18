@@ -61,6 +61,21 @@ public class ShellEntity extends RocketEntity {
     }
 
     @Override
+    protected boolean afterSubstep(int sub, int subs, Vec3 pos) {
+        Ballistics.Profile p = this.profile();
+        if (!p.kinetic() && (p == Ballistics.Profile.AA37_HE || p == Ballistics.Profile.AA35_HE
+                || p == Ballistics.Profile.AA23_HE || p == Ballistics.Profile.KW20_HE)
+                && this.flight != null && this.flight.t > 0.08 && this.level() instanceof ServerLevel sl) {
+            for (Entity e : sl.getEntities(this, new net.minecraft.world.phys.AABB(pos, pos).inflate(3.5),
+                    x -> x.getId() != this.sourceVehicle && AirTargets.isAirTarget(x))) {
+                this.impact(sl, pos, e);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     protected void impact(ServerLevel sl, Vec3 pos, Entity direct) {
         Ballistics.Profile p = this.profile();
         if (!p.kinetic()) {

@@ -69,7 +69,7 @@ public final class ModTabs {
             "ppsh41", "mp40", "mosin", "k98k", "mosin_pu", "k98k_zf39", "c96", "tt33",
             "mag_ppsh", "mag_mp40", "clip_mosin", "clip_k98", "round_762x54r", "round_792x57", "clip_c96", "mag_tt33",
             "pz2_vehicle", "pz4_vehicle", "tiger_vehicle", "sturmtiger_vehicle", "maus_vehicle", "ratte_vehicle",
-            "t34_vehicle", "kv2_vehicle", "is2_vehicle", "kv5_vehicle", "bm13_vehicle", "bismarck_ship",
+            "t34_vehicle", "kv2_vehicle", "is2_vehicle", "kv5_vehicle", "bm13_vehicle", "wirbelwind_vehicle", "zsu37_vehicle", "bismarck_ship",
             "bf109_plane", "yak3_plane", "he111_plane", "pe8_plane", "little_boy",
             "shells_20", "shells_75", "shells_88", "shells_85", "shells_107", "shells_128", "shells_280",
             "rocket_380", "rocket_m13", "sc250", "sc1000", "fab250sv", "fab1000", "fab5000");
@@ -148,7 +148,7 @@ public final class ModTabs {
         for (String set : ru.aiforge.realwar.item.UniformItem.SETS)
             for (String sl : new String[]{"head", "chest", "legs", "feet"}) ModTabs.put(Cat.UNIFORMS, "uniform_" + set + "_" + sl);
         // WWI vertical slice: one tank, one infantry rifle, and its 57 mm tank ammunition.
-        put(Cat.VEHICLES, "mark_i_vehicle");
+        put(Cat.VEHICLES, "mark_i_vehicle", "wirbelwind_vehicle", "zsu37_vehicle", "gepard_vehicle", "shilka_vehicle");
         put(Cat.WEAPONS, "gewehr98", "mills_bomb", "stielhandgranate", "wex");
         put(Cat.AMMO, "wwi_fuel");
         put(Cat.AMMO, "shells_57");

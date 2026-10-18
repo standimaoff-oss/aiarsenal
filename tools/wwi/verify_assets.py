@@ -463,6 +463,17 @@ def main() -> int:
               "Mark I collision footprint disagrees with the tank dimensions")
         check(0.0 <= ybounds[0] < 0.05 and 2.1 < ybounds[1] < 2.5,
               "Mark I collision height disagrees with the GLB shell")
+        for spaag in ("wirbelwind", "zsu37", "gepard", "shilka"):
+            sm = validate_glb(MODELS / f"{spaag}.glb", {"track_L", "track_R"},
+                              {"hull", "launcher_yaw", "launcher_pitch", "barrel", "radar_dish", "sam_l", "sam_r",
+                               "rw_L_0", "rw_R_0", "spk_L", "spk_R", "idl_L", "idl_R"})
+            sl = validate_glb(MODELS / f"{spaag}_lod1.glb", {"track_L", "track_R"},
+                              {"hull", "launcher_yaw", "launcher_pitch", "barrel", "radar_dish", "sam_l", "sam_r"})
+            sd = validate_deck(ASSETS / f"deck/{spaag}.deck")
+            check(9000 < sm["triangles"] < 32000, f"{spaag}: triangles {sm['triangles']} out of [9000..32000]")
+            check(sl["triangles"] < sm["triangles"] * 0.6, f"{spaag}: lod1 triangles {sl['triangles']} >= 60% of {sm['triangles']}")
+            check(sd["boxes"] >= 20, f"{spaag}: deck has too few boxes ({sd['boxes']})")
+            png_size_and_crc((ASSETS / f"textures/item/{spaag}_vehicle.png").read_bytes(), f"{spaag} icon")
         if args.rebuild:
             regenerate_and_compare()
             print("Rebuild: byte-identical GLB, texture, and deck outputs")

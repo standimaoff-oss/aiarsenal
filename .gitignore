@@ -18,6 +18,14 @@ mods/aiarsenal/src/main/resources/**/*.glb
 !mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/wex.glb
 !mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/stielhandgranate.glb
 !mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/mills_bomb.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/wirbelwind.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/wirbelwind_lod1.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/zsu37.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/zsu37_lod1.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/gepard.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/gepard_lod1.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/shilka.glb
+!mods/aiarsenal/src/main/resources/assets/aiarsenal/models/glb/shilka_lod1.glb
 mods/aiarsenal/volpyro-*.jar
 
 # local Python environment used to run tools/deck + tools/wwi (numpy, scipy)

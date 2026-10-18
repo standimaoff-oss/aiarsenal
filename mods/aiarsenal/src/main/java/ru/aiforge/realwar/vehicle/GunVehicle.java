@@ -50,7 +50,7 @@ import ru.aiforge.realwar.registry.ModSounds;
  *   <li>Ready rounds = LauncherVehicle magazine (reload from the ammo item, R or right click at the rear).</li>
  * </ul>
  */
-public class GunVehicle extends LauncherVehicle {
+public class GunVehicle extends LauncherVehicle implements ru.aiforge.realwar.radar.RadarNet.RadarEmitter {
     protected static final EntityDataAccessor<Integer> SEL = SynchedEntityData.defineId(GunVehicle.class, EntityDataSerializers.INT);
     /** r20: smoke grenades left in the dischargers. */
     protected static final EntityDataAccessor<Integer> SMOKE = SynchedEntityData.defineId(GunVehicle.class, EntityDataSerializers.INT);
@@ -113,9 +113,54 @@ public class GunVehicle extends LauncherVehicle {
     static final double[] RAM_B = {-0.05, 1.6};
     static final double[] RAM_A = {0.05, 2.4};
 
-    /** Ready rounds of the second weapon: Bradley = 7 TOW (2 in the launcher + 5 stowed), others 40. */
+    /** Ready rounds of the second weapon: Bradley = 7 TOW (2 in the launcher + 5 stowed), SPAAGs = 4 SAMs, others 40. */
     public int thirdMax() {
-        return this.kind == VehicleKind.BRADLEY ? 7 : THIRD_MAX;
+        return this.kind == VehicleKind.BRADLEY ? 7 : (this.kind.isSpaag() ? 4 : THIRD_MAX);
+    }
+
+    public int gunTubeCount() {
+        return switch (this.kind) {
+            case WIRBELWIND, SHILKA -> 4;
+            case GEPARD, RATTE, MARK_I -> 2;
+            default -> 1;
+        };
+    }
+
+    @Override
+    public boolean radarActive() {
+        return this.kind.isSpaag() && this.isAlive() && !this.dmg.dead();
+    }
+
+    @Override
+    public double radarRange() {
+        return this.kind.isSpaag() ? (this.kind.ww2() ? 260.0 : 380.0) : 0.0;
+    }
+
+    @Nullable
+    public Entity scanSpaagRadar(ServerLevel sl) {
+        if (!this.kind.isSpaag() || !this.radarActive()) return null;
+        double r = this.radarRange();
+        Vec3 eye = this.position().add(0.0, 2.2, 0.0);
+        Vec3 aim = this.launchDir();
+        Entity best = null;
+        double bestScore = -1.0e9;
+        for (Entity e : sl.getEntities(this, this.getBoundingBox().inflate(r),
+                x -> x != this && !this.hasPassenger(x) && ru.aiforge.realwar.ordnance.AirTargets.isAirTarget(x))) {
+            Vec3 to = e.getBoundingBox().getCenter().subtract(eye);
+            double dist = to.length();
+            if (dist < 1.5 || dist > r) continue;
+            double dot = to.scale(1.0 / dist).dot(aim);
+            double score = dot * 120.0 - dist * 0.25;
+            if (score > bestScore) {
+                bestScore = score;
+                best = e;
+            }
+        }
+        int id = best == null ? -1 : best.getId();
+        if (id != this.entityData.get(FLAK_TGT)) {
+            this.entityData.set(FLAK_TGT, id);
+        }
+        return best;
     }
 
     /** TOS-1A: every rocket leaves its own tube (24 muzzles in the spec); guns: one barrel. */
@@ -174,6 +219,18 @@ public class GunVehicle extends LauncherVehicle {
             case MARK_I -> new Cfg(Ballistics.Profile.QF6_HE, Ballistics.Profile.QF6_AP, false, 0.14f,
                     1.50f, 0.305f, 0.385f, 0.385f, 0.115f, 6, 3, 0.29533399f, 45.0f, 0.45f, 0.35f,
                     () -> ModItems.SHELLS_57.get(), null, false, false);
+            case WIRBELWIND -> new Cfg(Ballistics.Profile.KW20_HE, Ballistics.Profile.KW20_AP, false, 0.06f,
+                    1.24f, 0.235f, 0.33f, 0.27f, 0.11f, 8, 4, 0.21914130f, 22.0f, 2.8f, 2.2f,
+                    () -> ModItems.SHELLS_20.get(), Ballistics.Profile.AA_SAM, false, false);
+            case ZSU37 -> new Cfg(Ballistics.Profile.AA37_HE, Ballistics.Profile.AA37_AP, false, 0.12f,
+                    1.15f, 0.30f, 0.31f, 0.28f, 0.11f, 6, 3, 0.20124737f, 26.0f, 2.6f, 2.0f,
+                    () -> ModItems.SHELLS_20.get(), Ballistics.Profile.AA_SAM, false, false);
+            case GEPARD -> new Cfg(Ballistics.Profile.AA35_HE, Ballistics.Profile.AA35_AP, false, 0.08f,
+                    1.42f, 0.33f, 0.34f, 0.31f, 0.11f, 7, 4, 0.26083791f, 32.0f, 4.0f, 3.2f,
+                    () -> ModItems.SHELLS_25.get(), Ballistics.Profile.AA_SAM, false, false);
+            case SHILKA -> new Cfg(Ballistics.Profile.AA23_HE, Ballistics.Profile.AA23_AP, false, 0.05f,
+                    1.28f, 0.335f, 0.32f, 0.29f, 0.10f, 6, 0, 0.23865420f, 28.0f, 4.2f, 3.4f,
+                    () -> ModItems.FLAK_AMMO_BOX.get(), Ballistics.Profile.AA_SAM, false, false);
             default -> throw new IllegalArgumentException("not a gun vehicle: " + k);
         };
     }
@@ -211,7 +268,7 @@ public class GunVehicle extends LauncherVehicle {
     public GunVehicle(EntityType<?> type, Level level, VehicleKind kind) {
         super(type, level, kind);
         this.cfg = cfg(kind);
-        if (kind == VehicleKind.BRADLEY) this.entityData.set(THIRD, 7);
+        if (kind == VehicleKind.BRADLEY || kind.isSpaag()) this.entityData.set(THIRD, this.thirdMax());
     }
 
     @Override
@@ -759,6 +816,9 @@ public class GunVehicle extends LauncherVehicle {
             if (this.operator() != null) this.updateSecondary();
             this.updateFlak(rsl, this.operator());
         }
+        if (this.kind.isSpaag() && this.level() instanceof ServerLevel ssl && this.tickCount % 5 == 0) {
+            this.scanSpaagRadar(ssl);
+        }
         if (this.coaxCd > 0) --this.coaxCd;
         if (this.thirdCd > 0) --this.thirdCd;
         boolean coaxNow = false;
@@ -884,7 +944,8 @@ public class GunVehicle extends LauncherVehicle {
                 muzzle = m0;
             }
         } else {
-            muzzle = this.tubeWorld(0);
+            int tubeIdx = this.kind.isSpaag() && this.gunTubeCount() > 1 ? Math.floorMod(this.firedSeq(), this.gunTubeCount()) : 0;
+            muzzle = this.tubeWorld(tubeIdx);
             ShellEntity.fire(sl, prof, muzzle.add(d.scale(0.2)), d, this.getId());
             this.markFired(k);
             if (this.cfg.alternate) {
@@ -906,8 +967,8 @@ public class GunVehicle extends LauncherVehicle {
         if (this.kind == VehicleKind.STURMTIGER) {
             sl.playSound(null, muzzle.x, muzzle.y, muzzle.z, ModSounds.ROCKET_LAUNCH_LARGE.get(), SoundSource.NEUTRAL, 18.0f, 0.7f);
         }
-        if (this.kind == VehicleKind.BRADLEY) {
-            // M242 Bushmaster chain gun: autocannon report, no tank-gun overpressure
+        if (this.kind == VehicleKind.BRADLEY || this.kind.isSpaag()) {
+            // Autocannon / SPAAG report, no tank-gun overpressure
             sl.playSound(null, muzzle.x, muzzle.y, muzzle.z, ModSounds.FLAK_BURST.get(), SoundSource.NEUTRAL, 7.0f, 0.85f + sl.random.nextFloat() * 0.08f);
             return;
         }
@@ -919,8 +980,45 @@ public class GunVehicle extends LauncherVehicle {
         } else this.muzzleBlast(sl, muzzle, d);
     }
 
+    /** Launch a radar-slaved surface-to-air missile from a SPAAG (defeatable by flares). */
+    public boolean fireSpaagMissile(ServerLevel sl, @Nullable Entity explicitTarget) {
+        if (this.thirdCd > 0) {
+            return false;
+        }
+        if (this.thirdRounds() <= 0) {
+            this.notifyOp("hud.aiarsenal.rw.no_ammo");
+            return false;
+        }
+        Entity tgt = explicitTarget != null ? explicitTarget : this.flakTarget();
+        if (tgt == null || !tgt.isAlive() || !ru.aiforge.realwar.ordnance.AirTargets.isAirTarget(tgt)) {
+            tgt = this.scanSpaagRadar(sl);
+        }
+        if (tgt == null) {
+            this.notifyOp("hud.aiarsenal.rw.no_target");
+            return false;
+        }
+        int podIdx = Math.min(this.spec.tubes().length - 1, this.gunTubeCount() + (this.thirdRounds() & 1));
+        Vec3 muzzle = this.tubeWorld(podIdx);
+        Vec3 toTgt = tgt.getBoundingBox().getCenter().subtract(muzzle);
+        Vec3 dir = toTgt.lengthSqr() > 1.0e-4 ? toTgt.normalize() : this.launchDir();
+        ServerPlayer op = this.operator();
+        ru.aiforge.realwar.handheld.HandheldKind hk = (this.kind == VehicleKind.GEPARD || this.kind == VehicleKind.WIRBELWIND)
+                ? ru.aiforge.realwar.handheld.HandheldKind.STINGER
+                : ru.aiforge.realwar.handheld.HandheldKind.IGLA;
+        ru.aiforge.realwar.handheld.AtMissileEntity.launch(sl, op != null ? op : this, hk,
+                muzzle.add(dir.scale(0.5)), dir, tgt.getId(), null);
+        this.entityData.set(THIRD, this.thirdRounds() - 1);
+        this.thirdCd = 30;
+        sl.playSound(null, muzzle.x, muzzle.y, muzzle.z, ModSounds.ROCKET_LAUNCH_SMALL.get(), SoundSource.NEUTRAL, 9.0f, 1.15f);
+        return true;
+    }
+
     /** Maus: the coaxial 7.5 cm KwK 44 L/36.5 - own ready rounds (refilled with [R] from the racks) and own loader cycle. */
     private void fireThird(ServerLevel sl) {
+        if (this.kind.isSpaag()) {
+            this.fireSpaagMissile(sl, null);
+            return;
+        }
         if (this.thirdCd > 0) {
             return;
         }
@@ -1119,6 +1217,13 @@ public class GunVehicle extends LauncherVehicle {
         if (this.kind == VehicleKind.BRADLEY) {
             pose.hide("tow_l", this.thirdRounds() < 1);
             pose.hide("tow_r", this.thirdRounds() < 2);
+        }
+        if (this.kind.isSpaag()) {
+            if (this.radarActive()) {
+                pose.rotate("radar_dish", ((float)this.tickCount + pt) * 0.22f, 0.0f, 1.0f, 0.0f);
+            }
+            pose.hide("sam_l", this.thirdRounds() < 1);
+            pose.hide("sam_r", this.thirdRounds() < 2);
         }
         if (this.kind == VehicleKind.RATTE) {
             // r9: the rear 12.8 cm turret has its own director (modelled facing aft = az 180)

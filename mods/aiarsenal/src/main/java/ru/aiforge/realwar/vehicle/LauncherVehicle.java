@@ -181,15 +181,57 @@ extends VehicleEntity {
         return -1;
     }
 
+    public boolean isDualBelt() {
+        return this instanceof GunVehicle gv && gv.cfg.secondary() != null && this.kind.magazine >= 4;
+    }
+
+    public int beltCapacity() {
+        return this.isDualBelt() ? this.kind.magazine / 2 : this.kind.magazine;
+    }
+
+    public int firstEmptyForType(int type) {
+        if (this.isDualBelt()) {
+            int half = this.kind.magazine / 2;
+            int start = type == 0 ? 0 : half;
+            int end = type == 0 ? half : this.kind.magazine;
+            for (int k = start; k < end; ++k) {
+                if (!this.isLoaded(k)) {
+                    return k;
+                }
+            }
+            return -1;
+        }
+        return this.firstEmpty();
+    }
+
     public void fillMagazine() {
         this.setLoadedMask(this.kind.magazine >= 64 ? -1L : (1L << this.kind.magazine) - 1L);
-        for (int k = 0; k < this.kind.magazine; ++k) {
-            this.setSlotType(k, this.loadType());
+        if (this.isDualBelt()) {
+            int half = this.kind.magazine / 2;
+            for (int k = 0; k < this.kind.magazine; ++k) {
+                this.setSlotType(k, k < half ? 0 : 1);
+            }
+        } else {
+            for (int k = 0; k < this.kind.magazine; ++k) {
+                this.setSlotType(k, this.loadType());
+            }
         }
     }
 
     /** r28: fill the ready rack with one round type (gametests, /realwar spawn). */
     public void fillMagazine(int type) {
+        if (this.isDualBelt()) {
+            int half = this.kind.magazine / 2;
+            int start = type == 0 ? 0 : half;
+            int end = type == 0 ? half : this.kind.magazine;
+            long mask = this.loadedMask();
+            for (int k = start; k < end; ++k) {
+                this.setSlotType(k, type);
+                mask |= 1L << k;
+            }
+            this.setLoadedMask(mask);
+            return;
+        }
         this.setLoadedMask(this.kind.magazine >= 64 ? -1L : (1L << this.kind.magazine) - 1L);
         for (int k = 0; k < this.kind.magazine; ++k) {
             this.setSlotType(k, type);
@@ -537,11 +579,11 @@ extends VehicleEntity {
         if (rt < 0) {
             if (rp != null && this.mayReload()) {
                 int want = this.loadType();
-                int slot = this.firstEmpty();
+                int slot = this.firstEmptyForType(want);
                 // r28: the rack is full, but (partly) of the OTHER round - exchange one round per loading cycle for
                 // the selected type. The exchanged round goes back to the stowage, so no ammunition item is spent.
                 boolean swap = false;
-                if (slot < 0) {
+                if (slot < 0 && !this.isDualBelt()) {
                     slot = this.firstLoadedNot(want);
                     swap = slot >= 0;
                 }
@@ -569,8 +611,12 @@ extends VehicleEntity {
         int t = this.reloadTicks() + 1;
         if (t >= this.kind.reloadTicks) {
             if (swap || this.takeAmmo(rp)) {
-                this.setSlotType(rt, this.loadType());
-                this.setLoadedMask(this.loadedMask() | 1L << rt);
+                if (this.isDualBelt()) {
+                    this.fillMagazine(this.loadType());
+                } else {
+                    this.setSlotType(rt, this.loadType());
+                    this.setLoadedMask(this.loadedMask() | 1L << rt);
+                }
                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 1.2f, 1.15f);
                 if (this.extReloader != null) {
                     this.extUntil = Math.max(this.extUntil, this.tickCount + 20);
