@@ -146,3 +146,17 @@ Still on the model backlog (next rounds): close the sky gap between the roof lin
 top track run, open up the frame plates so the hull side reads between the runs, rebuild
 the Gewehr 98 and the equipment with the same lofted approach, and capture a burning
 wreck in the CI previews to prove the volumetric fire in-game.
+
+
+## Round 33 (v1.0.1-alpha.42 — Scratch-Built Gewehr 98, Octagonal Equipment & True Volumetric Fire)
+
+- **Root-cause fix for Mark I side-plate diagonal streaks**: `Mesh.triangle` in `tools/wwi/glb_builder.py` previously defaulted to `((0, 0), (1, 0), (1, 1))` UVs whenever `uvs` was omitted, stretching the entire 512x512 riveted-plate atlas diagonally across every fan triangle of the hull/sponson caps. `Mesh.triangle` now computes world-aligned planar UVs (`_planar_uvs`), and `frame_mesh` in `tools/wwi/build_mark_i.py` builds the side armour from 3 rectangular/trapezoidal quad bays (`m.face(..., 1.4)`). All plate seams and rivet lines on the Mark I are now strictly horizontal and vertical (`23,588` triangles LOD0 / `4,804` triangles LOD1).
+- **Scratch-built Gewehr 98 (`tools/wwi/build_gewehr98.py`)**: replaced the 1,320-triangle box-stock mesh with a 3,764-triangle anatomical Mauser 98 (`gewehr98.glb`, 472,552 bytes): 10-sided walnut stock lofted across 22 stations (buttplate, comb, semi-pistol grip, finger-grooved fore-end, upper handguard), cylindrical receiver with front locking-lug ring, charger bridge and thumb cut, 3-position flag safety, spherical bolt knob (`Kammerstengel`), stepped 740 mm barrel, curved `Lange Visier` rear sight ramp, H-type `Oberring` nose cap with bayonet lug, curved 7-segment trigger guard bow and 5 bottlenecked 7.92x57 mm `S-Patrone` rounds.
+- **Scratch-built WWI infantry equipment (`tools/wwi/build_equipment.py`)**: replaced the blocky 3-box item JSONs with 8-sided rotated-element geometry and 64x64 procedural textures:
+  - `mills_bomb.json`: 5-tier 8-sided ovoid body, 4 circumferential rows of pineapple segmentation blocks (cardinal + 45 deg), brass base plug, striker housing, curved safety lever and split-ring pin.
+  - `stielhandgranate.json`: 8-sided cylindrical explosive pot with rolled steel top/bottom crimp seams, belt clip, tapered turned beech handle and knurled brass bottom screw cap with porcelain pull bead.
+  - `wex.json`: forward `Strahlrohr` lance with dual angled wooden pistol grips, brass stopcock valve, pressure gauge, nitrogen feed line, igniter shroud, corrugated hose and rear toroidal tank; first-person transform now frames the lance and valve in the player's hand instead of the backpack wall.
+- **True volumetric ray-marched fire (`arsenal_smoke.glsl`, `VolumeGlRenderer.java`, `VolumetricFxManager.java`, `FlamethrowerItem.java`, `DamageFx.java`)**:
+  - Kept the upstream `volumetric_raymarch.fsh` byte-identical (`643b7b99...`, verified by `tools/check_volumetric.py`) so `VolumeGlRenderer.loadShader` never triggers the fallback path.
+  - Added profile `7.0` (`type == 11`, `material.w > 6.5`) in `arsenal_smoke.glsl` + `emitGain = 7.5`: turbulent swaying flame tongue with a 1,350–3,700 K incandescent blackbody core and dark soot tips.
+  - Routed both burning vehicles (`DamageFx.java`, `mark-i-burning.png`) and the `Wex` flamethrower jet (`FlamethrowerItem.java`, `wex-flame.png`) exclusively through `VolumetricParticles.FIRE` (no flat vanilla `ParticleTypes.FLAME` sprites).
