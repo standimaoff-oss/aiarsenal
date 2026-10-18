@@ -195,6 +195,11 @@ class Mesh:
 
         ``profile`` is a list of 2-D points: (y, z) for axis 'x', (x, z) for axis 'y', (x, y) for axis 'z'.
         The two end caps are filled with a triangle fan (the profiles used here are convex).
+
+        Winding is normalised here because materials are single-sided and Minecraft back-face
+        culls: a plate wound the wrong way renders black instead of armoured khaki.  The
+        cross-section is reversed when its signed area disagrees with the extrusion direction,
+        and each cap fan is flipped unless it already faces out along the axis.
         """
         def to3(p, depth):
             if axis == "x":
@@ -204,17 +209,27 @@ class Mesh:
             return (p[0], p[1], depth)
 
         n = len(profile)
+        area = 0.5 * sum(profile[i][0] * profile[(i + 1) % n][1] - profile[(i + 1) % n][0] * profile[i][1]
+                         for i in range(n))
+        if (area > 0) != (b > a):
+            profile = list(reversed(profile))
         for i in range(n):
             p0 = profile[i]
             p1 = profile[(i + 1) % n]
             self.face(material, [to3(p0, a), to3(p1, a), to3(p1, b), to3(p0, b)], tile)
+        ax = (1.0, 0.0, 0.0) if axis == "x" else ((0.0, 1.0, 0.0) if axis == "y" else (0.0, 0.0, 1.0))
+        far = max(a, b)
         for depth in (a, b):
+            want = 1.0 if depth == far else -1.0
             base = to3(profile[0], depth)
             for i in range(1, n - 1):
                 pts = [base, to3(profile[i], depth), to3(profile[i + 1], depth)]
                 ab = tuple(pts[1][k] - pts[0][k] for k in range(3))
                 ac = tuple(pts[2][k] - pts[0][k] for k in range(3))
                 nrm = (ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0])
+                if (nrm[0] * ax[0] + nrm[1] * ax[1] + nrm[2] * ax[2]) * want < 0.0:
+                    pts = [pts[0], pts[2], pts[1]]
+                    nrm = (-nrm[0], -nrm[1], -nrm[2])
                 uvs = self._planar_uvs(pts, nrm, tile)
                 self.triangle(material, pts[0], pts[1], pts[2], uvs)
 

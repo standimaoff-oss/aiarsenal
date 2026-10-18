@@ -45,3 +45,28 @@ ambiguous rifle recipe was caught by regression tests and corrected before alpha
 
 Gameplay and visuals are adapted to Minecraft, not a historical simulation. The Wex fuel assembly is part of the
 held model, not a separately wearable backpack. Flames do not ignite blocks. This remains an alpha release.
+
+## Mark I model rebuild (alpha.18)
+
+The Mark I hull, sponsons, running gear and stowage were rebuilt from the same historical
+references at a higher level of detail: `tools/wwi/build_mark_i.py` now emits 18,420 triangles
+(was 9,252) with a driver's hood and vision slits, raised engine deck with radiator louvres,
+manhole coamings and lids, exhaust stacks with rain caps, mud chutes and return-roller skirts,
+sponson gun-port collars with mantlet rings, rivet rings and vision slits, escape doors,
+an unditching beam chained across the tail, and a track frame with inspection hatch.
+The khaki paint atlas (`textures/entity/mark_i/paint.png`) is regenerated with plate seams,
+rust streaks and dirt so the flat panels read as armour plate in game.
+
+`tools/wwi/glb_builder.py:Mesh.prism` gained winding safety: profiles of either orientation and
+either extrusion direction now produce outward-facing side walls and end caps. The previous
+implementation fanned both caps with the same vertex order, so one cap of every prism was
+inverted and Minecraft back-face culled it (the shipped right-hand track frame rendered
+inside-out). `tools/wwi/test_equipment_assets.py:GlbWinding` reproduces the old behaviour
+(24 inward-facing triangles) and asserts the new one (0), for every profile orientation and
+extrusion direction. Walkable collision was regenerated: 136 boxes at 0.20 m (was 90).
+
+`tools/wwi/render_preview.py` renders any shipped GLB offline as a flat-shaded orthographic
+PNG with the same back-face culling Minecraft applies, so geometry can be inspected without
+a game client: `python tools/wwi/render_preview.py mark_i.glb --azim -32 --elev 14`.
+These renders are development aids; in-game F2 captures remain the gameplay evidence.
+`python tools/wwi/verify_assets.py --rebuild` passes byte-identical for the new resources.
