@@ -109,3 +109,40 @@ HE detonating "against almost anything"):
   graze under the floor). Three new `rw_pen` gametests cover all of it;
   run 39133628822 is green with zero annotations.
   Released as [v1.0.1-alpha.37](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.37).
+
+## Round 32: Mark I rebuilt from zero, volumetric fire
+
+The player's verdict on the round-27 model ("just terrible") was fair: in-game the tank
+read as a flat khaki panel with a floating black rail. `tools/wwi/build_mark_i.py` was
+rewritten from scratch (the old geometry code is gone; only the rig contract survives -
+node names, track path/pitch, wheel radii, sponson pivots - because Java pose code,
+deck collision and `verify_assets.py` test exactly those):
+
+* hull = lofted hexagonal armour sections (chamfered belly, sloped side plates, cambered
+  roof, raked nose/tail), driver's cab with a visor slit and frame, two manhole coamings
+  with flat lids and hinge knobs, ventilator, radiator louvres, exhaust stacks with rain
+  caps and brackets, unditching beam, tow shackles;
+* sponsons = lofted octagonal casemates with chamfered top/bottom, raked front corners,
+  recessed gun port + mantlet ring, vision slits, inspection hatch;
+* running gear: riveted track-frame plates, flanged road wheels with hub bolts, toothed
+  sprockets (teeth kept inside the contract radius so they mesh with the guide horns),
+  track shoes with two grouser bars and a central guide horn;
+* rivet rows along hull, cab, sponson and frame seams; new 512 px weathered khaki atlas
+  (panel seams, rivet shadows, mud streaks) and a 256 px steel atlas;
+* a generic `loft_rings()` helper with winding correction against the outward radial
+  (signed-volume check: every closed body comes out positive).
+
+LOD0 22 156 tris / LOD1 3 548. `verify_assets.py` green, gametests green
+(run 39137339687, zero annotations), released as
+[v1.0.1-alpha.38](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.38).
+
+Fire is now volumetric: `VolumetricParticles.FIRE` ("volume_fire") spawns a hot buoyant
+volume (1450 K, the renderer glows it by temperature) instead of flat FLAME sprites.
+Emitters: burning engine, burning wreck with the turret gone, craft fire points and the
+ammo cook-off column; `VolumetricSetup` falls back to vanilla FLAME when the volumetric
+renderer is off. DamageFx keeps a few flat sparks for detail.
+
+Still on the model backlog (next rounds): close the sky gap between the roof line and the
+top track run, open up the frame plates so the hull side reads between the runs, rebuild
+the Gewehr 98 and the equipment with the same lofted approach, and capture a burning
+wreck in the CI previews to prove the volumetric fire in-game.
