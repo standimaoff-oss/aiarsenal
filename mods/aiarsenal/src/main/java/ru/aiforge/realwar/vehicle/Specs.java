@@ -59,8 +59,11 @@ public final class Specs {
             new float[]{0.0f, 1.7f, 0.45f}, new float[]{0.0f, 0.35f, 0.91f}, new float[0][]);
     public static final VehicleSpec TIGER = new VehicleSpec("tiger", 3.705f, 3f, 8.45f, 3f, new float[0][],
             new float[][]{{0.62f, 2.9f, -0.32f}, {0.62f, 1.31f, 2.05f}}, new String[]{"driver", "gunner"},
-            new float[][]{{0.62f, 1.86f, 2.05f, 0.4f, 0.25f, 0.4f}, {0.0f, 2.43f, 0.3f, 1.111f, 0.57f, 1.263f}, {0.0f, 1.116f, -3.158f, 1.482f, 0.558f, 0.3f}, {0.0f, 0.93f, 0.0f, 1.853f, 0.93f, 3.158f}},
-            new String[]{"door_driver", "door_gunner", "rear", "body"}, new float[][]{{0.0f, 0.0f, 3.932f}, {0.3f, 0.06f, 0.32f}}, new float[0][],
+            new float[][]{{0.62f, 1.86f, 2.05f, 0.4f, 0.25f, 0.4f}, {0.0f, 2.43f, 0.3f, 1.111f, 0.57f, 1.263f}, {0.0f, 1.116f, -3.158f, 1.482f, 0.558f, 0.3f}, {0.0f, 0.93f, 0.0f, 1.853f, 0.93f, 3.158f},
+                    {-0.55f, 1.55f, 3.16f, 0.22f, 0.10f, 0.05f}, {-0.55f, 3.0f, 0.3f, 0.30f, 0.06f, 0.30f}, {0.5f, 3.0f, -0.3f, 0.28f, 0.06f, 0.28f},
+                    {1.2f, 1.0f, -2.2f, 0.4f, 0.45f, 0.7f}, {-1.2f, 1.0f, -2.2f, 0.4f, 0.45f, 0.7f}, {0.0f, 1.88f, 0.3f, 0.95f, 0.10f, 0.95f}},
+            new String[]{"door_driver", "door_gunner", "rear", "body",
+                    "vision", "hatch", "hatch", "fuel", "fuel", "ring"}, new float[][]{{0.0f, 0.0f, 3.932f}, {0.3f, 0.06f, 0.32f}}, new float[0][],
             new float[]{0.0f, 1.86f, 0.3f}, new float[]{0.0f, 0.38f, 1.06f}, new float[0][]);
     public static final VehicleSpec STURMTIGER = new VehicleSpec("sturmtiger", 3.705f, 2.85f, 6.28f, 2.85f, new float[0][],
             new float[][]{{0.75f, 2.57f, 0.95f}, {0.62f, 2.07f, 2.05f}}, new String[]{"driver", "gunner"},
@@ -79,8 +82,11 @@ public final class Specs {
             new float[]{0.0f, 7f, 3f}, new float[]{0.0f, 1.7f, 4.4f}, new float[0][]);
     public static final VehicleSpec T34 = new VehicleSpec("t34", 3f, 2.72f, 8.15f, 2.72f, new float[0][],
             new float[][]{{0.45f, 2.61f, 0.3f}, {0.45f, 1f, 2.4f}}, new String[]{"driver", "gunner"},
-            new float[][]{{0.45f, 1.55f, 2.4f, 0.4f, 0.25f, 0.4f}, {0.0f, 2.135f, 0.85f, 0.9f, 0.585f, 1.22f}, {0.0f, 0.93f, -3.05f, 1.2f, 0.465f, 0.3f}, {0.0f, 0.775f, 0.0f, 1.5f, 0.775f, 3.05f}},
-            new String[]{"door_driver", "door_gunner", "rear", "body"}, new float[][]{{0.0f, 0.0f, 3.24f}, {0.3f, 0.0f, 0.27f}}, new float[0][],
+            new float[][]{{0.45f, 1.55f, 2.4f, 0.4f, 0.25f, 0.4f}, {0.0f, 2.135f, 0.85f, 0.9f, 0.585f, 1.22f}, {0.0f, 0.93f, -3.05f, 1.2f, 0.465f, 0.3f}, {0.0f, 0.775f, 0.0f, 1.5f, 0.775f, 3.05f},
+                    {-0.45f, 1.30f, 2.45f, 0.25f, 0.12f, 0.15f}, {-0.45f, 1.50f, 2.10f, 0.30f, 0.08f, 0.30f}, {0.0f, 2.72f, 0.85f, 0.35f, 0.06f, 0.35f},
+                    {1.25f, 0.85f, 0.5f, 0.2f, 0.45f, 1.2f}, {-1.25f, 0.85f, 0.5f, 0.2f, 0.45f, 1.2f}, {0.0f, 1.57f, 0.85f, 0.75f, 0.10f, 0.75f}},
+            new String[]{"door_driver", "door_gunner", "rear", "body",
+                    "vision", "hatch", "hatch", "fuel", "fuel", "ring"}, new float[][]{{0.0f, 0.0f, 3.24f}, {0.3f, 0.0f, 0.27f}}, new float[0][],
             new float[]{0.0f, 1.55f, 0.85f}, new float[]{0.0f, 0.48f, 1.01f}, new float[0][]);
     public static final VehicleSpec KV2 = new VehicleSpec("kv2", 3.32f, 3.24f, 6.95f, 3.24f, new float[0][],
             new float[][]{{0.0f, 3.15f, -0.4f}, {0.0f, 1.05f, 2.2f}}, new String[]{"driver", "gunner"},
@@ -196,8 +202,13 @@ public final class Specs {
                     {0.0f, 1.65f, 1.45f, 0.45f, 0.25f, 0.48f},
                     {0.0f, 1.23f, 0.25f, 0.42f, 0.30f, 0.34f},
                     {1.41f, 1.23f, 0.0f, 0.41f, 0.43f, 0.87f},
-                    {-1.41f, 1.23f, 0.0f, 0.41f, 0.43f, 0.87f}},
-            new String[]{"body", "engine", "door_driver", "door_gunner", "sponson_L", "sponson_R"},
+                    {-1.41f, 1.23f, 0.0f, 0.41f, 0.43f, 0.87f},
+                    {0.0f, 1.92f, 2.15f, 0.35f, 0.09f, 0.06f},
+                    {0.0f, 1.88f, -0.02f, 0.30f, 0.05f, 0.62f},
+                    {0.0f, 2.22f, 1.60f, 0.24f, 0.05f, 0.24f},
+                    {0.0f, 0.85f, -2.25f, 0.55f, 0.35f, 0.30f}},
+            new String[]{"body", "engine", "door_driver", "door_gunner", "sponson_L", "sponson_R",
+                    "vision", "hatch", "hatch", "fuel"},
             new float[][]{{0.0f, 0.0f, 1.15f}, {0.0f, 0.0f, 1.15f}}, new float[0][],
             new float[]{0.0f, 1.22f, 0.0f}, new float[]{0.0f, 0.0f, 0.0f}, new float[0][]);
 

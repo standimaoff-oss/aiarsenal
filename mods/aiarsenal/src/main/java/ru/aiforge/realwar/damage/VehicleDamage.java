@@ -97,7 +97,7 @@ public final class VehicleDamage {
     }
 
     public record Geo(float cx, float cy, float cz, float hx, float hy, float hz, float trackW, boolean tracked, boolean turret,
-               float[] yp, float[] pp, float tube, int ammo, boolean engineFront) {}
+               float[] yp, float[] pp, float tube, int ammo, boolean engineFront, float rgTop) {}
 
     public static Geo geo(VehicleEntity v) {
         boolean tracked = v instanceof GunVehicle gv && gv.cfg.tracked();
@@ -119,8 +119,11 @@ public final class VehicleDamage {
         if (k == VehicleKind.RATTE) tw = hx * 0.4f;
         turret = turret && k.spec.yawPivot() != null && k != VehicleKind.MARK_I;
         boolean front = k == VehicleKind.BRADLEY || !tracked;
+        // top of the running gear: only a hit below it really passes through track links (the Mark I belt wraps the
+        // whole side, so its links stand in front of the hull side only in the bottom run)
+        float rgTop = tracked ? (k == VehicleKind.MARK_I ? 0.35f : 0.9f) : 0.0f;
         return new Geo(cx, cy, cz, hx, hy, hz, tw, tracked, turret, k.spec.yawPivot(), k.spec.pitchPivot(), k.tubeLen,
-                (int) params(k)[3], front);
+                (int) params(k)[3], front, rgTop);
     }
 
     static float scale(VehicleEntity v) {
@@ -178,6 +181,15 @@ public final class VehicleDamage {
         }
         boolean inHull = Math.abs(x - g.cx) < g.hx + 0.15 && y > 0 && y < g.cy + g.hy + 0.1 && Math.abs(z - g.cz) < g.hz + 0.25;
         if (!inHull) return -1;
+        // r31: per-component modules from the spec part boxes (fuel tanks ignite, the turret ring jams the drive)
+        for (int i = 0; i < kind.spec.partKinds().length; i++) {
+            String pk = kind.spec.partKinds()[i];
+            if (!"fuel".equals(pk) && !"ring".equals(pk)) continue;
+            float[] b = kind.spec.parts()[i];
+            if (Math.abs(x - b[0]) < b[3] && Math.abs(y - b[1]) < b[4] && Math.abs(z - b[2]) < b[5]) {
+                return "fuel".equals(pk) ? FIRE : TURRET;
+            }
+        }
         if (g.turret && g.ammo == CAROUSEL) {
             double dx = x - g.yp[0], dz = z - g.yp[2];
             if (dx * dx + dz * dz < 1.0 && y > g.cy - g.hy && y < g.cy) return AMMO;

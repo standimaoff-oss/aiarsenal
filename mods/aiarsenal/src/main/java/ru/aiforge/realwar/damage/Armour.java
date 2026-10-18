@@ -24,9 +24,9 @@ import ru.aiforge.realwar.vehicle.VehicleKind;
  */
 public final class Armour {
     public static final int HULL_UF = 0, HULL_LF = 1, HULL_S = 2, HULL_R = 3, HULL_T = 4, HULL_B = 5, TUR_F = 6, TUR_S = 7, TUR_R = 8, TUR_T = 9,
-            TRACK = 10, GUN = 11;
+            TRACK = 10, GUN = 11, VIEW = 12, HATCH = 13, FUEL = 14, RING = 15;
     public static final String[] ZONE_KEYS = {"hull_uf", "hull_lf", "hull_side", "hull_rear", "hull_roof", "hull_floor",
-            "tur_front", "tur_side", "tur_rear", "tur_roof", "track", "barrel"};
+            "tur_front", "tur_side", "tur_rear", "tur_roof", "track", "barrel", "vision", "hatch", "fuel", "ring"};
     public static final int RICOCHET = 0, NO_PEN = 1, PEN = 2, MODULE = 3;
     /** Tracks / road wheels in front of the plate (spaced armour, mm). */
     public static final float TRACK_MM = 20f;
@@ -482,7 +482,7 @@ public final class Armour {
                 zone = upper ? HULL_UF : HULL_LF;
                 double aa = Math.toRadians(tb.ang[zone]);
                 n = new Vector3d(0, upper ? Math.sin(aa) : -Math.sin(aa), Math.cos(aa) * fz);
-                if (g.tracked() && !upper && Math.abs(entry.x - g.cx()) > g.hx() - g.trackW()) viaTrack = true;
+                if (g.tracked() && !upper && entry.y <= g.rgTop() && Math.abs(entry.x - g.cx()) > g.hx() - g.trackW()) viaTrack = true;
             } else if (axis == 2) {
                 zone = HULL_R;
                 double aa = Math.toRadians(tb.ang[HULL_R]);
@@ -491,7 +491,7 @@ public final class Armour {
                 zone = HULL_S;
                 double aa = low ? 0 : Math.toRadians(tb.ang[HULL_S]);      // sponson / upper side plate slope
                 n = new Vector3d(sg * Math.cos(aa), Math.sin(aa), 0);
-                if (g.tracked() && low) viaTrack = true;
+                if (g.tracked() && entry.y <= g.rgTop()) viaTrack = true;   // r31: only the running-gear band
             } else if (sg > 0) {
                 zone = HULL_T;
                 n = new Vector3d(0, 1, 0);
@@ -500,13 +500,20 @@ public final class Armour {
                 n = new Vector3d(0, -1, 0);
             }
         }
+        // r31: weak components (driver vision slit, roof hatches, the turret ring gap, fuel tanks behind their plate)
+        int comp = component(g, k, entry);
+        if (comp >= 0) zone = comp;
         n.normalize();
         double cosA = Math.max(-1, Math.min(1, -d.dot(n)));
         if (cosA < 0) {             // leaving face (point blank inside a box): treat as perpendicular
             cosA = Math.abs(cosA);
         }
         double angle = Math.toDegrees(Math.acos(cosA));
-        float nominal = tb.mm(zone);
+        float nominal = switch (zone) {
+            case VIEW -> Math.max(6f, tb.mm(HULL_UF) * 0.6f);   // the visor block is thinner than the plate around it
+            case HATCH -> tb.mm(HULL_T);                        // lids are roof thickness, but a separate hit zone
+            default -> tb.mm(zone < VIEW ? zone : HULL_S);
+        };
         boolean overmatch = a.calMm() > 3.0 * nominal;
         double an = angle;
         switch (a.type()) {
@@ -539,6 +546,23 @@ public final class Armour {
         if (pr > 0 && roll < pr) res = RICOCHET;
         else res = pen >= eff ? PEN : NO_PEN;
         return new Result(res, zone, nominal, (float) eff, (float) angle, (float) pen, entry, n, viaTrack, overmatch, -1);
+    }
+
+    /** r31: the weak component (VIEW / HATCH / FUEL / RING) whose spec part box holds the entry point, else -1. */
+    public static int component(VehicleDamage.Geo g, VehicleKind k, Vector3d e) {
+        String[] kinds = k.spec.partKinds();
+        float[][] parts = k.spec.parts();
+        for (int i = 0; i < kinds.length; i++) {
+            int zone = switch (kinds[i]) {
+                case "vision" -> VIEW;
+                case "hatch" -> HATCH;
+                default -> -1;      // fuel / ring boxes lie inside the hull: they are module zones, see VehicleDamage.zone
+            };
+            if (zone < 0) continue;
+            float[] b = parts[i];
+            if (Math.abs(e.x - b[0]) < b[3] && Math.abs(e.y - b[1]) < b[4] && Math.abs(e.z - b[2]) < b[5]) return zone;
+        }
+        return -1;
     }
 
     /** Ricochet direction: the flight vector reflected off the plate and flattened a bit (energy loss). */

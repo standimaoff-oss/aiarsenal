@@ -254,4 +254,60 @@ public final class PenetrationTests {
             h.succeed();
         });
     }
+
+    /** r31: the spaced-armour bonus of the tracks applies only inside the running-gear band, not to the whole side. */
+    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 40)
+    public static void track_bonus_only_inside_the_running_gear_band(GameTestHelper h) {
+        VehicleDamage.Geo g = VehicleDamage.geo(VehicleKind.T34, true, true);
+        Armour.Ammo ap = Armour.Ammo.of(Ballistics.Profile.QF6_AP);      // 55 mm at the muzzle
+        double v = v0(Ballistics.Profile.QF6_AP);
+        // side plate above the running gear: a clean 45 mm plate, the 6-pdr must penetrate it
+        Armour.Result r = Armour.solve(g, VehicleKind.T34, false, ZERO, new Vector3d(1.5, 1.0, 0.5),
+                new Vector3d(-1, 0, 0), ap, v, 0.5);
+        h.assertTrue(!r.viaTrack() && r.result() == Armour.PEN,
+                "55 mm against the 45 mm T-34 side above the tracks must penetrate: " + s(r));
+        // inside the band the links really stand in front of the plate: 45 + 20 mm stops the same round
+        r = Armour.solve(g, VehicleKind.T34, false, ZERO, new Vector3d(1.5, 0.4, 0.5),
+                new Vector3d(-1, 0, 0), ap, v, 0.5);
+        h.assertTrue(r.viaTrack() && r.result() == Armour.NO_PEN,
+                "the same round must stop on the tracks in front of the lower side: " + s(r));
+        h.succeed();
+    }
+
+    /** r31: vision slits and roof hatches are separate armour zones with their own (weaker) thickness. */
+    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 40)
+    public static void vision_and_hatch_zones_are_weaker_than_their_plates(GameTestHelper h) {
+        VehicleDamage.Geo g = VehicleDamage.geo(VehicleKind.TIGER, true, true);
+        Armour.Ammo k88 = Armour.Ammo.of(Ballistics.Profile.K88_AP);     // 80 mm
+        double v = v0(Ballistics.Profile.K88_AP);
+        // the driver's visor block: 60 mm instead of the 100 mm frontal plate
+        Armour.Result r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.55, 1.55, 3.16),
+                new Vector3d(0, 0, -1), k88, v, 0.5);
+        h.assertTrue(r.zone() == Armour.VIEW && Math.abs(r.nominal() - 60f) < 0.5f && r.result() == Armour.PEN,
+                "8.8 cm Pzgr 39 must penetrate the 60 mm visor block: " + s(r));
+        // 50 cm to the right the same ray meets the full frontal plate and stops
+        r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.05, 1.55, 3.16),
+                new Vector3d(0, 0, -1), k88, v, 0.5);
+        h.assertTrue(r.zone() == Armour.HULL_UF && r.result() == Armour.NO_PEN,
+                "the same round must stop on the 100 mm plate beside the visor: " + s(r));
+        // cupola lid on the turret roof: its own zone at roof thickness
+        r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.55, 3.0, 0.3),
+                new Vector3d(0, -1, 0), k88, v, 0.5);
+        h.assertTrue(r.zone() == Armour.HATCH && Math.abs(r.nominal() - 25f) < 0.5f && r.result() == Armour.PEN,
+                "the cupola lid is a hatch zone at roof thickness: " + s(r));
+        // the Mark I cab visor: 12 mm frontal plate, the visor block keeps 60% of it
+        VehicleDamage.Geo mi = VehicleDamage.geo(VehicleKind.MARK_I, true, true);
+        Armour.Ammo qf6 = Armour.Ammo.of(Ballistics.Profile.QF6_AP);
+        r = Armour.solve(mi, VehicleKind.MARK_I, false, ZERO, new Vector3d(0.0, 1.92, 2.18),
+                new Vector3d(0, 0, -1), qf6, v0(Ballistics.Profile.QF6_AP), 0.5);
+        h.assertTrue(r.zone() == Armour.VIEW && Math.abs(r.nominal() - 7.2f) < 0.3f,
+                "the Mark I visor block is 60% of the 12 mm cab plate: " + s(r));
+        // internal component boxes: fuel tanks ignite, the turret ring jams the drive
+        VehicleDamage.Geo t34 = VehicleDamage.geo(VehicleKind.T34, true, true);
+        h.assertTrue(VehicleDamage.zone(t34, VehicleKind.T34, false, 1.25, 0.85, 0.5, ZERO) == DamageState.FIRE,
+                "a hit inside the T-34 side fuel tank must report fire");
+        h.assertTrue(VehicleDamage.zone(g, VehicleKind.TIGER, false, 0.0, 1.88, 0.3, ZERO) == DamageState.TURRET,
+                "a hit in the Tiger turret ring must jam the turret drive");
+        h.succeed();
+    }
 }
