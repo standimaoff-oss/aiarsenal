@@ -69,6 +69,7 @@ jobs:
         run: |
           mkdir -p previews
           cp verification/shots/public-preview-mark-i-exterior.png previews/mark-i.png
+          cp verification/shots/public-preview-mark-i-burning.png previews/mark-i-burning.png
           cp verification/shots/public-preview-gewehr98-first-person.png previews/gewehr98.png
           cp verification/shots/public-preview-gewehr98-aim.png previews/gewehr98-aim.png
           for item in mills_bomb stielhandgranate wex; do

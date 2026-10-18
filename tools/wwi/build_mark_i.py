@@ -81,6 +81,8 @@ def atlas() -> bytes:
     pix = [(0, 0, 0, 255)] * (n * n)
     seams_y = [70, 190, 330, 452]          # horizontal plate seams
     seams_x = [128, 384]
+    patches = [(30, 60, 150, 185, 1.10), (200, 75, 325, 185, 0.90), (340, 200, 470, 325, 1.08),
+               (60, 340, 120, 448, 0.92), (395, 335, 500, 448, 1.06), (140, 200, 250, 325, 0.94)]
     rivets = [(x, y) for y in (62, 78, 182, 198, 322, 338, 444, 460)
               for x in range(24, n, 48)]
     for y in range(n):
@@ -89,10 +91,13 @@ def atlas() -> bytes:
             b = blotch[y][x]
             g = grain[y][x]
             r, gg, bb = 104 + 26 * b, 102 + 24 * b, 74 + 18 * b
-            if y % n in () or any(abs(y - s) <= 1 for s in seams_y) or any(abs(x - s) <= 1 for s in seams_x):
-                r, gg, bb = r * 0.55, gg * 0.55, bb * 0.52      # seam groove
-            elif any(abs(y - s) <= 3 for s in seams_y):
-                r, gg, bb = r * 1.10, gg * 1.10, bb * 1.08      # lit edge under the seam
+            for px0, py0, px1, py1, pf in patches:            # replaced-plate patchwork
+                if px0 <= x < px1 and py0 <= y < py1:
+                    r, gg, bb = r * pf, gg * pf, bb * pf
+            if any(abs(y - s) <= 1 for s in seams_y) or any(abs(x - s) <= 1 for s in seams_x):
+                r, gg, bb = r * 0.42, gg * 0.42, bb * 0.40      # seam groove
+            elif any(abs(y - s) <= 3 for s in seams_y) or any(abs(x - s) <= 3 for s in seams_x):
+                r, gg, bb = r * 1.14, gg * 1.14, bb * 1.10      # lit edge under the seam
             for rx, ry in ((x, y),):
                 pass
             streak += 0.0
@@ -293,30 +298,33 @@ def hull_mesh(paint, highlight, steel, dark, brass, wood, lod: bool) -> Mesh:
     sides = 10 if not lod else 6
     # ---- driver's cab: lofted hood with a raked visor face
     cab = [
-        [(-0.52, 2.00, 0.78), (0.52, 2.00, 0.78), (0.52, 2.00, 1.66), (-0.52, 2.00, 1.66)],
-        [(-0.48, 2.34, 0.86), (0.48, 2.34, 0.86), (0.48, 2.34, 1.58), (-0.48, 2.34, 1.58)],
-        [(-0.34, 2.44, 0.98), (0.34, 2.44, 0.98), (0.34, 2.44, 1.46), (-0.34, 2.44, 1.46)],
+        [(-0.60, 2.00, 0.72), (0.60, 2.00, 0.72), (0.60, 2.00, 1.78), (-0.60, 2.00, 1.78)],
+        [(-0.55, 2.38, 0.80), (0.55, 2.38, 0.80), (0.55, 2.38, 1.70), (-0.55, 2.38, 1.70)],
+        [(-0.38, 2.50, 0.94), (0.38, 2.50, 0.94), (0.38, 2.50, 1.56), (-0.38, 2.50, 1.56)],
     ]
     loft_rings(m, highlight, cab, 0.4)
-    m.box(dark, (-0.30, 2.24, 1.44), (0.30, 2.36, 1.52), 0.2)          # visor slit
-    m.box(steel, (-0.34, 2.22, 1.40), (0.34, 2.26, 1.56), 0.2)         # slit frame
+    m.box(dark, (-0.36, 2.28, 1.56), (0.36, 2.40, 1.64), 0.2)          # visor slit
+    m.box(steel, (-0.40, 2.26, 1.52), (0.40, 2.44, 1.68), 0.2)         # slit frame
     # ---- roof furniture: two manhole coamings with lids, ventilator dome
     for cz, r in ((0.10, 0.30), (-1.30, 0.26)):
         m.cylinder(highlight, (0.0, 1.98, cz), (0.0, 2.10, cz), r, sides, highlight, 0.3)
         m.cylinder(steel, (0.0, 2.10, cz), (0.0, 2.145, cz), r * 0.94, sides, steel, 0.3)
         m.cylinder(brass, (0.0, 2.145, cz - r * 0.5), (0.0, 2.175, cz - r * 0.5), 0.03, 6, brass, 0.15)
     m.cylinder(steel, (0.34, 2.02, 0.95), (0.34, 2.16, 0.95), 0.09, sides, steel, 0.2)
+    for rz in (-2.1, -0.8, 0.5, 1.8):
+        m.box(highlight, (-0.78, 2.04, rz - 0.06), (0.78, 2.10, rz + 0.06), 0.3)
     # ---- tail: radiator louvres and exhaust outlets
     m.box(dark, (-0.60, 0.80, -3.02), (0.60, 1.70, -2.94), 0.3)
     for i in range(6):
         m.box(steel, (-0.55 + i * 0.19, 0.84, -3.06), (-0.47 + i * 0.19, 1.66, -2.99), 0.2)
     # ---- exhaust stacks along the roof edges with brackets and rain caps
     for sx in (-1.00, 1.00):
-        m.cylinder(steel, (sx, 2.06, 0.55), (sx, 2.06, -2.72), 0.055, sides, steel, 0.25)
-        m.cylinder(dark, (sx, 2.06, -2.72), (sx, 1.98, -2.86), 0.062, sides, dark, 0.25)
+        # the real Mark I carries its exhausts above the top track run, along the roof edge
+        m.cylinder(steel, (sx, 2.30, 0.55), (sx, 2.30, -2.72), 0.055, sides, steel, 0.25)
+        m.cylinder(dark, (sx, 2.30, -2.72), (sx, 2.22, -2.86), 0.062, sides, dark, 0.25)
         if not lod:
             for bz in (0.2, -0.9, -2.0):
-                m.box(steel, (sx - 0.02, 1.98, bz - 0.05), (sx + 0.02, 2.06, bz + 0.05), 0.15)
+                m.box(steel, (sx - 0.02, 2.06, bz - 0.05), (sx + 0.02, 2.30, bz + 0.05), 0.15)
     # ---- unditching beam across the roof, tow shackles at the nose
     m.box(wood, (-1.05, 2.06, -0.55), (1.05, 2.20, -0.36), 0.4)
     for sx in (-0.7, 0.7):
@@ -337,10 +345,10 @@ def sponson_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> 
     """Octagonal side casemate: chamfered top/bottom, raked front corners, gun port."""
     m = Mesh()
     s = side
-    plan = [(0.95, 1.10), (0.95, 1.52), (0.66, SPONSON_OUT), (-0.66, SPONSON_OUT),
-            (-0.95, 1.52), (-0.95, 1.10)]
+    plan = [(1.02, 1.10), (1.02, 1.52), (0.70, SPONSON_OUT), (-0.70, SPONSON_OUT),
+            (-1.02, 1.52), (-1.02, 1.10)]
     secs = []
-    for y, inset in ((0.96, 0.20), (1.10, 0.0), (1.66, 0.0), (1.82, 0.22)):
+    for y, inset in ((0.90, 0.24), (1.06, 0.0), (1.72, 0.0), (1.92, 0.26)):
         ring = [(s * (x - inset * 0.9) if x > 1.2 else s * x, y, z * (1.0 - inset * 0.28)) for z, x in plan]
         secs.append([(px, py, pz) for px, py, pz in ring])
     loft_rings(m, paint, secs, 0.5)
@@ -390,8 +398,8 @@ def gun_mesh(steel, dark, brass, lod: bool):
     barrel = Mesh()
     sides = 10 if not lod else 6
     secs = []
-    for z, r in ((-0.06, 0.041), (0.10, 0.036), (0.62, 0.030), (BARREL_TIP - 0.09, 0.026),
-                 (BARREL_TIP - 0.09, 0.030), (BARREL_TIP, 0.029), (BARREL_TIP, 0.021)):
+    for z, r in ((-0.06, 0.048), (0.10, 0.042), (0.34, 0.038), (0.62, 0.033), (BARREL_TIP - 0.09, 0.028),
+                 (BARREL_TIP - 0.09, 0.033), (BARREL_TIP, 0.031), (BARREL_TIP, 0.023)):
         ring = []
         for i in range(sides):
             a = i * math.tau / sides
@@ -407,8 +415,8 @@ def gun_mesh(steel, dark, brass, lod: bool):
 def frame_mesh(paint, steel, brass, side: int, lod: bool) -> Mesh:
     """Riveted track-frame armour enclosing the running gear (early British practice)."""
     m = Mesh()
-    profile = [(0.26, -2.40), (0.87, -3.12), (2.13, -3.12),
-               (2.13, 3.12), (0.87, 3.12), (0.26, 2.40)]
+    profile = [(0.20, -2.36), (0.78, -3.16), (2.20, -3.16),
+               (2.20, 3.16), (0.78, 3.16), (0.20, 2.36)]
     pts = [(side * FRAME_IN, y, z) for y, z in profile] + [(side * FRAME_OUT, y, z) for y, z in reversed(profile)]
     n = len(profile)
     for i in range(n):
@@ -421,12 +429,25 @@ def frame_mesh(paint, steel, brass, side: int, lod: bool) -> Mesh:
             if nn[0] * side * sgn < 0:
                 tri = (tri[0], tri[2], tri[1])
             m.triangle(paint, tri[0], tri[1], tri[2])
+    # axle bosses break the flat plate: big discs at sprocket/idler, small ones at the road wheels
+    for cy, cz, r in ((1.20, -3.20, 0.50), (1.20, 3.20, 0.50)):
+        m.cylinder(steel, (side * (FRAME_OUT - 0.01), cy, cz), (side * (FRAME_OUT + 0.035), cy, cz), r, 14, steel, 0.35)
+        m.cylinder(brass, (side * (FRAME_OUT + 0.035), cy, cz), (side * (FRAME_OUT + 0.06), cy, cz), 0.09, 8, brass, 0.2)
+    for i in range(6):
+        z = -1.78 + i * 0.70
+        m.cylinder(steel, (side * (FRAME_OUT - 0.01), ROAD_WHEEL_CENTER_Y, z),
+                   (side * (FRAME_OUT + 0.02), ROAD_WHEEL_CENTER_Y, z), 0.10, 10, steel, 0.25)
+    # external exhaust stack along the side, above the sponson line - reads in a side silhouette
+    m.cylinder(steel, (side * 1.20, 1.98, 0.90), (side * 1.20, 1.98, -2.50), 0.05, 10, steel, 0.25)
+    m.cylinder(steel, (side * 1.20, 1.98, -2.50), (side * 1.16, 1.90, -2.66), 0.056, 10, steel, 0.25)
     if not lod:
         m.box(steel, (side * (FRAME_OUT - 0.01), 0.62, -1.20), (side * (FRAME_OUT + 0.03), 1.02, -0.80), 0.30)
-        for y in (0.34, 2.06):
+        for y in (0.34, 2.14):
             rivet_row(m, brass, (side * FRAME_OUT, y, -2.9), (side * FRAME_OUT, y, 2.7), 18)
         for z in (-2.6, 2.6):
-            rivet_row(m, brass, (side * FRAME_OUT, 0.5, z), (side * FRAME_OUT, 1.9, z), 7)
+            rivet_row(m, brass, (side * FRAME_OUT, 0.5, z), (side * FRAME_OUT, 2.0, z), 8)
+        for bz in (0.5, -0.8, -2.0):
+            m.box(steel, (side * 1.16, 1.90, bz - 0.05), (side * 1.24, 1.98, bz + 0.05), 0.15)
     return m
 
 

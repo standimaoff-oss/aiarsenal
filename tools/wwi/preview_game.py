@@ -74,6 +74,22 @@ overrideHeight:800
     game.screenshot("mark-i-exterior")
     game.key("key", "F1")
 
+    # A second Mark I set ablaze: proof that the fire is a volumetric flame, not flat sprites.
+    game.command(
+        "summon aiarsenal:mark_i -20 -60 -20 {PersistenceRequired:1b}",
+        "Summoned new entity.aiarsenal.mark_i",
+    )
+    time.sleep(3)
+    game.command("realwar damage @e[type=aiarsenal:mark_i,x=-20,y=-60,z=-20,distance=..4] fire")
+    game.command("tp TestPlayer -17 -59 -17 135 12")
+    time.sleep(7)
+    game.key("key", "F1")
+    time.sleep(2)
+    game.screenshot("mark-i-burning")
+    game.key("key", "F1")
+    game.command("tp TestPlayer -6 -59 11 -50 2")
+    time.sleep(2)
+
     for cmd in [
         "clear TestPlayer",
         "item replace entity TestPlayer hotbar.0 with aiarsenal:gewehr98{Ammo:5}",
