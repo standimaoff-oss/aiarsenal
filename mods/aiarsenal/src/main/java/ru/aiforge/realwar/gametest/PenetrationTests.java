@@ -342,14 +342,18 @@ public final class PenetrationTests {
         GunVehicle t = vehicle(l, ModEntities.MARK_I.get(), c.getX() + 0.5, top, c.getZ() + 0.5);
         GunVehicle tg = vehicle(l, ModEntities.TIGER.get(), c.getX() + 8.5, top, c.getZ() + 0.5);
         h.runAfterDelay(6, () -> {
-            // a 6-pdr HE shot into the ground right under the Mark I floor
-            ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(t.getX(), t.getY() - 1.4, t.getZ()), new Vec3(0, -1, 0), -1);
+            // a 6-pdr HE shot into the ground right beside the Mark I floor: the burst must reach the crew.
+            // (The shell has to fly in through the air - a round spawned inside solid ground never triggers
+            // its block collision and tunnels past the world bottom, like every vanilla projectile.)
+            Vec3 from = new Vec3(t.getX() + 4.5, t.getY() + 3.0, t.getZ());
+            Vec3 aim = new Vec3(t.getX() + 2.0, t.getY() - 0.4, t.getZ());
+            ShellEntity.fire(l, Ballistics.Profile.QF6_HE, from, aim.subtract(from).normalize(), -1);
             // and one straight onto the Tiger commander's cupola lid
             ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(tg.getX() + 0.62, tg.getY() + 4.2, tg.getZ() - 0.32), new Vec3(0, -1, 0), -1);
         });
         h.runAfterDelay(22, () -> {
             h.assertTrue(t.dmg.crew[0] + t.dmg.crew[1] < 199f,
-                    "the ground burst under the floor must concuss the crew: " + t.dmg.crew[0] + "/" + t.dmg.crew[1]);
+                    "the ground burst beside the floor must concuss the crew: " + t.dmg.crew[0] + "/" + t.dmg.crew[1]);
             h.assertTrue(tg.dmg.crew[0] + tg.dmg.crew[1] < 199f,
                     "the burst over the cupola lid must concuss the commander: " + tg.dmg.crew[0] + "/" + tg.dmg.crew[1]);
             h.succeed();
