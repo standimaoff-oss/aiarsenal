@@ -155,9 +155,9 @@ public final class VolumetricFxManager {
     /** r32: a licking flame tongue - a hot buoyant volume (the shader glows it by temperature). */
     public static synchronized void addFire(Vec3 pos, float radius, float seconds, float seed) {
         float r = Math.max(0.25f, Math.min(4.0f, radius));
-        VolumeInstance v = new VolumeInstance(1, pos, r * 2.6f, 2.30f, 1700.0f, r * 0.6f, 0.0f,
-                Vec3.ZERO, 0.0f, Math.max(0.35f, seconds), seed, nextKey++);
-        v.profile = 1;
+        VolumeInstance v = new VolumeInstance(11, pos, r * 2.4f, 2.40f, 3200.0f, r * 1.15f, 7.0f,
+                Vec3.ZERO, 0.0f, Math.max(0.45f, seconds), seed, nextKey++);
+        v.profile = 7;
         v.velocity = new Vec3(((seed * 7.3f) % 0.24f) - 0.12f, 0.8f + 0.9f * ((seed * 3.1f) % 0.5f), ((seed * 5.7f) % 0.24f) - 0.12f);
         transientVolumes.add(v);
         VolumetricFxManager.trimVolumes();
@@ -249,7 +249,7 @@ public final class VolumetricFxManager {
                     v.velocity = v.velocity.scale(.94).add(.003, .012, 0);
                 }
                 VolumetricFxManager.updateSmokeClearance(level, v);
-                if (v.profile != 0) v.expansion *= .25f + .75f * Math.min(1, v.age / Math.min(1.4f,v.lifetime));
+                if (v.profile != 0 && v.profile != 7) v.expansion *= .25f + .75f * Math.min(1, v.age / Math.min(1.4f,v.lifetime));
             }
             if (!(((VolumeInstance)object).age >= ((VolumeInstance)object).lifetime)) continue;
             iterator.remove();

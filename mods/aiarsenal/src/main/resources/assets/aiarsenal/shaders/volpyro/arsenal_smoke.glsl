@@ -1,8 +1,26 @@
-// Original AI Arsenal smoke field. The donor's nuclear fields remain byte-for-byte in their own source.
-// Type 11: advected, expanding ellipsoidal powder/exhaust/dust lobes, NOT the donor's vertical chimney.
+// Original AI Arsenal smoke & fire fields. The donor's nuclear fields remain byte-for-byte in their own source.
+// Type 11: advected, expanding ellipsoidal powder/exhaust/dust lobes (profile 1..6) and volumetric fire tongues (profile 7).
 vec2 arsenalSmokeField(vec3 local, vec4 timing, vec4 material, vec4 orientation) {
     float age=timing.y, life=max(timing.z,0.1), seed=timing.w;
     float radius=max(material.z,0.025);
+    if(material.w>6.5) {
+        float R=max(radius,0.35);
+        float nf=billowFbm(local*(2.4/R)+vec3(seed*13.0,-uTime*3.6-age*2.4,seed*7.0));
+        float nf2=billowFbm(local*(5.2/R)+vec3(seed*5.0,-uTime*6.0-age*3.8,seed*19.0));
+        float y=(local.y+R*0.55)/(R*1.55);
+        if(y<0.0 || y>1.15) return vec2(0.0,290.0);
+        float fy=clamp(y,0.0,1.0);
+        vec2 sway=vec2(nf-0.5,nf2-0.5)*R*0.30*fy;
+        float rad=length(local.xz+sway);
+        float coneR=R*mix(0.62,0.18,pow(fy,0.75))*(0.78+0.48*nf);
+        float flame=clamp(1.0-rad/max(coneR,1e-3)+(nf2-0.46)*0.58,0.0,1.0);
+        float vert=smoothstep(0.0,0.10,fy)*(1.0-smoothstep(0.74,1.14,y));
+        float fade=1.0-smoothstep(life*0.65,life,age);
+        float rho=material.x*flame*vert*fade*1.65;
+        float core=clamp(1.0-rad/max(coneR*0.78,1e-3),0.0,1.0)*(1.0-0.38*fy);
+        float temp=1350.0+(2350.0*core+750.0*nf2)*(1.0-0.20*age/life);
+        return vec2(rho,temp);
+    }
     vec3 q=local/radius;
     vec3 axis=orientation.xyz;
     if(dot(axis,axis)>0.001) {
@@ -21,5 +39,6 @@ vec3 arsenalSmokeAlbedo(float profile) {
     if(profile<3.5) return vec3(0.82,0.83,0.78); // black powder makes pale smoke, not black soot
     if(profile<4.5) return vec3(0.49,0.51,0.52); // running engine: thin exhaust haze
     if(profile<5.5) return vec3(0.52,0.46,0.36); // solid roundshot impact dust
-    return vec3(0.30,0.31,0.32);                // ordinary explosive blast: darker rolling smoke
+    if(profile<6.5) return vec3(0.30,0.31,0.32); // ordinary explosive blast: darker rolling smoke
+    return vec3(0.10,0.06,0.03);                 // volumetric fire soot fringe
 }

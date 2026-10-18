@@ -407,13 +407,18 @@ def frame_mesh(paint, steel, brass, side: int, lod: bool) -> Mesh:
     for i in range(n):
         a, b = i, (i + 1) % n
         m.face(paint, [pts[a], pts[b], pts[n + b], pts[n + a]], 0.6)
-    for ring, sgn in ((pts[:n], -1.0), (pts[n:], 1.0)):
-        for k in range(1, n - 1):
-            tri = (ring[0], ring[k], ring[k + 1])
-            nn = _n3(tri)
+    panels = [
+        [(0.74, -3.20), (2.27, -3.20), (2.27, -2.30), (0.13, -2.30)],
+        [(0.13, -2.30), (2.27, -2.30), (2.27, 2.30), (0.13, 2.30)],
+        [(0.13, 2.30), (2.27, 2.30), (2.27, 3.20), (0.74, 3.20)],
+    ]
+    for x, sgn in (( side * FRAME_IN, -1.0), (side * FRAME_OUT, 1.0)):
+        for pan in panels:
+            q = [(x, y, z) for y, z in pan]
+            nn = _n3(q[:3])
             if nn[0] * side * sgn < 0:
-                tri = (tri[0], tri[2], tri[1])
-            m.triangle(paint, tri[0], tri[1], tri[2])
+                q = list(reversed(q))
+            m.face(paint, q, 1.4)
     # axle bosses break the flat plate: big discs at sprocket/idler, small ones at the road wheels
     for cy, cz, r in ((1.20, -3.20, 0.50), (1.20, 3.20, 0.50)):
         m.cylinder(steel, (side * (FRAME_OUT - 0.01), cy, cz), (side * (FRAME_OUT + 0.035), cy, cz), r, 14, steel, 0.35)

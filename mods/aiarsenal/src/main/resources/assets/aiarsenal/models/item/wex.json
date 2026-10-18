@@ -5326,19 +5326,19 @@
     },
     "firstperson_righthand": {
       "rotation": [
-        6,
-        12,
+        8,
+        16,
         -4
       ],
       "translation": [
-        -1.2,
-        2.2,
-        -3.8
+        1.2,
+        3.0,
+        4.8
       ],
       "scale": [
-        0.55,
-        0.55,
-        0.55
+        0.58,
+        0.58,
+        0.58
       ]
     },
     "thirdperson_righthand": {

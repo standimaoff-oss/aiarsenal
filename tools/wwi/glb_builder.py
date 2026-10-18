@@ -77,12 +77,14 @@ class Mesh:
         self.groups: dict[int, dict[str, list]] = {}
 
     # ------------------------------------------------------------------ low level
-    def triangle(self, material: int, a, b, c, uvs=((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))) -> None:
+    def triangle(self, material: int, a, b, c, uvs=None) -> None:
         ab = tuple(b[i] - a[i] for i in range(3))
         ac = tuple(c[i] - a[i] for i in range(3))
         n = (ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0])
         length = math.sqrt(sum(v * v for v in n)) or 1.0
         n = tuple(v / length for v in n)
+        if uvs is None:
+            uvs = self._planar_uvs((a, b, c), n, 1.4)
         g = self.groups.setdefault(material, {"p": [], "n": [], "uv": [], "i": []})
         for p, uv in zip((a, b, c), uvs):
             g["p"].extend(p)

@@ -116,7 +116,7 @@ overrideHeight:800
         time.sleep(3)
         game.screenshot(item+"-in-hand")
     game.key("mousedown", "3")
-    time.sleep(1)
+    time.sleep(2.2)
     game.screenshot("wex-flame")
     game.key("mouseup", "3")
 

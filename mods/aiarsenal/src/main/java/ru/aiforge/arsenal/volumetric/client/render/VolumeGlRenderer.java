@@ -489,7 +489,7 @@ public final class VolumeGlRenderer {
                 throw new IllegalStateException("Arsenal smoke extension: incompatible shader resource");
             string2 = string2.replace(function, loadShader("arsenal_smoke.glsl") + "\n" + function)
                 .replace(noise, "    if (type == 11) return arsenalSmokeField(local,h1,h2,h3);\n" + noise)
-                .replace(colour, "if (vtype==11) albedo=arsenalSmokeAlbedo(h2.w); else " + colour);
+                .replace(colour, "if (vtype==11) { albedo=arsenalSmokeAlbedo(h2.w); if (h2.w>6.5) emitGain=7.5; } else " + colour);
         }
         return string2;
     }

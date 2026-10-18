@@ -253,7 +253,7 @@ def main() -> None:
             # In first-person, put the Strahlrohr lance, valve, gauge and nozzle in view (pack behind the hand)
             display = {
                 "gui": {"rotation": [24, 142, 0], "translation": [0.0, -0.5, 0.0], "scale": [0.58, 0.58, 0.58]},
-                "firstperson_righthand": {"rotation": [6, 12, -4], "translation": [-1.2, 2.2, -3.8], "scale": [0.55, 0.55, 0.55]},
+                "firstperson_righthand": {"rotation": [8, 16, -4], "translation": [1.2, 3.0, 4.8], "scale": [0.58, 0.58, 0.58]},
                 "thirdperson_righthand": {"rotation": [0, 180, 0], "translation": [0.0, 1.5, -1.5], "scale": [0.55, 0.55, 0.55]},
                 "ground": {"translation": [0, 2, 0], "scale": [0.42, 0.42, 0.42]},
             }
