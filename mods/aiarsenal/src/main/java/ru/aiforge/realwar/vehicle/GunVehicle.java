@@ -50,7 +50,7 @@ import ru.aiforge.realwar.registry.ModSounds;
  *   <li>Ready rounds = LauncherVehicle magazine (reload from the ammo item, R or right click at the rear).</li>
  * </ul>
  */
-public class GunVehicle extends LauncherVehicle implements ru.aiforge.realwar.radar.RadarNet.RadarEmitter {
+public class GunVehicle extends LauncherVehicle {
     protected static final EntityDataAccessor<Integer> SEL = SynchedEntityData.defineId(GunVehicle.class, EntityDataSerializers.INT);
     /** r20: smoke grenades left in the dischargers. */
     protected static final EntityDataAccessor<Integer> SMOKE = SynchedEntityData.defineId(GunVehicle.class, EntityDataSerializers.INT);
@@ -126,12 +126,10 @@ public class GunVehicle extends LauncherVehicle implements ru.aiforge.realwar.ra
         };
     }
 
-    @Override
     public boolean radarActive() {
         return this.kind.isSpaag() && this.isAlive() && !this.dmg.dead();
     }
 
-    @Override
     public double radarRange() {
         return this.kind.isSpaag() ? (this.kind.ww2() ? 260.0 : 380.0) : 0.0;
     }

@@ -123,7 +123,7 @@ public enum VehicleKind {
     }
 
     public boolean selfRadar() {
-        return this.isSpaag();
+        return false;
     }
 
     public boolean isRadar() {

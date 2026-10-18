@@ -471,31 +471,37 @@ public final class GunTests {
         BlockPos c = h.absolutePos(new BlockPos(5, 0, 5));
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX(), c.getZ());
         for (VehicleKind k : new VehicleKind[]{VehicleKind.WIRBELWIND, VehicleKind.ZSU37, VehicleKind.GEPARD, VehicleKind.SHILKA}) {
-            h.assertTrue(k.isSpaag() && k.isGun() && k.tracked() && k.selfRadar(), k + ": SPAAG flags");
+            h.assertTrue(k.isSpaag() && k.isGun() && k.tracked(), k + ": SPAAG flags");
             GunVehicle.Cfg cfg = GunVehicle.cfg(k);
             h.assertTrue(cfg.modes().length == 3, k + ": 3 modes (HE belt, AP belt, SAM)");
             h.assertTrue(!cfg.primary().kinetic() && cfg.secondary().kinetic(), k + ": HE + AP belts");
             h.assertTrue(cfg.third() == Ballistics.Profile.AA_SAM, k + ": radar SAM mode");
         }
         GunVehicle shilka = spawn(level, ModEntities.SHILKA.get(), c.getX() + 0.5, y, c.getZ() + 0.5, 0.0f);
-        shilka.fillMagazine();
-        h.assertTrue(shilka.isDualBelt() && shilka.beltCapacity() == 30, "Shilka dual belt capacity");
-        h.assertTrue(shilka.loadedOfType(0) == 30 && shilka.loadedOfType(1) == 30, "both belts initially loaded 30/30");
         ServerPlayer gunner = mock(h);
-        h.assertTrue(shilka.enterSeat(gunner, shilka.operatorSeat()), "enter Shilka");
-        // Fire 1 burst on HE belt (slot 0): only HE belt decreases; AP belt stays at 30
-        shilka.handleControl(gunner, 0, 0, true, false, 0);
-        h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 30,
-                "HE shot must not consume AP belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
-        // Switch to AP belt (slot 1) and fire: only AP belt decreases; HE belt stays at 29
-        shilka.handleControl(gunner, 0, 0, false, false, 0);
-        shilka.tick();
-        shilka.selectSlot(gunner, 1);
-        shilka.handleControl(gunner, 0, 0, true, false, 0);
-        h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 29,
-                "AP shot must not consume HE belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
-        gunner.stopRiding();
-        shilka.discard();
+        try {
+            shilka.fillMagazine();
+            h.assertTrue(shilka.isDualBelt() && shilka.beltCapacity() == 30, "Shilka dual belt capacity");
+            h.assertTrue(shilka.loadedOfType(0) == 30 && shilka.loadedOfType(1) == 30, "both belts initially loaded 30/30");
+            h.assertTrue(shilka.radarActive() && shilka.radarRange() >= 250.0, "Shilka onboard radar active");
+            h.assertTrue(shilka.enterSeat(gunner, shilka.operatorSeat()), "enter Shilka");
+            // Fire 1 burst on HE belt (slot 0): only HE belt decreases; AP belt stays at 30
+            shilka.handleControl(gunner, 0, 0, true, false, 0);
+            shilka.tick();
+            h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 30,
+                    "HE shot must not consume AP belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
+            // Release trigger for 1 tick to clear fireCd, then switch to AP belt (slot 1) and fire
+            shilka.handleControl(gunner, 0, 0, false, false, 0);
+            shilka.tick();
+            shilka.selectSlot(gunner, 1);
+            shilka.handleControl(gunner, 0, 0, true, false, 0);
+            shilka.tick();
+            h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 29,
+                    "AP shot must not consume HE belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
+        } finally {
+            gunner.stopRiding();
+            shilka.discard();
+        }
         h.succeed();
     }
 }
