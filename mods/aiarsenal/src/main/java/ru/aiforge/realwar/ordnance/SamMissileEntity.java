@@ -87,8 +87,7 @@ extends RocketEntity {
         if (sub == 0 && !this.level().isClientSide && !(tg instanceof ru.aiforge.realwar.craft.CraftOrdnance)) {
             Entity decoy = ru.aiforge.realwar.craft.Flares.decoyFor(this, tg);
             if (decoy != null) {
-                this.entityData.set(TARGET, decoy.getId());
-                this.targetUid = decoy.getUUID();
+                this.targetId = decoy.getId();
                 tg = decoy;
             }
         }

@@ -488,8 +488,9 @@ public final class GunTests {
         h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 30,
                 "HE shot must not consume AP belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
         // Switch to AP belt (slot 1) and fire: only AP belt decreases; HE belt stays at 29
+        shilka.handleControl(gunner, 0, 0, false, false, 0);
+        shilka.tick();
         shilka.selectSlot(gunner, 1);
-        shilka.fireCd = 0;
         shilka.handleControl(gunner, 0, 0, true, false, 0);
         h.assertTrue(shilka.loadedOfType(0) == 29 && shilka.loadedOfType(1) == 29,
                 "AP shot must not consume HE belt: HE=" + shilka.loadedOfType(0) + " AP=" + shilka.loadedOfType(1));
