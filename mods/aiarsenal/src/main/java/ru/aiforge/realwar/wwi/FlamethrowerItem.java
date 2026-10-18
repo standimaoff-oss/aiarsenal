@@ -54,11 +54,11 @@ public final class FlamethrowerItem extends Item {
         Vec3 end = level.clip(new ClipContext(start, start.add(direction.scale(8)),
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, user)).getLocation();
         double length = end.distanceTo(start);
-        for (double d = 1.6; d < length; d += 0.85) {
+        for (double d = 1.85; d < length; d += 0.78) {
             Vec3 point = start.add(direction.scale(d));
-            double vy = 0.08 + 0.035 * d;
+            double vy = 0.02 + 0.030 * (d - 1.85);
             server.sendParticles(ru.aiforge.arsenal.volumetric.VolumetricParticles.FIRE.get(),
-                    point.x, point.y - 0.18, point.z, 0, direction.x * 0.15, vy, direction.z * 0.15, 1);
+                    point.x, point.y - 0.20, point.z, 0, direction.x * 0.15, vy, direction.z * 0.15, 1);
         }
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class,
                 new AABB(start,end).inflate(.45), e -> e != user && e.isAlive())) {
