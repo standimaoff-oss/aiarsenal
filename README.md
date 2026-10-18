@@ -15,7 +15,7 @@
 
 ## Скачать и установить
 
-**[Скачать AI Arsenal 1.0.1-alpha.16 — JAR](https://github.com/standimaoff-oss/aiarsenal/releases/download/v1.0.1-alpha.16/aiarsenal-1.0.1-alpha.16.jar)** · [Страница версии и контрольная сумма](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.16)
+**[Скачать AI Arsenal 1.0.1-alpha.45 — JAR](https://github.com/standimaoff-oss/aiarsenal/releases/download/v1.0.1-alpha.45/aiarsenal-1.0.1-alpha.45.jar)** · [Страница версии и контрольная сумма](https://github.com/standimaoff-oss/aiarsenal/releases/tag/v1.0.1-alpha.45)
 
 1. Установите Minecraft 1.20.1 и Forge 47.4.23.
 2. Поместите один JAR мода в папку `mods` клиента и сервера.
