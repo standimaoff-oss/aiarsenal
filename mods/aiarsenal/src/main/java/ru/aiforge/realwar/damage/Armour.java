@@ -623,7 +623,7 @@ public final class Armour {
     public static boolean crossesEngine(VehicleDamage.Geo g, VehicleKind k, Vector3d entry, Vector3d dir, double tEnd, float[] ang) {
         for (double t = 0.1; t < tEnd; t += 0.12) {
             if (VehicleDamage.zone(g, k, false, entry.x + dir.x * t, entry.y + dir.y * t, entry.z + dir.z * t, ang)
-                    == VehicleDamage.ENGINE) return true;
+                    == DamageState.ENGINE) return true;
         }
         return false;
     }
