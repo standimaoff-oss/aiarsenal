@@ -133,16 +133,17 @@ overrideHeight:800
     game.command("fill 16 -61 5 24 -55 5 minecraft:gray_concrete")
     game.key("key", "F1")
     display_settings = {
-        "mills_bomb": (8.0, 0.8, "[0f,0f,0f,1f]"),
-        "stielhandgranate": (3.2, 1.3, "[0f,0f,0f,1f]"),
-        "wex": (3.0, 2.2, "[0f,0.258819f,0f,0.965926f]"),
-        "wwi_fuel": (3.6, 1.3, "[0f,0f,0f,1f]"),
+        "mills_bomb": (8.0, 1.5, "[0f,0f,0f,1f]"),
+        "stielhandgranate": (3.2, 2.0, "[0f,0f,0f,1f]"),
+        "wex": (3.0, 3.0, "[0f,0.258819f,0f,0.965926f]"),
+        "wwi_fuel": (3.6, 2.0, "[0f,0f,0f,1f]"),
     }
     for item, (scale, distance, rotation) in display_settings.items():
         game.command("kill @e[type=minecraft:item_display]")
         scalar = f"{scale:g}f"
         summon = (
-            f'summon minecraft:item_display 20 -58.5 {distance:g} '
+            f'execute at TestPlayer anchored eyes positioned ^ ^ ^{distance:g} run '
+            f'summon minecraft:item_display ~ ~ ~ '
             f'{{item:{{id:"aiarsenal:{item}",Count:1b}},item_display:"fixed",'
             f'transformation:{{translation:[0f,0f,0f],left_rotation:{rotation},'
             f'scale:[{scalar},{scalar},{scalar}],right_rotation:[0f,0f,0f,1f]}}}}'
