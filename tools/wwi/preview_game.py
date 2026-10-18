@@ -142,7 +142,8 @@ overrideHeight:800
         summon = (
             f'summon minecraft:item_display 20 -58.38 3 '
             f'{{item:{{id:"aiarsenal:{item}",Count:1b}},item_display:"fixed",'
-            f'transformation:{{scale:[{scalar},{scalar},{scalar}]}}}}'
+            f'transformation:{{translation:[0f,0f,0f],left_rotation:[0f,0f,0f,1f],'
+            f'scale:[{scalar},{scalar},{scalar}],right_rotation:[0f,0f,0f,1f]}}}}'
         )
         game.command(summon, "Summoned new Item Display")
         time.sleep(2)
