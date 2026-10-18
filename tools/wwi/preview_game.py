@@ -129,20 +129,22 @@ overrideHeight:800
     # F2 files remain untouched captures from the running client; per-item scale
     # keeps the full, metre-scale meshes legible without editing the screenshots.
     game.command("tp TestPlayer 20 -60 0 0 0")
+    game.command("kill @e[type=aiarsenal:mark_i]")
+    game.command("fill 16 -61 5 24 -55 5 minecraft:gray_concrete")
     game.key("key", "F1")
-    display_scales = {
-        "mills_bomb": 8.0,
-        "stielhandgranate": 3.2,
-        "wex": 2.0,
-        "wwi_fuel": 3.6,
+    display_settings = {
+        "mills_bomb": (8.0, 0.8, "[0f,0f,0f,1f]"),
+        "stielhandgranate": (3.2, 1.3, "[0f,0f,0f,1f]"),
+        "wex": (3.0, 2.2, "[0f,0.258819f,0f,0.965926f]"),
+        "wwi_fuel": (3.6, 1.3, "[0f,0f,0f,1f]"),
     }
-    for item, scale in display_scales.items():
+    for item, (scale, distance, rotation) in display_settings.items():
         game.command("kill @e[type=minecraft:item_display]")
         scalar = f"{scale:g}f"
         summon = (
-            f'summon minecraft:item_display 20 -58.38 3 '
+            f'summon minecraft:item_display 20 -58.5 {distance:g} '
             f'{{item:{{id:"aiarsenal:{item}",Count:1b}},item_display:"fixed",'
-            f'transformation:{{translation:[0f,0f,0f],left_rotation:[0f,0f,0f,1f],'
+            f'transformation:{{translation:[0f,0f,0f],left_rotation:{rotation},'
             f'scale:[{scalar},{scalar},{scalar}],right_rotation:[0f,0f,0f,1f]}}}}'
         )
         game.command(summon, "Summoned new Item Display")
