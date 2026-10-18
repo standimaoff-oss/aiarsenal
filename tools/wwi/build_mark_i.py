@@ -90,7 +90,7 @@ def atlas() -> bytes:
         for x in range(n):
             b = blotch[y][x]
             g = grain[y][x]
-            r, gg, bb = 104 + 26 * b, 102 + 24 * b, 74 + 18 * b
+            r, gg, bb = 96 + 24 * b, 92 + 22 * b, 78 + 16 * b
             for px0, py0, px1, py1, pf in patches:            # replaced-plate patchwork
                 if px0 <= x < px1 and py0 <= y < py1:
                     r, gg, bb = r * pf, gg * pf, bb * pf
