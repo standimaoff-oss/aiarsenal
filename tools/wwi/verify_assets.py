@@ -309,6 +309,40 @@ def validate_glb(path: Path, expected_animations: set[str], expected_nodes: set[
             idx = js["accessors"][primitive["indices"]]
             check(idx["type"] == "SCALAR" and idx["count"] % 3 == 0, f"{path.name}: index list is not triangles")
             triangles += idx["count"] // 3
+            # Verify triangle winding vs vertex normals and absence of opposite-winding z-fighting faces
+            views = js["bufferViews"]
+            pv = views[pos["bufferView"]]
+            nv = views[nor["bufferView"]]
+            iv = views[idx["bufferView"]]
+            p_off = pv.get("byteOffset", 0) + pos.get("byteOffset", 0)
+            n_off = nv.get("byteOffset", 0) + nor.get("byteOffset", 0)
+            i_off = iv.get("byteOffset", 0) + idx.get("byteOffset", 0)
+            p_str = pv.get("byteStride", 12)
+            n_str = nv.get("byteStride", 12)
+            i_fmt, i_sz = {5121: ("B", 1), 5123: ("H", 2), 5125: ("I", 4)}[idx["componentType"]]
+            i_str = iv.get("byteStride", i_sz)
+            pts = [struct.unpack_from("<fff", binary, p_off + k * p_str) for k in range(pos["count"])]
+            nrms = [struct.unpack_from("<fff", binary, n_off + k * n_str) for k in range(nor["count"])]
+            inds = [struct.unpack_from("<" + i_fmt, binary, i_off + k * i_str)[0] for k in range(idx["count"])]
+            seen_tris: dict[tuple, tuple[float, float, float]] = {}
+            for k in range(0, len(inds) - 2, 3):
+                a, b, c = pts[inds[k]], pts[inds[k + 1]], pts[inds[k + 2]]
+                ux, uy, uz = b[0] - a[0], b[1] - a[1], b[2] - a[2]
+                vx, vy, vz = c[0] - a[0], c[1] - a[1], c[2] - a[2]
+                nx, ny, nz = uy * vz - uz * vy, uz * vx - ux * vz, ux *vy - uy * vx
+                ln = math.sqrt(nx * nx + ny * ny + nz * nz)
+                check(ln >= 1e-10, f"{path.name}: degenerate triangle in mesh {mesh.get('name', mi)}")
+                nx, ny, nz = nx / ln, ny / ln, nz / ln
+                vn = nrms[inds[k]]
+                check(nx * vn[0] + ny * vn[1] + nz * vn[2] >= 0.25,
+                      f"{path.name}: inverted/mismatched normal in mesh {mesh.get('name', mi)}")
+                key = tuple(sorted(tuple(round(v, 5) for v in p) for p in (a, b, c)))
+                if key in seen_tris:
+                    pn = seen_tris[key]
+                    check(nx * pn[0] + ny * pn[1] + nz * pn[2] > -0.5,
+                          f"{path.name}: opposite-winding z-fighting triangles in mesh {mesh.get('name', mi)}")
+                else:
+                    seen_tris[key] = (nx, ny, nz)
     check(triangles > 0, f"{path.name}: no triangle geometry")
     material_refs = [m.get("pbrMetallicRoughness", {}).get("baseColorTexture", {}).get("index") for m in js.get("materials", [])]
     check(material_refs and all(isinstance(i, int) and 0 <= i < len(js.get("textures", [])) for i in material_refs),

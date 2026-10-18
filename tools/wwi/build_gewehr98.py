@@ -65,41 +65,7 @@ def loft_rings(
     cap_end: bool = True,
 ) -> None:
     """Loft arbitrary N-gon cross-section rings with outward-guaranteed winding."""
-    k = len(rings[0])
-    all_pts = [p for r in rings for p in r]
-    cx, cy, cz = _cen(all_pts)
-    for r0, r1 in zip(rings, rings[1:]):
-        for i in range(k):
-            j = (i + 1) % k
-            a, b, c, d = r0[i], r0[j], r1[j], r1[i]
-            mx, my, mz = _cen((a, b, c, d))
-            nx, ny, nz = _n3(a, b, c)
-            if nx * (mx - cx) + ny * (my - cy) + nz * (mz - cz) >= 0:
-                m.face(mat, [a, b, c, d], uv_scale)
-            else:
-                m.face(mat, [d, c, b, a], uv_scale)
-    if cap_start:
-        r0 = rings[0]
-        c0 = _cen(r0)
-        nx, ny, nz = _n3(c0, r0[1], r0[0])
-        flip = (nx * (c0[0] - cx) + ny * (c0[1] - cy) + nz * (c0[2] - cz)) < 0
-        for i in range(k):
-            j = (i + 1) % k
-            if not flip:
-                m.triangle(mat, c0, r0[j], r0[i])
-            else:
-                m.triangle(mat, c0, r0[i], r0[j])
-    if cap_end:
-        r1 = rings[-1]
-        c1 = _cen(r1)
-        nx, ny, nz = _n3(c1, r1[0], r1[1])
-        flip = (nx * (c1[0] - cx) + ny * (c1[1] - cy) + nz * (c1[2] - cz)) < 0
-        for i in range(k):
-            j = (i + 1) % k
-            if not flip:
-                m.triangle(mat, c1, r1[i], r1[j])
-            else:
-                m.triangle(mat, c1, r1[j], r1[i])
+    m.loft_rings(mat, rings, tile=uv_scale, cap_start=cap_start, cap_end=cap_end)
 
 
 def stock_ring(z: float, hw: float, y_bot: float, y_top: float, crown: float = 0.25) -> list[Vec3]:
@@ -398,14 +364,14 @@ def _cartridge(m: Mesh, brass: int, steel: int, cx: float, cy: float, cz: float)
         (cz + 0.015, 0.0042),
         (cz + 0.022, 0.0041),
     ]
-    loft_rings(m, brass, cyl_rings_z(cx, cy, profile, 10), 0.12)
+    loft_rings(m, brass, cyl_rings_z(cx, cy, profile, 10), 0.12, cap_start=True, cap_end=False)
     bullet = [
         (cz + 0.022, 0.0041),
         (cz + 0.036, 0.0036),
         (cz + 0.048, 0.0018),
         (cz + 0.053, 0.0005),
     ]
-    loft_rings(m, steel, cyl_rings_z(cx, cy, bullet, 10), 0.12)
+    loft_rings(m, steel, cyl_rings_z(cx, cy, bullet, 10), 0.12, cap_start=False, cap_end=True)
 
 
 def clip_mesh(brass: int, steel: int) -> Mesh:
@@ -427,16 +393,15 @@ def round_mesh(brass: int, steel: int) -> Mesh:
 
 def flash_mesh(brass: int) -> Mesh:
     m = Mesh()
-    for i in range(8):
-        a = math.tau * i / 8
-        u = (math.cos(a), math.sin(a), 0)
-        v = (-math.sin(a), math.cos(a), 0)
-        c = (0.0, 0.0, 0.0)
-        p1 = (u[0] * 0.020 + v[0] * 0.006, u[1] * 0.020 + v[1] * 0.006, 0.015)
-        p2 = (u[0] * 0.020 - v[0] * 0.006, u[1] * 0.020 - v[1] * 0.006, 0.015)
-        tip = (u[0] * 0.075, u[1] * 0.075, 0.015)
-        m.triangle(brass, c, p1, tip)
-        m.triangle(brass, c, tip, p2)
+    rings: list[list[Vec3]] = []
+    for z, r_tip, r_valley in ((0.0, 0.006, 0.004), (0.016, 0.068, 0.016), (0.042, 0.005, 0.003)):
+        ring: list[Vec3] = []
+        for i in range(16):
+            a = math.tau * i / 16
+            r = r_tip if i % 2 == 0 else r_valley
+            ring.append((r * math.cos(a), r * math.sin(a), z))
+        rings.append(ring)
+    loft_rings(m, brass, rings, 0.10, cap_start=True, cap_end=True)
     return m
 
 

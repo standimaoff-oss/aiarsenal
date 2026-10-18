@@ -50,41 +50,7 @@ def loft_rings(
     cap_start: bool = True,
     cap_end: bool = True,
 ) -> None:
-    k = len(rings[0])
-    all_pts = [p for r in rings for p in r]
-    cx, cy, cz = _cen(all_pts)
-    for r0, r1 in zip(rings, rings[1:]):
-        for i in range(k):
-            j = (i + 1) % k
-            a, b, c, d = r0[i], r0[j], r1[j], r1[i]
-            mx, my, mz = _cen((a, b, c, d))
-            nx, ny, nz = _n3(a, b, c)
-            if nx * (mx - cx) + ny * (my - cy) + nz * (mz - cz) >= 0:
-                m.face(mat, [a, b, c, d], uv_scale)
-            else:
-                m.face(mat, [d, c, b, a], uv_scale)
-    if cap_start:
-        r0 = rings[0]
-        c0 = _cen(r0)
-        nx, ny, nz = _n3(c0, r0[1], r0[0])
-        flip = (nx * (c0[0] - cx) + ny * (c0[1] - cy) + nz * (c0[2] - cz)) < 0
-        for i in range(k):
-            j = (i + 1) % k
-            if not flip:
-                m.triangle(mat, c0, r0[j], r0[i])
-            else:
-                m.triangle(mat, c0, r0[i], r0[j])
-    if cap_end:
-        r1 = rings[-1]
-        c1 = _cen(r1)
-        nx, ny, nz = _n3(c1, r1[0], r1[1])
-        flip = (nx * (c1[0] - cx) + ny * (c1[1] - cy) + nz * (c1[2] - cz)) < 0
-        for i in range(k):
-            j = (i + 1) % k
-            if not flip:
-                m.triangle(mat, c1, r1[i], r1[j])
-            else:
-                m.triangle(mat, c1, r1[j], r1[i])
+    m.loft_rings(mat, rings, tile=uv_scale, cap_start=cap_start, cap_end=cap_end)
 
 
 def cyl_rings_y(cx: float, cz: float, y_r: Sequence[tuple[float, float]], sides: int = 20) -> list[list[Vec3]]:
@@ -217,6 +183,18 @@ def build_mills_glb() -> None:
                     m.face(mat, [p00, p10, p11, p01], 0.08)
                 else:
                     m.face(mat, [p01, p11, p10, p00], 0.08)
+    for y_cap, r_cap, ny_sign in ((stations[0][0], stations[0][1], -1.0), (stations[-1][0], stations[-1][1], 1.0)):
+        c_cap = (0.0, y_cap, 0.0)
+        for i0 in range(n_az):
+            i1 = (i0 + 1) % n_az
+            a0 = math.tau * i0 / n_az
+            a1 = math.tau * i1 / n_az
+            p0 = (r_cap * math.cos(a0), y_cap, r_cap * math.sin(a0))
+            p1 = (r_cap * math.cos(a1), y_cap, r_cap * math.sin(a1))
+            if ny_sign < 0:
+                m.triangle(groove, c_cap, p0, p1)
+            else:
+                m.triangle(groove, c_cap, p1, p0)
 
     # Brass base plug with two spanner recesses
     loft_rings(m, brass, cyl_rings_y(0.0, 0.0, [(-0.052, 0.013), (-0.045, 0.015)], 18), 0.08)

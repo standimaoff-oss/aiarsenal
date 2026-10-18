@@ -65,7 +65,7 @@ overrideHeight:800
     ]:
         game.command(cmd)
     game.command(
-        "summon aiarsenal:mark_i 0 -60 16 {PersistenceRequired:1b}",
+        "summon aiarsenal:mark_i 0 -60 16 {PersistenceRequired:1b,az:-38f,el:4f}",
         "Summoned new entity.aiarsenal.mark_i",
     )
     time.sleep(5)
@@ -73,6 +73,28 @@ overrideHeight:800
     time.sleep(2)
     game.screenshot("mark-i-exterior")
     game.key("key", "F1")
+
+    # Authentic in-game F2 screenshots of all 4 SPAAG vehicles (Wirbelwind, ZSU-37, Gepard 1A2, ZSU-23-4M4 Shilka)
+    import shutil
+    previews_dir = ROOT / "previews"
+    previews_dir.mkdir(parents=True, exist_ok=True)
+    game.command("fill -48 -61 -48 48 -61 48 minecraft:grass_block")
+    for idx, spaag in enumerate(("wirbelwind", "zsu37", "gepard", "shilka")):
+        sx = 28
+        sz = -24 + idx * 14
+        game.command(
+            f"summon aiarsenal:{spaag} {sx} -60 {sz} {{PersistenceRequired:1b,az:-22f,el:16f}}",
+            f"Summoned new entity.aiarsenal.{spaag}",
+        )
+        game.command(f"tp TestPlayer {sx - 4.2:.1f} -58.9 {sz + 4.8:.1f} -138 7")
+        time.sleep(2.5)
+        game.key("key", "F1")
+        time.sleep(1.2)
+        game.screenshot(spaag)
+        game.key("key", "F1")
+        shot = game.OUT / "shots" / (f"public-preview-{spaag}.png")
+        if shot.exists():
+            shutil.copy2(shot, previews_dir / f"{spaag}.png")
 
     # A second Mark I set ablaze: proof that the fire is a volumetric flame, not flat sprites.
     game.command(

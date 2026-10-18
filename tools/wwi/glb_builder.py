@@ -119,8 +119,11 @@ class Mesh:
 
     # ------------------------------------------------------------------ primitives
     def box(self, material: int, lo, hi, tile: float = 1.0) -> None:
-        x0, y0, z0 = lo
-        x1, y1, z1 = hi
+        x0, x1 = (lo[0], hi[0]) if lo[0] <= hi[0] else (hi[0], lo[0])
+        y0, y1 = (lo[1], hi[1]) if lo[1] <= hi[1] else (hi[1], lo[1])
+        z0, z1 = (lo[2], hi[2]) if lo[2] <= hi[2] else (hi[2], lo[2])
+        if x1 - x0 < 1e-8 or y1 - y0 < 1e-8 or z1 - z0 < 1e-8:
+            return
         faces = [
             ((x1,y0,z0),(x1,y1,z0),(x1,y1,z1),(x1,y0,z1)),  # +X
             ((x0,y0,z1),(x0,y1,z1),(x0,y1,z0),(x0,y0,z0)),  # -X
@@ -134,6 +137,13 @@ class Mesh:
 
     def oriented_box(self, material: int, center, ex, ey, ez, tile: float = 1.0) -> None:
         """Cuboid from three half-axis vectors; useful for tread plates along a sloped track loop."""
+        det = (
+            ex[0] * (ey[1] * ez[2] - ey[2] * ez[1])
+            - ex[1] * (ey[0] * ez[2] - ey[2] * ez[0])
+            + ex[2] * (ey[0] * ez[1] - ey[1] * ez[0])
+        )
+        if det < 0.0:
+            ez = (-ez[0], -ez[1], -ez[2])
         def p(sx, sy, sz):
             return tuple(center[k] + sx * ex[k] + sy * ey[k] + sz * ez[k] for k in range(3))
         self.face(material, [p(1,-1,-1),p(1,1,-1),p(1,1,1),p(1,-1,1)], tile)
@@ -174,6 +184,77 @@ class Mesh:
                               ((0.5, 0.5), (0.5 + 0.5 * math.cos(a0), 0.5 + 0.5 * math.sin(a0)),
                                (0.5 + 0.5 * math.cos(a1), 0.5 + 0.5 * math.sin(a1))))
 
+    def loft_rings(self, material: int, rings, tile: float = 0.5,
+                   cap_start: bool = True, cap_end: bool = True) -> None:
+        """Loft N-gon cross-section rings with guaranteed outward winding on every triangle."""
+        if len(rings) < 2:
+            return
+        k = len(rings[0])
+        def _cen(pts):
+            n = len(pts) or 1
+            return (
+                sum(p[0] for p in pts) / n,
+                sum(p[1] for p in pts) / n,
+                sum(p[2] for p in pts) / n,
+            )
+        def _nrm(a, b, c):
+            ux, uy, uz = b[0] - a[0], b[1] - a[1], b[2] - a[2]
+            vx, vy, vz = c[0] - a[0], c[1] - a[1], c[2] - a[2]
+            return (uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx)
+
+        for r0, r1 in zip(rings, rings[1:]):
+            c0 = _cen(r0)
+            c1 = _cen(r1)
+            ax = (c1[0] - c0[0], c1[1] - c0[1], c1[2] - c0[2])
+            al = math.sqrt(ax[0] * ax[0] + ax[1] * ax[1] + ax[2] * ax[2]) or 1.0
+            u_ax = (ax[0] / al, ax[1] / al, ax[2] / al)
+            for i in range(k):
+                j = (i + 1) % k
+                a, b, c, d = r0[i], r0[j], r1[j], r1[i]
+                for p0, p1, p2 in ((a, b, c), (a, c, d)):
+                    tc = _cen((p0, p1, p2))
+                    vx, vy, vz = tc[0] - c0[0], tc[1] - c0[1], tc[2] - c0[2]
+                    proj = vx * u_ax[0] + vy * u_ax[1] + vz * u_ax[2]
+                    rx = vx - proj * u_ax[0]
+                    ry = vy - proj * u_ax[1]
+                    rz = vz - proj * u_ax[2]
+                    nx, ny, nz = _nrm(p0, p1, p2)
+                    if nx * rx + ny * ry + nz * rz < 0.0:
+                        p1, p2 = p2, p1
+                        nx, ny, nz = -nx, -ny, -nz
+                    uvs = self._planar_uvs((p0, p1, p2), (nx, ny, nz), tile)
+                    self.triangle(material, p0, p1, p2, uvs)
+
+        if cap_start:
+            r0 = rings[0]
+            c0 = _cen(r0)
+            c1 = _cen(rings[1])
+            dx, dy, dz = c0[0] - c1[0], c0[1] - c1[1], c0[2] - c1[2]
+            for i in range(k):
+                j = (i + 1) % k
+                p0, p1, p2 = c0, r0[i], r0[j]
+                nx, ny, nz = _nrm(p0, p1, p2)
+                if nx * dx + ny * dy + nz * dz < 0.0:
+                    p1, p2 = p2, p1
+                    nx, ny, nz = -nx, -ny, -nz
+                uvs = self._planar_uvs((p0, p1, p2), (nx, ny, nz), tile)
+                self.triangle(material, p0, p1, p2, uvs)
+
+        if cap_end:
+            r1 = rings[-1]
+            c1 = _cen(r1)
+            c0 = _cen(rings[-2])
+            dx, dy, dz = c1[0] - c0[0], c1[1] - c0[1], c1[2] - c0[2]
+            for i in range(k):
+                j = (i + 1) % k
+                p0, p1, p2 = c1, r1[i], r1[j]
+                nx, ny, nz = _nrm(p0, p1, p2)
+                if nx * dx + ny * dy + nz * dz < 0.0:
+                    p1, p2 = p2, p1
+                    nx, ny, nz = -nx, -ny, -nz
+                uvs = self._planar_uvs((p0, p1, p2), (nx, ny, nz), tile)
+                self.triangle(material, p0, p1, p2, uvs)
+
     def loft(self, material: int, sections, tile: float = 1.0, caps: bool = True) -> None:
         """Loft a run of rectangular cross-sections along +Z.
 
@@ -183,14 +264,7 @@ class Mesh:
         rings = []
         for z, hw, y0, y1 in sections:
             rings.append([(-hw, y0, z), (hw, y0, z), (hw, y1, z), (-hw, y1, z)])
-        for i in range(len(rings) - 1):
-            a, b = rings[i], rings[i + 1]
-            for k in range(4):
-                j = (k + 1) % 4
-                self.face(material, (a[k], a[j], b[j], b[k]), tile)
-        if caps:
-            self.face(material, tuple(reversed(rings[0])), tile)
-            self.face(material, tuple(rings[-1]), tile)
+        self.loft_rings(material, rings, tile=tile, cap_start=caps, cap_end=caps)
 
     def prism(self, material: int, profile, axis: str, a: float, b: float, tile: float = 1.0) -> None:
         """Extrude a convex polygon along an axis.

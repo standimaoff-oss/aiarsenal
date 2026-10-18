@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Flat-shaded orthographic preview of a GLB, so models can be inspected without Minecraft.
 
-Renders a z-buffered image with the same back-face culling Minecraft applies, which makes
+Renders a z-buffered image with back-face culling and embedded PNG texture tinting, which makes
 inverted winding and wrong proportions obvious before anything is shipped.
 
-    python tools/wwi/render_preview.py mark_i.glb [out.png] [--azim -28] [--elev 12] [--width 900]
+    python tools/wwi/render_preview.py mark_i.glb [out.png] [--azim -28] [--elev 14] [--width 900]
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ import argparse
 import math
 import struct
 import sys
+import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -33,14 +34,84 @@ def read_accessor(js: dict, binary: bytes, index: int) -> list[tuple]:
     return [struct.unpack_from("<" + fmt * n, binary, start + i * stride) for i in range(acc["count"])]
 
 
+def _png_average_rgb(png_bytes: bytes) -> tuple[float, float, float]:
+    """Decode an embedded RGBA8 PNG (filter 0) and return its mean RGB in 0..1."""
+    if not png_bytes.startswith(b"\x89PNG\r\n\x1a\n"):
+        return (1.0, 1.0, 1.0)
+    pos = 8
+    w = h = 0
+    idat = bytearray()
+    while pos + 8 <= len(png_bytes):
+        length = struct.unpack_from(">I", png_bytes, pos)[0]
+        kind = png_bytes[pos + 4:pos + 8]
+        data = png_bytes[pos + 8:pos + 8 + length]
+        pos += 12 + length
+        if kind == b"IHDR":
+            w, h, bit_depth, color_type = struct.unpack_from(">IIBB", data, 0)
+            if bit_depth != 8 or color_type != 6:
+                return (1.0, 1.0, 1.0)
+        elif kind == b"IDAT":
+            idat.extend(data)
+        elif kind == b"IEND":
+            break
+    if w <= 0 or h <= 0 or not idat:
+        return (1.0, 1.0, 1.0)
+    raw = zlib.decompress(bytes(idat))
+    stride = 1 + w * 4
+    r_sum = g_sum = b_sum = count = 0
+    for y in range(0, h, max(1, h // 32)):
+        row = y * stride + 1
+        if row + w * 4 > len(raw):
+            break
+        for x in range(0, w, max(1, w // 32)):
+            o = row + x * 4
+            r_sum += raw[o]
+            g_sum += raw[o + 1]
+            b_sum += raw[o + 2]
+            count += 1
+    if count == 0:
+        return (1.0, 1.0, 1.0)
+    return (r_sum / (255.0 * count), g_sum / (255.0 * count), b_sum / (255.0 * count))
+
+
+def material_colours(js: dict, binary: bytes) -> list[tuple[float, float, float]]:
+    views = js.get("bufferViews", [])
+    images = js.get("images", [])
+    textures = js.get("textures", [])
+    img_rgb: list[tuple[float, float, float]] = []
+    for img in images:
+        vi = img.get("bufferView")
+        if vi is not None and 0 <= vi < len(views):
+            v = views[vi]
+            off = v.get("byteOffset", 0)
+            ln = v.get("byteLength", 0)
+            img_rgb.append(_png_average_rgb(binary[off:off + ln]))
+        else:
+            img_rgb.append((1.0, 1.0, 1.0))
+    out: list[tuple[float, float, float]] = []
+    for mat in js.get("materials", []):
+        pbr = mat.get("pbrMetallicRoughness", {})
+        base = pbr.get("baseColorFactor", (1.0, 1.0, 1.0, 1.0))[:3]
+        tex_info = pbr.get("baseColorTexture")
+        if tex_info is not None:
+            ti = tex_info.get("index", 0)
+            if 0 <= ti < len(textures):
+                si = textures[ti].get("source", 0)
+                if 0 <= si < len(img_rgb):
+                    tr, tg, tb = img_rgb[si]
+                    base = (base[0] * tr, base[1] * tg, base[2] * tb)
+        out.append(base)
+    return out or [(0.8, 0.8, 0.8)]
+
+
 def trs_matrix(node: dict) -> list[float]:
     """Row-major 4x4 for a node's translation/rotation/scale."""
     if "matrix" in node:
         m = list(node["matrix"])
-        return [m[r + 4 * c] for r in range(4) for c in range(4)]  # glTF is column-major
+        return [m[r + 4 * c] for r in range(4) for c in range(4)]
     tx, ty, tz = node.get("translation", (0.0, 0.0, 0.0))
     x, y, z, w = node.get("rotation", (0.0, 0.0, 0.0, 1.0))
-    sx, sy, sz = node.get("scale", (1.0, 1.0, 1.0))
+    sx, sy, sz = node.get("scale", (1.0, 0.0, 1.0)) if "scale" not in node else node.get("scale", (1.0, 1.0, 1.0))
     r = [
         [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
         [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
@@ -73,7 +144,7 @@ def triangles(js: dict, binary: bytes):
     """(world-space triangle, base colour) for every primitive of the default scene."""
     nodes = js.get("nodes", [])
     meshes = js.get("meshes", [])
-    materials = js.get("materials", [])
+    mat_cols = material_colours(js, binary)
     stack = [(i, [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1])
              for i in js["scenes"][js.get("scene", 0)]["nodes"]]
     while stack:
@@ -84,8 +155,8 @@ def triangles(js: dict, binary: bytes):
         if "mesh" not in node:
             continue
         for primitive in meshes[node["mesh"]].get("primitives", []):
-            colour = materials[primitive.get("material", 0)]["pbrMetallicRoughness"].get(
-                "baseColorFactor", (1.0, 1.0, 1.0, 1.0))[:3]
+            mi = primitive.get("material", 0)
+            colour = mat_cols[mi] if 0 <= mi < len(mat_cols) else (0.8, 0.8, 0.8)
             points = read_accessor(js, binary, primitive["attributes"]["POSITION"])
             if "indices" in primitive:
                 flat = [i[0] for i in read_accessor(js, binary, primitive["indices"])]
@@ -101,9 +172,9 @@ def render(path: Path, out: Path, azim: float, elev: float, width: int) -> None:
     if not tris:
         raise SystemExit(f"{path}: no triangles")
 
-    # View basis: yaw about Y, then pitch about X, looking towards -Z.
+    # View basis: yaw about Y, then pitch down from above by +elev, looking towards -Z (camera at +Z).
     ca, sa = math.cos(math.radians(azim)), math.sin(math.radians(azim))
-    ce, se = math.cos(math.radians(elev)), math.sin(math.radians(elev))
+    ce, se = math.cos(math.radians(-elev)), math.sin(math.radians(-elev))
 
     def project(p):
         x = p[0] * ca - p[2] * sa
@@ -127,7 +198,7 @@ def render(path: Path, out: Path, azim: float, elev: float, width: int) -> None:
     light = [v / norm for v in light]
 
     buf = [(24, 26, 30, 255)] * (width * height)
-    depth = [math.inf] * (width * height)
+    depth = [-math.inf] * (width * height)
     drawn = culled = 0
     for tri, colour in projected:
         (x0, y0, z0), (x1, y1, z1), (x2, y2, z2) = tri
@@ -138,12 +209,12 @@ def render(path: Path, out: Path, azim: float, elev: float, width: int) -> None:
         if length < 1e-12:
             continue
         nx, ny, nz = nx / length, ny / length, nz / length
-        if nz < 0.0:  # faces away from the camera -- Minecraft culls these too
+        if nz < 0.0:  # faces away from the camera (+Z)
             culled += 1
             continue
-        shade = 0.34 + 0.66 * max(0.0, nx * light[0] + ny * light[1] + nz * light[2])
+        shade = 0.42 + 0.68 * max(0.0, nx * light[0] + ny * light[1] + nz * light[2])
         mid = (z0 + z1 + z2) / 3.0
-        shade *= 1.0 - 0.55 * max(0.0, min(1.0, (mid - zmin) / zrange))  # depth fog
+        shade *= 1.0 - 0.18 * max(0.0, min(1.0, (zmax - mid) / zrange))
         rgb = tuple(max(0, min(255, int(c * 255 * shade))) for c in colour) + (255,)
         px = [x0 * scale + ox, x1 * scale + ox, x2 * scale + ox]
         py = [oy - y0 * scale, oy - y1 * scale, oy - y2 * scale]
@@ -162,7 +233,7 @@ def render(path: Path, out: Path, azim: float, elev: float, width: int) -> None:
                     continue
                 z = w0 * pz[0] + w1 * pz[1] + w2 * pz[2]
                 i = y * width + x
-                if z < depth[i]:
+                if z > depth[i]:
                     depth[i] = z
                     buf[i] = rgb
                     drawn += 1
@@ -175,7 +246,7 @@ def main() -> int:
     parser.add_argument("model", help="GLB name under models/glb, or a path")
     parser.add_argument("out", nargs="?", default=None, help="output PNG (default: previews/<model>.png)")
     parser.add_argument("--azim", type=float, default=-28.0)
-    parser.add_argument("--elev", type=float, default=12.0)
+    parser.add_argument("--elev", type=float, default=14.0)
     parser.add_argument("--width", type=int, default=900)
     args = parser.parse_args()
     path = Path(args.model)

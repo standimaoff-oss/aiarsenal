@@ -47,7 +47,7 @@ BARREL_TIP = 1.15
 TRACK_X = 1.50          # centre plane of the belt
 FRAME_IN, FRAME_OUT = 1.18, 1.58
 HULL_X = 1.18           # inner hull side plate
-SPONSON_OUT = 2.08
+SPONSON_OUT = 1.90
 
 _CACHE: dict[tuple, bytes] = {}
 
@@ -210,28 +210,7 @@ def _cen(ring):
 
 
 def loft_rings(m: Mesh, mat, rings, tile: float = 0.5) -> None:
-    # Loft convex rings of equal point count; winding is corrected against the outward
-    # radial direction because Minecraft back-face culls single-sided materials.
-    for i in range(len(rings) - 1):
-        a, b = rings[i], rings[i+1]
-        ca = _cen(a)
-        for k in range(len(a)):
-            j = (k + 1) % len(a)
-            quad = (a[k], a[j], b[j], b[k])
-            n = _n3(quad); qc = _cen(quad)
-            rad = (qc[0]-ca[0], qc[1]-ca[1], qc[2]-ca[2])
-            if n[0]*rad[0] + n[1]*rad[1] + n[2]*rad[2] < 0:
-                quad = tuple(reversed(quad))
-            m.face(mat, quad, tile)
-    for ring, other in ((rings[0], rings[1]), (rings[-1], rings[-2])):
-        c = _cen(ring); o = _cen(other)
-        d = (c[0]-o[0], c[1]-o[1], c[2]-o[2])
-        for k in range(1, len(ring) - 1):
-            tri = (ring[0], ring[k], ring[k+1])
-            n = _n3(tri)
-            if n[0]*d[0] + n[1]*d[1] + n[2]*d[2] < 0:
-                tri = (ring[0], ring[k+1], ring[k])
-            m.triangle(mat, tri[0], tri[1], tri[2])
+    m.loft_rings(mat, rings, tile=tile, cap_start=True, cap_end=True)
 
 
 def hex_ring(z: float, sx: float, y_lo: float, y_hi: float) -> list[tuple[float, float, float]]:
@@ -308,17 +287,17 @@ def sponson_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> 
     with sloped roof/floor, semi-cylindrical QF 6-pdr gun shield, Hotchkiss MG ball mount and rear crew door."""
     m = Mesh()
     s = float(side)
-    # 6-point planform projecting from inside the track frame (1.42) out to SPONSON_OUT (2.08)
+    # 6-point planform projecting from inside the track frame (1.42) out to SPONSON_OUT (1.90)
     plan = [
-        (1.12, 1.42),
-        (1.12, 1.74),
-        (0.74, SPONSON_OUT),
-        (-0.74, SPONSON_OUT),
-        (-1.12, 1.74),
-        (-1.12, 1.42),
+        (0.96, 1.42),
+        (0.96, 1.64),
+        (0.58, SPONSON_OUT),
+        (-0.68, SPONSON_OUT),
+        (-1.08, 1.68),
+        (-1.08, 1.42),
     ]
     secs = []
-    for y, inset in ((0.76, 0.28), (0.94, 0.0), (1.68, 0.0), (1.88, 0.26)):
+    for y, inset in ((0.76, 0.24), (0.94, 0.0), (1.68, 0.0), (1.88, 0.22)):
         ring = []
         for z, x in plan:
             xx = x if x <= 1.44 else max(1.44, x - inset)
@@ -328,22 +307,22 @@ def sponson_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> 
     loft_rings(m, paint, secs, 0.8)
 
     # Heavy overhanging roof plate with riveted edge lip
-    m.box(highlight, (min(s * 1.52, s * (SPONSON_OUT - 0.18)), 1.86, -0.96),
-          (max(s * 1.52, s * (SPONSON_OUT - 0.18)), 1.92, 0.96), 0.5)
+    m.box(highlight, (min(s * 1.50, s * (SPONSON_OUT - 0.14)), 1.86, -0.92),
+          (max(s * 1.50, s * (SPONSON_OUT - 0.14)), 1.92, 0.84), 0.5)
     # Semi-cylindrical internal rotating gun shield & recessed embrasure around the 6-pdr pivot (y=1.22, z=0.0)
-    m.cylinder(dark, (s * (SPONSON_OUT - 0.12), 1.22, 0.0), (s * (SPONSON_OUT + 0.04), 1.22, 0.0), 0.32, 18, dark, 0.3)
-    m.cylinder(steel, (s * (SPONSON_OUT - 0.06), 1.22, 0.0), (s * (SPONSON_OUT + 0.10), 1.22, 0.0), 0.24, 18, steel, 0.3)
+    m.cylinder(dark, (s * (SPONSON_OUT - 0.10), 1.22, 0.0), (s * (SPONSON_OUT + 0.03), 1.22, 0.0), 0.30, 18, dark, 0.3)
+    m.cylinder(steel, (s * (SPONSON_OUT - 0.05), 1.22, 0.0), (s * (SPONSON_OUT + 0.08), 1.22, 0.0), 0.22, 18, steel, 0.3)
     # Secondary Hotchkiss machine-gun ball mount on the rear-side facet + armoured vision slits
-    m.cylinder(steel, (s * (SPONSON_OUT - 0.10), 1.36, -0.56), (s * (SPONSON_OUT + 0.05), 1.36, -0.56), 0.11, 12, steel, 0.2)
-    m.box(dark, (min(s * (SPONSON_OUT - 0.02), s * (SPONSON_OUT + 0.02)), 1.54, 0.28),
-          (max(s * (SPONSON_OUT - 0.02), s * (SPONSON_OUT + 0.02)), 1.60, 0.54), 0.2)
+    m.cylinder(steel, (s * (SPONSON_OUT - 0.10), 1.36, -0.52), (s * (SPONSON_OUT + 0.05), 1.36, -0.52), 0.11, 12, steel, 0.2)
+    m.box(dark, (min(s * (SPONSON_OUT - 0.02), s * (SPONSON_OUT + 0.02)), 1.54, 0.24),
+          (max(s * (SPONSON_OUT - 0.02), s * (SPONSON_OUT + 0.02)), 1.60, 0.48), 0.2)
     # Rear crew access door on the back bevel of the sponson with hinges & grab handle
-    m.box(steel, (min(s * 1.60, s * 1.88), 0.98, -1.14), (max(s * 1.60, s * 1.88), 1.62, -1.06), 0.3)
+    m.box(steel, (min(s * 1.52, s * 1.76), 0.98, -1.10), (max(s * 1.52, s * 1.76), 1.62, -1.02), 0.3)
     if not lod:
         # 3D structural angle-iron strips and rivet rows framing the sponson facets
         for y in (0.96, 1.66):
-            rivet_row(m, brass, (s * SPONSON_OUT, y, -0.68), (s * SPONSON_OUT, y, 0.68), 11)
-        for z in (-0.70, 0.70):
+            rivet_row(m, brass, (s * SPONSON_OUT, y, -0.62), (s * SPONSON_OUT, y, 0.54), 11)
+        for z in (-0.64, 0.54):
             rivet_row(m, brass, (s * SPONSON_OUT, 0.98, z), (s * SPONSON_OUT, 1.64, z), 6)
     return m
 
@@ -413,23 +392,9 @@ def frame_mesh(paint, highlight, steel, dark, brass, side: int, lod: bool) -> Me
         (0.80, 3.22),
         (0.18, 2.38),
     ]
-    pts = [(s * FRAME_IN, y, z) for y, z in profile] + [(s * FRAME_OUT, y, z) for y, z in reversed(profile)]
-    n = len(profile)
-    for i in range(n):
-        a, b = i, (i + 1) % n
-        m.face(steel, [pts[a], pts[b], pts[n + b], pts[n + a]], 0.8)
-    panels = [
-        [(0.80, -3.22), (2.22, -3.22), (2.22, -2.38), (0.18, -2.38)],
-        [(0.18, -2.38), (2.22, -2.38), (2.22, 2.38), (0.18, 2.38)],
-        [(0.18, 2.38), (2.22, 2.38), (2.22, 3.22), (0.80, 3.22)],
-    ]
-    for x, sgn in ((s * FRAME_IN, -1.0), (s * FRAME_OUT, 1.0)):
-        for pan in panels:
-            q = [(x, y, z) for y, z in pan]
-            nn = _n3(q[:3])
-            if nn[0] * s * sgn < 0:
-                q = list(reversed(q))
-            m.face(paint, q, 1.6)
+    in_pts = [(s * FRAME_IN, y, z) for y, z in profile]
+    out_pts = [(s * FRAME_OUT, y, z) for y, z in profile]
+    m.loft_rings(paint, [in_pts, out_pts], tile=1.2, cap_start=True, cap_end=True)
 
     x0 = min(s * (FRAME_OUT - 0.005), s * (FRAME_OUT + 0.022))
     x1 = max(s * (FRAME_OUT - 0.005), s * (FRAME_OUT + 0.022))
@@ -509,19 +474,19 @@ def build(path: Path, lod=False) -> tuple[int, float]:
             shoe = Mesh()
             shoe.oriented_box(track, (0, 0, 0), (0.28, 0, 0), (0, TRACK_HALF_THICKNESS, 0), (0, 0, pitch * 0.495))
             if not lod:
-                # two grouser bars and the central guide horn that runs in the track race
-                shoe.oriented_box(grouser, (0, -0.005, 0.018), (0.036, 0, 0), (0, 0.024, 0), (0, 0, pitch * 0.30))
-                shoe.oriented_box(grouser, (0, -0.005, -0.018), (0.036, 0, 0), (0, 0.024, 0), (0, 0, pitch * 0.30))
-                shoe.oriented_box(grouser, (0, TRACK_HALF_THICKNESS, 0), (0.030, 0, 0), (0, 0.055, 0), (0, 0, pitch * 0.16))
+                # two transverse grouser bars on the outer face (-Y in link local space) and guide horn on inner (+Y)
+                shoe.oriented_box(grouser, (0, -TRACK_HALF_THICKNESS - 0.010, 0.045), (0.26, 0, 0), (0, 0.010, 0), (0, 0, 0.018))
+                shoe.oriented_box(grouser, (0, -TRACK_HALF_THICKNESS - 0.010, -0.045), (0.26, 0, 0), (0, 0.010, 0), (0, 0, 0.018))
+                shoe.oriented_box(grouser, (0, TRACK_HALF_THICKNESS + 0.022, 0), (0.028, 0, 0), (0, 0.022, 0), (0, 0, pitch * 0.16))
                 for kx in (-0.19, 0.19):
-                    shoe.cylinder(dark, (kx, 0, -pitch * 0.34), (kx, 0, pitch * 0.34), 0.026, 6, dark, 0.30)
+                    shoe.cylinder(dark, (kx, 0, -pitch * 0.34), (kx, 0, pitch * 0.34), 0.024, 6, dark, 0.30)
             shoe_i = b.add_mesh(f"track_shoe_{name}_{i:02d}", shoe)
-            link = b.add_node(f"MarkI_link_{name}_{i:02d}", shoe_i, (side * TRACK_X, y, z), axis_quaternion((1, 0, 0), rx))
+            link = b.add_node(f"MarkI_link_{name}_{i:02d}", shoe_i, (side * TRACK_X, y, z), axis_quaternion((1, 0, 0), -rx))
             kids.append(link)
             y2, z2, rx2 = loop_point((i + 1) * pitch)
             channels.extend([
                 (link, "translation", [0.0, 1.0], [side * TRACK_X, y, z, side * TRACK_X, y2, z2]),
-                (link, "rotation", [0.0, 1.0], [*axis_quaternion((1, 0, 0), rx), *axis_quaternion((1, 0, 0), rx2)]),
+                (link, "rotation", [0.0, 1.0], [*axis_quaternion((1, 0, 0), -rx), *axis_quaternion((1, 0, 0), -rx2)]),
             ])
         children.append(b.add_node("track_links_" + name, children=kids))
         track_animations.append(("track_" + name, channels))
