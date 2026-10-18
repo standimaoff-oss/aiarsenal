@@ -184,3 +184,19 @@ python3 tools/verify_game.py gametest    # gametest'и Forge (нужен соб�
 компиляция и gametest'и выполняются в GitHub Actions: `.github/workflows/wwi-delivery.yml`
 собирает мод, прогоняет регрессию, запускает Minecraft на Xvfb и снимает настоящие кадры F2.
 Запуск — пуш в ветку сессии с `[preview]` в заголовке коммита.
+
+### Как читать результат регрессии из песочницы (важно)
+
+* Шаг `Run regression tests` помечен `continue-on-error: true`, поэтому **зелёная галочка шага
+  ничего не значит**. Настоящий исход — в `previews/verification.txt` в HEAD ветки
+  (`Regression tests: success|failure`), его пишет сам workflow.
+* Логи джоба и артефакты лежат на `*.blob.core.windows.net` — из песочницы недоступны.
+  Точные имена упавших тестов видны в аннотациях check-run:
+  `gh api repos/standimaoff-oss/aiarsenal/check-runs/<check_run_id>/annotations`
+  (`tools/verify_game.py` печатает `::error title=Minecraft GameTest::...` для каждого падения).
+* Первый прогон этой ветки (run 39102924927, коммит `b98f3ac`) дал `failure`: новый тест
+  `ready_rack_keeps_the_round_type_of_every_slot` поймал ошибку в своей же логике обмена —
+  при полном магазине обмен начинался только если снарядов выбранного типа не было вовсе,
+  а удержанный спуск тут же расходовал первый обменянный снаряд. Исправлено: обмен идёт по
+  одному снаряду за цикл, пока в укладке есть чужой тип, а тест разделён на фазы
+  (сначала удержанный спуск без перезарядки — выстрела быть не должно, затем удержанный `[R]`).

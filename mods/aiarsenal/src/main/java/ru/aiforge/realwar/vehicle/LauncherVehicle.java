@@ -476,10 +476,10 @@ extends VehicleEntity {
 
     @Override
     protected void onRearClick(ServerPlayer p) {
-        if (this.loadedCount() >= this.kind.magazine && this.loadedOfType(this.loadType()) > 0) {
+        if (this.firstEmpty() < 0 && this.firstLoadedNot(this.loadType()) < 0) {
             return;
         }
-        if (!this.hasAmmo(p) && this.loadedOfType(this.loadType()) > 0) {
+        if (!this.hasAmmo(p) && this.firstEmpty() < 0) {
             p.displayClientMessage((Component)Component.translatable((String)"hud.aiarsenal.rw.no_ammo"), true);
             return;
         }
@@ -490,7 +490,7 @@ extends VehicleEntity {
 
     @Override
     protected boolean onItemUse(ServerPlayer p, ItemStack st) {
-        if (this.isAmmo(st) && (this.loadedCount() < this.kind.magazine || this.loadedOfType(this.loadType()) == 0)) {
+        if (this.isAmmo(st) && (this.firstEmpty() >= 0 || this.firstLoadedNot(this.loadType()) >= 0)) {
             this.extReloader = p.getUUID();
             this.extRef = new java.lang.ref.WeakReference<>(p);
         this.extRef = new java.lang.ref.WeakReference<>(p);
@@ -523,11 +523,11 @@ extends VehicleEntity {
         if (rt < 0) {
             if (rp != null && this.mayReload()) {
                 int want = this.loadType();
-                int slot = this.loadedCount() < this.kind.magazine ? this.firstEmpty() : -1;
-                // r28: the rack is full, but of the OTHER round - exchange one round for the selected type. The
-                // exchanged round goes back to the stowage, so no ammunition item is spent on the swap.
+                int slot = this.firstEmpty();
+                // r28: the rack is full, but (partly) of the OTHER round - exchange one round per loading cycle for
+                // the selected type. The exchanged round goes back to the stowage, so no ammunition item is spent.
                 boolean swap = false;
-                if (slot < 0 && this.loadedOfType(want) == 0) {
+                if (slot < 0) {
                     slot = this.firstLoadedNot(want);
                     swap = slot >= 0;
                 }

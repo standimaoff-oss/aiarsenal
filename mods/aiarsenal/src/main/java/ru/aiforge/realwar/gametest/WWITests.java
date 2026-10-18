@@ -235,11 +235,24 @@ public final class WWITests {
         h.assertTrue(tank.loadedOfType(0) == 2, "selecting AP must not consume the HE rounds");
         int seq = tank.firedSeq();
         int[] tick = {0};
+        int[] phase = {0};
         h.onEachTick(() -> {
             tick[0]++;
-            tank.handleControl(operator, 0, 0, true, true, 0);
-            h.assertTrue(tank.firedSeq() == seq, "the gun fired from a rack that holds the wrong round");
-            h.assertTrue(tank.loadedOfType(0) + tank.loadedOfType(1) == 2, "rounds disappeared while exchanging");
+            if (phase[0] == 0) {
+                // the rack holds HE only while AP is selected: 20 ticks of a held trigger must produce no shot
+                tank.handleControl(operator, 0, 0, true, false, 0);
+                h.assertTrue(tank.firedSeq() == seq, "the gun fired from a rack that holds the wrong round");
+                h.assertTrue(tank.loadedOfType(0) == 2, "the HE rounds were touched");
+                if (tick[0] >= 20) {
+                    phase[0] = 1;
+                    tick[0] = 0;
+                }
+                return;
+            }
+            // now hold [R]: every loading cycle exchanges one round of the rack for the selected AP round
+            tank.handleControl(operator, 0, 0, false, true, 0);
+            h.assertTrue(tank.firedSeq() == seq, "the gun fired while only the loader was working");
+            h.assertTrue(tank.loadedCount() == 2, "exchanging rounds lost a slot: " + tank.loadedCount());
             int ap = tank.loadedOfType(1);
             if (ap == 2) {
                 int items = 0;
@@ -256,7 +269,7 @@ public final class WWITests {
                 tank.discard();
                 restored.discard();
                 h.succeed();
-            } else if (tick[0] > 350) {
+            } else if (tick[0] > 320) {
                 h.fail("round exchange stalled: HE=" + tank.loadedOfType(0) + " AP=" + ap
                         + " tube=" + tank.reloadTube() + " t=" + tank.reloadTicks());
             }
