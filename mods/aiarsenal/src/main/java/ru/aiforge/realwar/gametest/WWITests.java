@@ -382,7 +382,8 @@ public final class WWITests {
                 StringBuilder dmlog = new StringBuilder();
                 boolean broadside = false, clamped = false;
                 for (ShellEntity sh : shells) {
-                    Vec3 dm = sh.getDeltaMovement().normalize();
+                    ru.aiforge.realwar.ordnance.Ballistics.Flight fl = sh.flight();
+                    Vec3 dm = new Vec3(fl.vx, fl.vy, fl.vz).normalize();
                     dmlog.append(String.format(" [%.3f %.3f %.3f]", dm.x, dm.y, dm.z));
                     if (dm.x < -0.9) broadside = true;
                     if (dm.x > 0.7 && dm.z > 0.4) clamped = true;
