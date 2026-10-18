@@ -297,7 +297,7 @@ public final class PenetrationTests {
                 new Vector3d(0, 0, -1), kw20, v0(Ballistics.Profile.KW20_AP), 0.5);
         h.assertTrue(r.result() == Armour.NO_PEN, "2 cm APCR must stop on the 60 mm visor block: " + s(r));
         // cupola lid on the turret roof: its own zone at roof thickness
-        r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.55, 3.0, 0.3),
+        r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(0.62, 3.0, -0.32),
                 new Vector3d(0, -1, 0), k88, v, 0.5);
         h.assertTrue(r.zone() == Armour.HATCH && Math.abs(r.nominal() - 25f) < 0.5f && r.result() == Armour.PEN,
                 "the cupola lid is a hatch zone at roof thickness: " + s(r));
@@ -345,7 +345,7 @@ public final class PenetrationTests {
             // a 6-pdr HE shot into the ground right under the Mark I floor
             ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(t.getX(), t.getY() - 1.4, t.getZ()), new Vec3(0, -1, 0), -1);
             // and one straight onto the Tiger commander's cupola lid
-            ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(tg.getX() + 0.62, tg.getY() + 2.6, tg.getZ() - 0.32), new Vec3(0, -1, 0), -1);
+            ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(tg.getX() + 0.62, tg.getY() + 4.2, tg.getZ() - 0.32), new Vec3(0, -1, 0), -1);
         });
         h.runAfterDelay(22, () -> {
             h.assertTrue(t.dmg.crew[0] + t.dmg.crew[1] < 199f,

@@ -547,6 +547,24 @@ public final class VehicleDamage {
      */
     public static void blastNear(VehicleEntity v, Vec3 centre, double tnt, double dist) {
         if (!(v.level() instanceof ServerLevel sl) || v.dmg.dead() && v.hp() <= 0f) return;   // r21: knocked-out hulls still take blast
+        HitContext.Blast bl = HitContext.peekBlast();
+        if (bl != null && bl.pos().distanceToSqr(centre) < 0.25) {
+            // r31: the shell that made this burst registered its centre and its shot: a burst right on the
+            // armour (ground burst under the belly floor, burst in the turret-ring gap or over a lid) resolves
+            // through the full directional model instead of the generic near-miss below
+            Vector3d bc = new Matrix4d(v.bodyFrame()).invert().transformPosition(new Vector3d(centre.x, centre.y, centre.z));
+            if (boxDist(geo(v), bc) < 1.0 + 1.2 * Math.cbrt(Math.max(0.05, tnt))) {
+                float amount = Math.max(4f, ru.aiforge.realwar.blast.BlastPhysics.blastDamage(
+                        ru.aiforge.realwar.blast.BlastPhysics.overpressure(Math.max(0.3, dist), Math.max(0.05, tnt), true)));
+                float mul = onHurt(v, ru.aiforge.realwar.blast.ModDamage.source((net.minecraft.world.level.Level) sl,
+                        ru.aiforge.realwar.blast.ModDamage.BLAST), amount);
+                if (mul > 0f) v.blastHull(amount * mul * 0.6f);
+                if (Crew.knockedOut(v)) knockOut(sl, v);
+                v.dmg.dirtyNow = true;
+                return;
+            }
+            HitContext.takeBlast();   // too far for the contact model: drop it and use the near-miss below
+        }
         boolean soft = !Armour.armoured(v.kind);
         double Rb = 1.6 * Math.cbrt(tnt), Rf = soft ? 7.0 * Math.cbrt(tnt) : 0.0;
         double R = 1.0 + 0.6 * Math.cbrt(tnt);

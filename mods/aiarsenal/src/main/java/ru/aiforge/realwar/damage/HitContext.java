@@ -47,6 +47,11 @@ public final class HitContext {
     }
 
     @Nullable
+    public static Blast peekBlast() {
+        return BLAST.get();
+    }
+
+    @Nullable
     public static Blast takeBlast() {
         Blast b = BLAST.get();
         BLAST.set(null);
