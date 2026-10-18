@@ -144,7 +144,7 @@ overrideHeight:800
             f'{{item:{{id:"aiarsenal:{item}",Count:1b}},item_display:"fixed",'
             f'transformation:{{scale:[{scalar},{scalar},{scalar}]}}}}'
         )
-        game.command(summon, "Summoned new entity.minecraft.item_display")
+        game.command(summon, "Summoned new Item Display")
         time.sleep(2)
         game.screenshot(item+"-showcase")
     game.command("kill @e[type=minecraft:item_display]")
