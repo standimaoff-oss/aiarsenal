@@ -36,6 +36,27 @@ public final class HitContext {
         }
     }
 
+    /** r31: a blast centre registered by a weapon that detonates without a direct hit context (a ground burst
+     *  under the belly, a wall burst beside the hull). The damage model prefers it over a random hull point. */
+    public record Blast(Vec3 pos, double tnt, Shot shot) {}
+
+    private static final ThreadLocal<Blast> BLAST = new ThreadLocal<>();
+
+    public static void blast(Vec3 pos, double tnt, @Nullable Shot shot) {
+        BLAST.set(new Blast(pos, tnt, shot));
+    }
+
+    @Nullable
+    public static Blast takeBlast() {
+        Blast b = BLAST.get();
+        BLAST.set(null);
+        return b;
+    }
+
+    public static void setShot(@Nullable Shot shot) {
+        SHOT.set(shot);
+    }
+
     /**
      * r20: the projectile behind a hit, for the armour / penetration model and the shooter's hit camera.
      * shooter = entity id of the firing vehicle, craft or player (-1 unknown), speed = impact speed (m/s),

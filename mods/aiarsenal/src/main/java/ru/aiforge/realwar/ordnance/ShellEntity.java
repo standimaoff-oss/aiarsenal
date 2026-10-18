@@ -64,6 +64,10 @@ public class ShellEntity extends RocketEntity {
     protected void impact(ServerLevel sl, Vec3 pos, Entity direct) {
         Ballistics.Profile p = this.profile();
         if (!p.kinetic()) {
+            if (direct == null) {
+                // r31: the burst centre feeds the vehicle damage model even though nothing was hit directly
+                ru.aiforge.realwar.damage.HitContext.blast(pos, Math.max(0.3, p.tntKg), shot());
+            }
             if (direct instanceof VehicleEntity || direct instanceof ru.aiforge.realwar.craft.CraftEntity) {
                 ru.aiforge.realwar.damage.HitContext.hurt(direct, ModDamage.source(sl, ModDamage.ORDNANCE), (float) (p.tntKg < 0.1 ? 9.0 : 20.0 + p.tntKg * 6.0), pos, this.lastDir, ru.aiforge.realwar.damage.HitContext.Kind.HE, Math.max(0.3, p.tntKg), this.shot());
             }

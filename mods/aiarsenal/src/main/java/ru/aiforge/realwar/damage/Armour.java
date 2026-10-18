@@ -610,6 +610,24 @@ public final class Armour {
         return out;
     }
 
+    /** r31: 1.0..1.8 - how close the shell path passes to the crew compartment centre (a centre hit spalls harder). */
+    public static double centreBoost(VehicleDamage.Geo g, Vector3d entry, Vector3d dir, double tEnd) {
+        Vector3d c = new Vector3d(g.cx(), g.cy(), g.cz());
+        Vector3d w = new Vector3d(c).sub(entry);
+        double t = Math.max(0.0, Math.min(tEnd, w.dot(dir)));
+        double d = c.distance(entry.x + dir.x * t, entry.y + dir.y * t, entry.z + dir.z * t);
+        return 1.0 + 0.8 * Math.max(0.0, Math.min(1.0, 1.0 - d / 1.5));
+    }
+
+    /** r31: true when the shell path crosses the engine compartment (the block absorbs fragments). */
+    public static boolean crossesEngine(VehicleDamage.Geo g, VehicleKind k, Vector3d entry, Vector3d dir, double tEnd, float[] ang) {
+        for (double t = 0.1; t < tEnd; t += 0.12) {
+            if (VehicleDamage.zone(g, k, false, entry.x + dir.x * t, entry.y + dir.y * t, entry.z + dir.z * t, ang)
+                    == VehicleDamage.ENGINE) return true;
+        }
+        return false;
+    }
+
     /** Length (m) a spall ray / the shell travels inside the vehicle before it hits the far wall. */
     public static double travel(VehicleDamage.Geo g, VehicleKind k, boolean turretGone, float[] ang, Vector3d start, Vector3d dir, double max) {
         double s = 0.05;

@@ -226,12 +226,24 @@ public final class VehicleDamage {
         if (!(v.level() instanceof ServerLevel sl) || v.dmg.dead()) return 1f;
         HitContext.Hit h = HitContext.get();
         String id = src.getMsgId();
+        HitContext.Shot blastShot = null;
+        HitContext.Shot prevShot = null;
         if (h == null) {
-            // no context: explosions and ordnance hit a random point of the hull
-            if (!(id.contains("ordnance") || id.contains("blast") || src.is(net.minecraft.tags.DamageTypeTags.IS_EXPLOSION))) return 1f;
-            RandomSource r = sl.random;
-            Vec3 c = v.localToWorld((r.nextDouble() - 0.5) * v.spec.aabbW(), v.spec.height() * (0.2 + 0.6 * r.nextDouble()), (r.nextDouble() - 0.5) * v.spec.length() * 0.8);
-            h = new HitContext.Hit(c, Vec3.ZERO, HitContext.Kind.HE, amount / 8.0);
+            // r31: a registered blast centre (ground burst under the belly, burst in the turret ring gap) beats
+            // the random hull point: the splash and the crew sphere then come from the real direction
+            HitContext.Blast bl = HitContext.takeBlast();
+            if (bl != null && bl.pos().distanceToSqr(v.position()) < 400.0) {
+                h = new HitContext.Hit(bl.pos(), v.position().subtract(bl.pos()).normalize(), HitContext.Kind.HE, bl.tnt());
+                prevShot = HitContext.shot();
+                HitContext.setShot(bl.shot());
+                blastShot = bl.shot();
+            } else {
+                // no context: explosions and ordnance hit a random point of the hull
+                if (!(id.contains("ordnance") || id.contains("blast") || src.is(net.minecraft.tags.DamageTypeTags.IS_EXPLOSION))) return 1f;
+                RandomSource r = sl.random;
+                Vec3 c = v.localToWorld((r.nextDouble() - 0.5) * v.spec.aabbW(), v.spec.height() * (0.2 + 0.6 * r.nextDouble()), (r.nextDouble() - 0.5) * v.spec.length() * 0.8);
+                h = new HitContext.Hit(c, Vec3.ZERO, HitContext.Kind.HE, amount / 8.0);
+            }
         }
         if (h.kind() == HitContext.Kind.BULLET) return 1f;            // armour stops rifle-calibre fire
         Geo g = geo(v);
@@ -256,6 +268,7 @@ public final class VehicleDamage {
         }
         if (mul > 0.1f) addHole(v, g, p, d, h);
         v.dmg.dirtyNow = true;
+        if (blastShot != null) HitContext.setShot(prevShot);
         return mul;
     }
 
@@ -325,6 +338,9 @@ public final class VehicleDamage {
                     splash(sl, v, g, r.entry(), 0.8 + 0.45 * Math.cbrt(tnt), (float) heMod(tnt), 0.0, ang);   // tracks / barrel only
                     if (ratio > 0.6 && tnt >= 1.0) {
                         Crew.sphere(sl, v, g, ang[0], r.entry(), 0.6 + 0.4 * Math.cbrt(tnt), (float) (70.0 * (ratio - 0.6) / 0.4 * Math.min(1.0, tnt / 4.0)));
+                    } else if ((r.zone() == Armour.HATCH || r.zone() == Armour.VIEW) && tnt >= 0.2) {
+                        // r31: a burst right over a lid or a visor block concusses the men behind the weak component
+                        Crew.sphere(sl, v, g, ang[0], r.entry(), 0.6 + 0.4 * Math.cbrt(tnt), (float) (60.0 * Math.min(1.0, tnt)));
                     }
                     s.lastHeTick = v.tickCount;
                 } else {
@@ -351,11 +367,17 @@ public final class VehicleDamage {
                     mul = soft ? 0.3f : (float) (0.45 + 0.25 * ex);
                     float budget = (float) (amount * (0.6 + 0.4 * ex));
                     tEnd = apFrom(sl, v, g, r.entry(), dir, budget, ang, tg);
+                    // r31: a round through the middle of the crew compartment throws deadlier spall; the engine
+                    // block in the shell path absorbs fragments and shields the men behind it
+                    double boost = Armour.centreBoost(g, r.entry(), dir, tEnd);
+                    boolean eng = Armour.crossesEngine(g, v.kind, r.entry(), dir, tEnd, ang);
                     spN = Armour.spallCount(a.type(), ex);
+                    if (eng) spN = Math.max(2, spN / 2);
                     spA = Armour.spallAngle(a.type(), ex);
                     Vector3d st = new Vector3d(r.entry()).add(new Vector3d(dir).mul(0.08));
                     float per = (float) (amount * 0.30 / Math.max(1, spN) * (1.0 + ex));
                     float perCrew = (float) Mth.clamp((22.0 + 40.0 * ex) * Math.max(0.5, Math.min(1.4, a.calMm() / 100.0)), 12.0, 75.0);
+                    perCrew = (float) (perCrew * boost * (eng ? 0.5 : 1.0));
                     for (Vector3d sd : Armour.spall(seed, dir, spA, spN)) {
                         double L = Armour.travel(g, v.kind, tg, ang, st, sd, 4.5);
                         boolean[] done = new boolean[N];

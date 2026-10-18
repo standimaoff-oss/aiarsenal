@@ -18,6 +18,7 @@ import ru.aiforge.realwar.damage.DamageState;
 import ru.aiforge.realwar.damage.HitContext;
 import ru.aiforge.realwar.damage.VehicleDamage;
 import ru.aiforge.realwar.ordnance.Ballistics;
+import ru.aiforge.realwar.ordnance.ShellEntity;
 import ru.aiforge.realwar.registry.ModEntities;
 import ru.aiforge.realwar.vehicle.GunVehicle;
 import ru.aiforge.realwar.vehicle.VehicleEntity;
@@ -314,5 +315,44 @@ public final class PenetrationTests {
         h.assertTrue(VehicleDamage.zone(g, VehicleKind.TIGER, false, 0.0, 1.88, 0.3, ZERO) == DamageState.TURRET,
                 "a hit in the Tiger turret ring must jam the turret drive");
         h.succeed();
+    }
+
+    /** r31: a round through the middle of the crew compartment spalls harder; the engine block absorbs the cone. */
+    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 40)
+    public static void centre_spall_boost_and_engine_absorption(GameTestHelper h) {
+        VehicleDamage.Geo g = VehicleDamage.geo(VehicleKind.TIGER, true, true);
+        double b = Armour.centreBoost(g, new Vector3d(g.cx() + g.hx(), g.cy(), g.cz()), new Vector3d(-1, 0, 0), 3.7);
+        h.assertTrue(b > 1.7, "a round through the middle must get the full centre boost: " + b);
+        b = Armour.centreBoost(g, new Vector3d(g.cx() + g.hx(), g.cy(), g.cz() + 2.3), new Vector3d(-1, 0, 0), 3.7);
+        h.assertTrue(b < 1.05, "a round 2.3 m off the centre must not get the boost: " + b);
+        h.assertTrue(Armour.crossesEngine(g, VehicleKind.TIGER, new Vector3d(0, 0.93, 3.0), new Vector3d(0, 0, -1), 6.0, ZERO),
+                "a fore-aft round must cross the engine compartment");
+        h.assertTrue(!Armour.crossesEngine(g, VehicleKind.TIGER, new Vector3d(0, 0.93, 3.0), new Vector3d(0, 0, 1), 3.0, ZERO),
+                "a round fired away from the engine must not be absorbed");
+        h.succeed();
+    }
+
+    /** r31: HE detonates against the ground under the floor and over a lid, and the crew feels both bursts. */
+    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 80)
+    public static void he_ground_burst_under_the_belly_concusses_the_crew(GameTestHelper h) {
+        ServerLevel l = h.getLevel();
+        BlockPos c = h.absolutePos(new BlockPos(15, 0, 15));
+        TestChunks.force(l, Vec3.atCenterOf(c));
+        int top = l.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX(), c.getZ());
+        GunVehicle t = vehicle(l, ModEntities.MARK_I.get(), c.getX() + 0.5, top, c.getZ() + 0.5);
+        GunVehicle tg = vehicle(l, ModEntities.TIGER.get(), c.getX() + 8.5, top, c.getZ() + 0.5);
+        h.runAfterDelay(6, () -> {
+            // a 6-pdr HE shot into the ground right under the Mark I floor
+            ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(t.getX(), t.getY() - 1.4, t.getZ()), new Vec3(0, -1, 0), -1);
+            // and one straight onto the Tiger commander's cupola lid
+            ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(tg.getX() + 0.62, tg.getY() + 2.6, tg.getZ() - 0.32), new Vec3(0, -1, 0), -1);
+        });
+        h.runAfterDelay(22, () -> {
+            h.assertTrue(t.dmg.crew[0] + t.dmg.crew[1] < 199f,
+                    "the ground burst under the floor must concuss the crew: " + t.dmg.crew[0] + "/" + t.dmg.crew[1]);
+            h.assertTrue(tg.dmg.crew[0] + tg.dmg.crew[1] < 199f,
+                    "the burst over the cupola lid must concuss the commander: " + tg.dmg.crew[0] + "/" + tg.dmg.crew[1]);
+            h.succeed();
+        });
     }
 }
