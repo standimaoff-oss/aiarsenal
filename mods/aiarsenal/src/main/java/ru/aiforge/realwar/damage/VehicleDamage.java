@@ -346,9 +346,11 @@ public final class VehicleDamage {
                     } else if (tnt >= 0.05 && (r.zone() == Armour.HATCH || r.zone() == Armour.VIEW
                             || (r.nominal() <= 30.0 && ratio >= 0.5))) {
                         // r31: a burst right over a lid or a visor block - or on a thin roof / floor plate it
-                        // almost got through - concusses the men behind the weak component, any charge size
+                        // almost got through - concusses the men behind the weak component, any charge size.
+                        // The sphere starts just inside the plate so it reaches the men under a turret roof.
                         double k = (r.zone() == Armour.HATCH || r.zone() == Armour.VIEW) ? 1.0 : Mth.clamp((ratio - 0.4) / 0.3, 0.0, 1.0);
-                        Crew.sphere(sl, v, g, ang[0], r.entry(), 0.6 + 0.5 * Math.cbrt(tnt), (float) (150.0 * Math.cbrt(tnt) * k));
+                        Vector3d cc = new Vector3d(r.entry()).sub(new Vector3d(r.normal()).mul(0.15));
+                        Crew.sphere(sl, v, g, ang[0], cc, 1.1 + 1.5 * Math.cbrt(tnt), (float) (150.0 * Math.cbrt(tnt) * k));
                     }
                     s.lastHeTick = v.tickCount;
                 } else {

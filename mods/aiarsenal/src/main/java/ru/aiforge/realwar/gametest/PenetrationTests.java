@@ -14,6 +14,7 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import org.joml.Vector3d;
 import ru.aiforge.realwar.blast.ModDamage;
 import ru.aiforge.realwar.damage.Armour;
+import ru.aiforge.realwar.damage.Crew;
 import ru.aiforge.realwar.damage.DamageState;
 import ru.aiforge.realwar.damage.HitContext;
 import ru.aiforge.realwar.damage.VehicleDamage;
@@ -183,6 +184,13 @@ public final class PenetrationTests {
     }
 
     @SuppressWarnings("unchecked")
+    /** Total health left across every crew seat (the Tiger has 5 men, the Mark I 6 - not just two). */
+    private static double crewSum(GunVehicle v) {
+        double s = 0;
+        for (int i = 0; i < Crew.count(v.kind); i++) s += v.dmg.crew[i];
+        return s;
+    }
+
     private static <T extends VehicleEntity> T vehicle(ServerLevel level, EntityType<?> type, double x, double y, double z) {
         VehicleEntity e = (VehicleEntity) type.create((Level) level);
         e.moveTo(x, y, z, 0f, 0f);
@@ -352,10 +360,10 @@ public final class PenetrationTests {
             ShellEntity.fire(l, Ballistics.Profile.QF6_HE, new Vec3(tg.getX() + 0.62, tg.getY() + 4.2, tg.getZ() - 0.32), new Vec3(0, -1, 0), -1);
         });
         h.runAfterDelay(22, () -> {
-            h.assertTrue(t.dmg.crew[0] + t.dmg.crew[1] < 199f,
-                    "the ground burst beside the floor must concuss the crew: " + t.dmg.crew[0] + "/" + t.dmg.crew[1]);
-            h.assertTrue(tg.dmg.crew[0] + tg.dmg.crew[1] < 199f,
-                    "the burst over the cupola lid must concuss the commander: " + tg.dmg.crew[0] + "/" + tg.dmg.crew[1]);
+            h.assertTrue(crewSum(t) < Crew.count(VehicleKind.MARK_I) * 100 - 1,
+                    "the ground burst beside the floor must concuss the crew: " + crewSum(t));
+            h.assertTrue(crewSum(tg) < Crew.count(VehicleKind.TIGER) * 100 - 1,
+                    "the burst over the cupola lid must concuss the turret crew: " + crewSum(tg));
             h.succeed();
         });
     }
