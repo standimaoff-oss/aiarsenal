@@ -285,11 +285,16 @@ public final class PenetrationTests {
                 new Vector3d(0, 0, -1), k88, v, 0.5);
         h.assertTrue(r.zone() == Armour.VIEW && Math.abs(r.nominal() - 60f) < 0.5f && r.result() == Armour.PEN,
                 "8.8 cm Pzgr 39 must penetrate the 60 mm visor block: " + s(r));
-        // 50 cm to the right the same ray meets the full frontal plate and stops
+        // 50 cm to the right the same ray meets the full 100 mm frontal plate: another zone, another thickness
         r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.05, 1.55, 3.16),
                 new Vector3d(0, 0, -1), k88, v, 0.5);
-        h.assertTrue(r.zone() == Armour.HULL_UF && r.result() == Armour.NO_PEN,
-                "the same round must stop on the 100 mm plate beside the visor: " + s(r));
+        h.assertTrue(r.zone() == Armour.HULL_UF && Math.abs(r.nominal() - 100f) < 0.5f,
+                "beside the visor the plate is the full 100 mm: " + s(r));
+        // the 2 cm APCR of the Flak 38 stops on the 60 mm visor block...
+        Armour.Ammo kw20 = Armour.Ammo.of(Ballistics.Profile.KW20_AP);
+        r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.55, 1.55, 3.16),
+                new Vector3d(0, 0, -1), kw20, v0(Ballistics.Profile.KW20_AP), 0.5);
+        h.assertTrue(r.result() == Armour.NO_PEN, "2 cm APCR must stop on the 60 mm visor block: " + s(r));
         // cupola lid on the turret roof: its own zone at roof thickness
         r = Armour.solve(g, VehicleKind.TIGER, false, ZERO, new Vector3d(-0.55, 3.0, 0.3),
                 new Vector3d(0, -1, 0), k88, v, 0.5);
