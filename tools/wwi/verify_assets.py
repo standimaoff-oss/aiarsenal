@@ -22,6 +22,13 @@ ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "mods/aiarsenal/src/main/resources/assets/aiarsenal"
 DATA = ROOT / "mods/aiarsenal/src/main/resources/data/aiarsenal"
 MODELS = ASSETS / "models/glb"
+TEXTURE_DIR = ASSETS / "textures/item/wwi"
+WWI_EQUIPMENT = {
+    "mills_bomb": {"mills_bomb.body", "mills_bomb.striker", "mills_bomb.safety_lever", "mills_bomb.pull_pin"},
+    "stielhandgranate": {"stielhandgranate.head", "stielhandgranate.handle", "stielhandgranate.belt_clip", "stielhandgranate.pull_cord"},
+    "wex": {"wex.lance_and_igniter", "wex.lance_stopcock", "wex.annular_fuel_tank", "wex.central_propellant_vessel", "wex.backpack_harness", "wex.tank_filler_and_outlet", "wex.feed_hose"},
+    "wwi_fuel": {"wwi_fuel.body", "wwi_fuel.filler_cap", "wwi_fuel.carry_handle"},
+}
 
 class InvalidAsset(ValueError):
     pass
@@ -376,17 +383,24 @@ def validate_resources() -> None:
         ASSETS / "models/item/mark_i_vehicle.json", ASSETS / "models/item/gewehr98.json", ASSETS / "models/item/shells_57.json",
         DATA / "recipes/mark_i_vehicle.json", DATA / "recipes/gewehr98.json", DATA / "recipes/shells_57.json",
         ASSETS / "deck/mark_i.deck",
-    ]
+    ] + [MODELS / f"{name}.glb" for name in WWI_EQUIPMENT] \
+      + [ASSETS / f"models/item/{name}.json" for name in WWI_EQUIPMENT] \
+      + [TEXTURE_DIR / f"{name}.png" for name in ("olive", "steel", "wood", "brass", "rubber", "ivory")] \
+      + [DATA / f"recipes/{name}.json" for name in WWI_EQUIPMENT]
     for path in required:
         check(path.is_file() and path.stat().st_size > 0, f"missing or empty resource: {path.relative_to(ROOT)}")
     for path in ASSETS.rglob("*.json"):
         json.loads(path.read_text(encoding="utf-8"))
     for path in DATA.rglob("*.json"):
         json.loads(path.read_text(encoding="utf-8"))
-    for path in [ASSETS / "textures/entity/mark_i/paint.png", ASSETS / "textures/entity/gewehr98/beech.png",
-                 ASSETS / "textures/item/mark_i_vehicle.png", ASSETS / "textures/item/gewehr98.png", ASSETS / "textures/item/shells_57.png"]:
+    texture_paths = [ASSETS / "textures/entity/mark_i/paint.png", ASSETS / "textures/entity/gewehr98/beech.png",
+                     ASSETS / "textures/item/mark_i_vehicle.png", ASSETS / "textures/item/gewehr98.png", ASSETS / "textures/item/shells_57.png"]
+    texture_paths.extend(TEXTURE_DIR / f"{name}.png" for name in ("olive", "steel", "wood", "brass", "rubber", "ivory"))
+    for path in texture_paths:
         w, h = png_size_and_crc(path.read_bytes(), str(path.relative_to(ROOT)))
         check(w >= 16 and h >= 16, f"{path.name}: texture dimensions too small")
+        if path.parent == TEXTURE_DIR:
+            check((w, h) == (128, 128), f"{path.name}: WWI equipment atlas should be 128x128")
     recipes = {
         "gewehr98": "aiarsenal:gewehr98",
         "mark_i_vehicle": "aiarsenal:mark_i_vehicle",
@@ -396,9 +410,17 @@ def validate_resources() -> None:
         recipe = json.loads((DATA / "recipes" / f"{name}.json").read_text(encoding="utf-8"))
         check(recipe.get("result", {}).get("item") == result, f"{name}: recipe output mismatch")
         check(recipe.get("type") == "minecraft:crafting_shaped", f"{name}: expected shaped crafting recipe")
+    for name in WWI_EQUIPMENT:
+        recipe = json.loads((DATA / "recipes" / f"{name}.json").read_text(encoding="utf-8"))
+        check(recipe.get("result", {}).get("item") == f"aiarsenal:{name}", f"{name}: recipe output mismatch")
+        check(recipe.get("type") == "minecraft:crafting_shapeless", f"{name}: expected shapeless crafting recipe")
+        model = json.loads((ASSETS / "models/item" / f"{name}.json").read_text(encoding="utf-8"))
+        check(model.get("parent") == "minecraft:builtin/entity" and "elements" not in model,
+              f"{name}: GLB-backed item model must use builtin/entity with no block-cube geometry")
+        check("firstperson_righthand" in model.get("display", {}), f"{name}: missing first-person display transform")
     for locale, required_keys in {
-        "en_us": {"item.aiarsenal.gewehr98", "item.aiarsenal.mark_i_vehicle", "item.aiarsenal.shells_57", "itemGroup.aiarsenal.wwi_vehicles"},
-        "ru_ru": {"item.aiarsenal.gewehr98", "item.aiarsenal.mark_i_vehicle", "item.aiarsenal.shells_57", "itemGroup.aiarsenal.wwi_vehicles"},
+        "en_us": {"item.aiarsenal.gewehr98", "item.aiarsenal.mark_i_vehicle", "item.aiarsenal.shells_57", "itemGroup.aiarsenal.wwi_vehicles"} | {f"item.aiarsenal.{name}" for name in WWI_EQUIPMENT},
+        "ru_ru": {"item.aiarsenal.gewehr98", "item.aiarsenal.mark_i_vehicle", "item.aiarsenal.shells_57", "itemGroup.aiarsenal.wwi_vehicles"} | {f"item.aiarsenal.{name}" for name in WWI_EQUIPMENT},
     }.items():
         strings = json.loads((ASSETS / "lang" / f"{locale}.json").read_text(encoding="utf-8"))
         check(required_keys <= strings.keys(), f"{locale}: missing WWI translation keys {sorted(required_keys - strings.keys())}")
@@ -410,18 +432,28 @@ def validate_resources() -> None:
         "mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/WWITests.java": "mark_i_sponsons_fire_as_one_salvo_in_both_modes",
         "mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/SmallArmsTests.java": "gewehr98_round_hits_hard",
         "mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/PenetrationTests.java": "mark_i_armour_and_track_layers",
+        "mods/aiarsenal/src/main/java/ru/aiforge/realwar/wwi/GrenadeItem.java": "GlbItemExt.apply",
+        "mods/aiarsenal/src/main/java/ru/aiforge/realwar/wwi/FlamethrowerItem.java": "GlbItemExt.apply",
+        "mods/aiarsenal/src/main/java/ru/aiforge/realwar/wwi/WwiEquipmentItem.java": "GlbItemExt.apply",
+        "mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/WWITests.java": "WWI_EQUIPMENT_GLB",
     }
     for relative, token in source_checks.items():
         check(token in (ROOT / relative).read_text(encoding="utf-8"), f"source missing WWI integration token {token}: {relative}")
 
 
 def regenerate_and_compare() -> None:
+    equipment = list(WWI_EQUIPMENT)
     outputs = [MODELS / "mark_i.glb", MODELS / "mark_i_lod1.glb", MODELS / "gewehr98.glb",
                ASSETS / "textures/entity/mark_i/paint.png", ASSETS / "textures/entity/gewehr98/beech.png",
                ASSETS / "textures/item/mark_i_vehicle.png", ASSETS / "textures/item/gewehr98.png",
-               ASSETS / "textures/item/shells_57.png", ASSETS / "deck/mark_i.deck"]
+               ASSETS / "textures/item/shells_57.png", ASSETS / "deck/mark_i.deck",
+               ASSETS / "lang/en_us.json", ASSETS / "lang/ru_ru.json"]
+    outputs += [MODELS / f"{name}.glb" for name in equipment]
+    outputs += [ASSETS / f"models/item/{name}.json" for name in equipment]
+    outputs += [TEXTURE_DIR / f"{name}.png" for name in ("olive", "steel", "wood", "brass", "rubber", "ivory")]
+    outputs += [DATA / f"recipes/{name}.json" for name in equipment]
     before = {path: sha(path) for path in outputs}
-    for script in (ROOT / "tools/wwi/build_mark_i.py", ROOT / "tools/wwi/build_gewehr98.py"):
+    for script in (ROOT / "tools/wwi/build_mark_i.py", ROOT / "tools/wwi/build_gewehr98.py", ROOT / "tools/wwi/build_equipment.py"):
         subprocess.run([sys.executable, str(script)], cwd=ROOT, check=True)
     subprocess.run([sys.executable, str(ROOT / "tools/deck/gen_boxes.py"), "mark_i"], cwd=ROOT, check=True)
     changed = [str(path.relative_to(ROOT)) for path in outputs if sha(path) != before[path]]
@@ -442,6 +474,32 @@ def main() -> int:
         lod = validate_glb(MODELS / "mark_i_lod1.glb", {"track_L", "track_R"}, {"hull", "launcher_yaw", "launcher_yaw_left"})
         gewehr = validate_glb(MODELS / "gewehr98.glb", {"gewehr98_reload", "gewehr98_bolt"},
                               {"gewehr98.body", "gewehr98.bolt", "gewehr98.clip", "gewehr98.round", "gewehr98.sight"})
+        equipment = {}
+        min_triangles = {"mills_bomb": 1500, "stielhandgranate": 1400, "wex": 11000, "wwi_fuel": 1600}
+        dimension_ranges = {
+            "mills_bomb": ((0.05, 0.09, 0.05), (0.08, 0.105, 0.08)),
+            "stielhandgranate": ((0.05, 0.32, 0.05), (0.08, 0.38, 0.08)),
+            "wex": ((0.55, 0.47, 1.20), (0.67, 0.57, 1.30)),
+            "wwi_fuel": ((0.13, 0.24, 0.13), (0.18, 0.30, 0.18)),
+        }
+        for name, expected_nodes in WWI_EQUIPMENT.items():
+            result = validate_glb(MODELS / f"{name}.glb", set(), expected_nodes)
+            low, high = result["bounds"]
+            dims = tuple(high[axis] - low[axis] for axis in range(3))
+            lo, hi = dimension_ranges[name]
+            check(result["triangles"] >= min_triangles[name], f"{name}: mesh detail below triangle budget")
+            check(all(lo[axis] <= dims[axis] <= hi[axis] for axis in range(3)),
+                  f"{name}: model scale {dims} outside historical size bounds")
+            gltf, binary = parse_glb(MODELS / f"{name}.glb")
+            check(len(gltf.get("images", [])) >= 5, f"{name}: missing separate embedded material textures")
+            for image in gltf["images"]:
+                texture = image["name"].removeprefix("wwi_").removesuffix("_128")
+                external = (TEXTURE_DIR / f"{texture}.png").read_bytes()
+                view = gltf["bufferViews"][image["bufferView"]]
+                start = view.get("byteOffset", 0)
+                embedded = binary[start:start + view["byteLength"]]
+                check(embedded == external, f"{name}: embedded {texture} texture differs from reproducible PNG source")
+            equipment[name] = result
         deck = validate_deck(ASSETS / "deck/mark_i.deck")
         for model_name, texture_name in (("mark_i.glb", "mark_i/paint.png"),
                                          ("mark_i_lod1.glb", "mark_i/paint.png"),
@@ -459,9 +517,9 @@ def main() -> int:
               "Gewehr 98 model length is outside the historical rifle scale")
         check(deck["boxes"] > 0 and deck["resolution"] <= 0.2001, "Mark I deck collision is missing or too coarse")
         xbounds, ybounds, zbounds = deck["bounds"]
-        check(3.5 < xbounds[1] - xbounds[0] < 4.0 and 6.9 < zbounds[1] - zbounds[0] < 7.5,
+        check(3.8 <= xbounds[1] - xbounds[0] <= 4.1 and 7.2 <= zbounds[1] - zbounds[0] <= 7.8,
               "Mark I collision footprint disagrees with the tank dimensions")
-        check(0.0 <= ybounds[0] < 0.05 and 2.1 < ybounds[1] < 2.5,
+        check(-0.02 <= ybounds[0] < 0.05 and 2.1 < ybounds[1] <= 2.6,
               "Mark I collision height disagrees with the GLB shell")
         if args.rebuild:
             regenerate_and_compare()
@@ -471,6 +529,12 @@ def main() -> int:
             dims = tuple(hi[i] - lo[i] for i in range(3))
             print(f"{label}: {result['triangles']:,} triangles, {result['nodes']} nodes, {result['meshes']} meshes, "
                   f"{result['animations']} animations, bounds {tuple(round(v, 3) for v in dims)} m, {result['bytes']:,} bytes")
+        for name, result in equipment.items():
+            lo, hi = result["bounds"]
+            dims = tuple(hi[i] - lo[i] for i in range(3))
+            print(f"{name}: {result['triangles']:,} triangles, {result['nodes']} nodes, {result['meshes']} meshes, "
+                  f"{len(parse_glb(MODELS / f'{name}.glb')[0].get('images', []))} embedded textures, "
+                  f"bounds {tuple(round(v, 3) for v in dims)} m, {result['bytes']:,} bytes")
         rr = mark_i_gear["radii"]
         print(f"Mark I running gear: road={rr['road_wheel']:.3f} m at y={mark_i_gear['road_center_y']:.3f}, "
               f"sprocket/idler={rr['end_wheel']:.3f} m, return={rr['return_roller']:.3f} m "

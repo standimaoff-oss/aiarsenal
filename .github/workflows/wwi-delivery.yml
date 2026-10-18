@@ -2,7 +2,7 @@ name: WWI build, tests and game previews
 on:
   push:
     branches:
-      - arena/9b3be652-aiarsenal
+      - arena/6c00ee44-aiarsenal
 permissions:
   contents: write
 concurrency:
@@ -35,7 +35,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y xvfb xdotool x11-utils pulseaudio libegl1 libgl1 libgl1-mesa-dri libopenal1 libxi6 libxrender1 libxxf86vm1 libxfixes3 libxkbcommon0 libsm6 libflite1
-          python -m pip install pillow
+          python -m pip install -r tools/wwi/requirements.txt
           Xvfb :99 -screen 0 1400x1000x24 -nolisten tcp > "$RUNNER_TEMP/xvfb.log" 2>&1 &
           python - <<'PY'
           import subprocess,time
@@ -52,6 +52,8 @@ jobs:
         run: python tools/restore_models.py
       - name: Validate reproducible equipment resources
         run: python tools/wwi/test_equipment_assets.py
+      - name: Validate and rebuild every WWI asset byte-for-byte
+        run: python tools/wwi/verify_assets.py --rebuild
       - name: Build distributable
         working-directory: mods/aiarsenal
         run: ./gradlew build --no-daemon
@@ -72,14 +74,17 @@ jobs:
           cp verification/shots/public-preview-mark-i-burning.png previews/mark-i-burning.png
           cp verification/shots/public-preview-gewehr98-first-person.png previews/gewehr98.png
           cp verification/shots/public-preview-gewehr98-aim.png previews/gewehr98-aim.png
-          for item in mills_bomb stielhandgranate wex; do
+          for item in mills_bomb stielhandgranate wex wwi_fuel; do
             cp "verification/shots/public-preview-${item}-in-hand.png" "previews/${item}.png"
           done
           cp verification/shots/public-preview-wex-flame.png previews/wex-flame.png
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
-          for path in sorted(Path('previews').glob('*.png')):
+          names = ('mark-i.png', 'mark-i-burning.png', 'gewehr98.png', 'gewehr98-aim.png',
+                   'mills_bomb.png', 'stielhandgranate.png', 'wex.png', 'wwi_fuel.png', 'wex-flame.png')
+          for name in names:
+              path = Path('previews') / name
               with Image.open(path) as image:
                   image.verify()
               print(f'{path}: {path.stat().st_size} bytes')
@@ -93,16 +98,22 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add previews/
           git commit -m 'Publish in-game mod previews' || exit 0
-          git pull --rebase origin arena/9b3be652-aiarsenal
-          git push origin HEAD:arena/9b3be652-aiarsenal
+          git pull --rebase origin arena/6c00ee44-aiarsenal
+          git push origin HEAD:arena/6c00ee44-aiarsenal
       - name: Publish verified build and screenshots
+        if: steps.regression.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
           sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
-          gh release create "v${version}" --repo "$GITHUB_REPOSITORY" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/*.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Мод для Minecraft 1.20.1 и Forge 47.4.23. Mark I, Gewehr 98, гранаты Миллса и образца 1915 года, огнемёт Wex. Java 17. Изображения — предпросмотр в игре. Альфа-версия: перед установкой сохраните резервную копию мира." --prerelease --draft 2> release-error.txt || { cat release-error.txt; echo "::error title=Release publication::$(cat release-error.txt)"; exit 1; }
+          gh release create "v${version}" --repo "$GITHUB_REPOSITORY" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/mark-i.png previews/mark-i-burning.png previews/gewehr98.png previews/gewehr98-aim.png previews/mills_bomb.png previews/stielhandgranate.png previews/wex.png previews/wwi_fuel.png previews/wex-flame.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23, Java 17. Includes the GLB-rendered WWI Mills bomb No. 5, Stielhandgranate M1915, German Wex M.1917 and fuel item. The attached PNGs are the unedited Minecraft F2 captures from this workflow; older preview files are not release assets. Alpha build: back up worlds before installing." --prerelease 2> release-error.txt || { cat release-error.txt; echo "::error title=Release publication::$(cat release-error.txt)"; exit 1; }
+      - name: Fail delivery when regression tests fail
+        if: steps.regression.outcome != 'success'
+        run: |
+          echo "Regression tests failed; screenshots/logs are retained as CI artifacts but no public release is created."
+          exit 1
       - name: Report test outcome
         if: always()
         run: echo "Regression status ${{ steps.regression.outcome }}" >> "$GITHUB_STEP_SUMMARY"
@@ -113,7 +124,15 @@ jobs:
           name: wwi-gameplay-previews-${{ github.run_number }}
           path: |
             verification/shots/public-preview-*.png
-            previews/*.png
+            previews/mark-i.png
+            previews/mark-i-burning.png
+            previews/gewehr98.png
+            previews/gewehr98-aim.png
+            previews/mills_bomb.png
+            previews/stielhandgranate.png
+            previews/wex.png
+            previews/wwi_fuel.png
+            previews/wex-flame.png
             verification/logs/*.log
             mods/aiarsenal/build/libs/*.jar
           if-no-files-found: warn

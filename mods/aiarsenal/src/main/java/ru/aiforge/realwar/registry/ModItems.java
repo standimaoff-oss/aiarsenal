@@ -316,7 +316,7 @@ public final class ModItems {
     public static final RegistryObject<Item> MILLS_BOMB = ITEMS.register("mills_bomb", () -> new ru.aiforge.realwar.wwi.GrenadeItem(new Item.Properties().stacksTo(8)));
     public static final RegistryObject<Item> STIELHANDGRANATE = ITEMS.register("stielhandgranate", () -> new ru.aiforge.realwar.wwi.GrenadeItem(new Item.Properties().stacksTo(8)));
     public static final RegistryObject<Item> WEX = ITEMS.register("wex", () -> new ru.aiforge.realwar.wwi.FlamethrowerItem(new Item.Properties().durability(401)));
-    public static final RegistryObject<Item> WWI_FUEL = ITEMS.register("wwi_fuel", () -> new Item(new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> WWI_FUEL = ITEMS.register("wwi_fuel", () -> new ru.aiforge.realwar.wwi.WwiEquipmentItem(new Item.Properties().stacksTo(16)));
 
     private ModItems() {
     }

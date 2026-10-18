@@ -16,10 +16,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import ru.aiforge.realwar.registry.ModItems;
+import java.util.function.Consumer;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import ru.aiforge.realwar.missile.GlbItemExt;
 
 /** Short-range game flame projector: fuel, water cutoff and solid-wall occlusion are server authoritative. */
 public final class FlamethrowerItem extends Item {
     public FlamethrowerItem(Properties properties) { super(properties); }
+
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        GlbItemExt.apply(consumer);
+    }
+
     @Override public int getUseDuration(ItemStack stack) { return 72000; }
     @Override public UseAnim getUseAnimation(ItemStack stack) { return UseAnim.BOW; }
     @Override public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

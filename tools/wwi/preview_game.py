@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture authentic Minecraft F2 previews of the WWI Mark I and Gewehr 98."""
+"""Capture authentic Minecraft F2 previews of the WWI vehicles and handheld equipment."""
 from pathlib import Path
 import sys
 import time
@@ -109,12 +109,16 @@ overrideHeight:800
     time.sleep(2)
     game.screenshot("gewehr98-aim")
     game.key("mouseup", "3")
-    for item in ("mills_bomb", "stielhandgranate", "wex"):
+    for item in ("mills_bomb", "stielhandgranate", "wex", "wwi_fuel"):
         game.command("clear TestPlayer")
         game.command(f"item replace entity TestPlayer hotbar.0 with aiarsenal:{item}")
         game.key("key", "1")
         time.sleep(3)
         game.screenshot(item+"-in-hand")
+    game.command("clear TestPlayer")
+    game.command("item replace entity TestPlayer hotbar.0 with aiarsenal:wex")
+    game.key("key", "1")
+    time.sleep(2)
     game.key("mousedown", "3")
     time.sleep(1)
     game.screenshot("wex-flame")

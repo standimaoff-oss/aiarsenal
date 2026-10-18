@@ -7,12 +7,19 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.sounds.SoundEvents;
+import java.util.function.Consumer;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import ru.aiforge.realwar.missile.GlbItemExt;
 import net.minecraft.sounds.SoundSource;
 import ru.aiforge.realwar.registry.ModEntities;
 
 /** Game grenade: the fuse starts only after a successful server-side throw. */
 public final class GrenadeItem extends Item {
     public GrenadeItem(Properties properties) { super(properties); }
+
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        GlbItemExt.apply(consumer);
+    }
 
     @Override public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);

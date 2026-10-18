@@ -38,6 +38,7 @@ import ru.aiforge.realwar.vehicle.VehicleKind;
 @GameTestHolder("aiarsenal")
 @PrefixGameTestTemplate(false)
 public final class WWITests {
+    private static final String WWI_EQUIPMENT_GLB = "/assets/aiarsenal/models/glb/";
     private WWITests() {}
 
     private static ServerPlayer mock(GameTestHelper h) {
@@ -90,6 +91,10 @@ public final class WWITests {
                 && !VehicleDamage.geo(VehicleKind.MARK_I, true, true).turret(), "sponsons are not a fictitious turret");
         h.assertTrue(ModTabs.content("wwi_vehicles").contains(ModItems.MARK_I_VEHICLE.get()), "Mark I is reachable in WWI vehicles");
         h.assertTrue(ModTabs.content("wwi_weapons").contains(ModItems.GEWEHR98.get()), "Gewehr 98 is reachable in WWI weapons");
+        h.assertTrue(ModTabs.content("wwi_weapons").contains(ModItems.MILLS_BOMB.get())
+                && ModTabs.content("wwi_weapons").contains(ModItems.STIELHANDGRANATE.get())
+                && ModTabs.content("wwi_weapons").contains(ModItems.WEX.get()), "all WWI handheld weapons remain reachable");
+        h.assertTrue(ModTabs.content("wwi_ammo").contains(ModItems.WWI_FUEL.get()), "Wex fuel is reachable in WWI ammunition");
         h.assertTrue(ModTabs.content("wwi_ammo").contains(ModItems.SHELLS_57.get()), "6-pdr ammunition is reachable");
         h.assertTrue(ModTabs.content("wwi_ammo").contains(ModItems.CLIP_K98.get()), "shared Mauser clip is reachable in WWI ammo");
         h.assertTrue(ModTabs.sectionOf("gewehr98").equals("wwi_weapons")
@@ -102,7 +107,8 @@ public final class WWITests {
         h.assertTrue(ru.aiforge.realwar.handheld.GunKind.GEWEHR98.boltAction()
                 && ru.aiforge.realwar.handheld.GunKind.GEWEHR98.clipFed()
                 && ru.aiforge.realwar.handheld.GunKind.GEWEHR98.ammo.equals("clip_k98"), "Gewehr 98 Mauser clip-fed action");
-        for (String name : new String[]{"gewehr98", "mark_i_vehicle", "shells_57"}) {
+        for (String name : new String[]{"gewehr98", "mark_i_vehicle", "shells_57", "mills_bomb",
+                "stielhandgranate", "wex", "wwi_fuel"}) {
             var id = new net.minecraft.resources.ResourceLocation("aiarsenal", name);
             h.assertTrue(h.getLevel().getRecipeManager().byKey(id).isPresent(), "missing WWI recipe " + id);
         }
@@ -144,6 +150,24 @@ public final class WWITests {
             h.assertTrue(m.animation("gewehr98_reload") != null, "five-round stripper-clip reload animation");
         } catch (Exception e) {
             h.fail("Gewehr 98 model: " + e);
+        }
+        String[][] equipmentModels = {
+                {"mills_bomb", "1500", "mills_bomb.body", "mills_bomb.striker", "mills_bomb.safety_lever", "mills_bomb.pull_pin"},
+                {"stielhandgranate", "1400", "stielhandgranate.head", "stielhandgranate.handle", "stielhandgranate.belt_clip", "stielhandgranate.pull_cord"},
+                {"wex", "11000", "wex.lance_and_igniter", "wex.lance_stopcock", "wex.annular_fuel_tank", "wex.central_propellant_vessel", "wex.backpack_harness", "wex.tank_filler_and_outlet", "wex.feed_hose"},
+                {"wwi_fuel", "1600", "wwi_fuel.body", "wwi_fuel.filler_cap", "wwi_fuel.carry_handle"}
+        };
+        for (String[] spec : equipmentModels) {
+            try (InputStream in = WWITests.class.getResourceAsStream(WWI_EQUIPMENT_GLB + spec[0] + ".glb")) {
+                h.assertTrue(in != null, "missing WWI equipment GLB " + spec[0]);
+                GlbModel model = GlbModel.read(in);
+                h.assertTrue(model.totalTriangles() >= Integer.parseInt(spec[1]), spec[0] + " has enough real mesh geometry");
+                h.assertTrue(model.images.size() >= 5, spec[0] + " has embedded material textures");
+                for (int i = 2; i < spec.length; i++)
+                    h.assertTrue(model.nodeIndex(spec[i]) >= 0, spec[0] + " GLB node " + spec[i]);
+            } catch (Exception e) {
+                h.fail(spec[0] + " GLB: " + e);
+            }
         }
         h.succeed();
     }
