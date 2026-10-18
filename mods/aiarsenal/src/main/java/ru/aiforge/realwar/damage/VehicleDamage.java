@@ -343,9 +343,12 @@ public final class VehicleDamage {
                     splash(sl, v, g, r.entry(), 0.8 + 0.45 * Math.cbrt(tnt), (float) heMod(tnt), 0.0, ang);   // tracks / barrel only
                     if (ratio > 0.6 && tnt >= 1.0) {
                         Crew.sphere(sl, v, g, ang[0], r.entry(), 0.6 + 0.4 * Math.cbrt(tnt), (float) (70.0 * (ratio - 0.6) / 0.4 * Math.min(1.0, tnt / 4.0)));
-                    } else if ((r.zone() == Armour.HATCH || r.zone() == Armour.VIEW) && tnt >= 0.2) {
-                        // r31: a burst right over a lid or a visor block concusses the men behind the weak component
-                        Crew.sphere(sl, v, g, ang[0], r.entry(), 0.6 + 0.4 * Math.cbrt(tnt), (float) (60.0 * Math.min(1.0, tnt)));
+                    } else if (tnt >= 0.05 && (r.zone() == Armour.HATCH || r.zone() == Armour.VIEW
+                            || (r.nominal() <= 30.0 && ratio >= 0.5))) {
+                        // r31: a burst right over a lid or a visor block - or on a thin roof / floor plate it
+                        // almost got through - concusses the men behind the weak component, any charge size
+                        double k = (r.zone() == Armour.HATCH || r.zone() == Armour.VIEW) ? 1.0 : Mth.clamp((ratio - 0.4) / 0.3, 0.0, 1.0);
+                        Crew.sphere(sl, v, g, ang[0], r.entry(), 0.6 + 0.5 * Math.cbrt(tnt), (float) (150.0 * Math.cbrt(tnt) * k));
                     }
                     s.lastHeTick = v.tickCount;
                 } else {
