@@ -333,6 +333,7 @@ public final class WWITests {
         ServerPlayer operator = mock(h);
         h.assertTrue(tank.enterSeat(operator, 0), "seat 0 is the Mark I driver/operator");
         tank.fillMagazine(1);
+        tank.selectSlot(operator, 1);   // the selector must match the rack, else wrong_round blocks the shot
         // aim straight ahead: neither gun may lie along the hull side, both stop 35 deg off broadside
         h.assertTrue(Math.abs(tank.sponsonAz(0) + 55.0f) < 0.01f && Math.abs(tank.sponsonAz(1) - 55.0f) < 0.01f,
                 "aim az 0 must clamp to the sector ends: " + tank.sponsonAz(0) + "/" + tank.sponsonAz(1));
