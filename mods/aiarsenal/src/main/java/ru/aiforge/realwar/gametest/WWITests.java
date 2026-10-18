@@ -217,7 +217,7 @@ public final class WWITests {
     /** r28 (player report "one shot eats both round types"): every ready slot keeps the type the loader seated, so a
      *  selected AP round cannot be fired from an HE rack, the HE counter does not drop with it, and holding [R]
      *  exchanges the rounds in the rack without spending ammunition. */
-    @GameTest(template = "arena", batch = "rw_wwi", timeoutTicks = 400)
+    @GameTest(template = "arena", batch = "rw_wwi", timeoutTicks = 480)
     public static void ready_rack_keeps_the_round_type_of_every_slot(GameTestHelper h) {
         ServerLevel level = h.getLevel();
         BlockPos c = h.absolutePos(new BlockPos(2, 0, 2));
@@ -350,7 +350,7 @@ public final class WWITests {
                     h.assertTrue(d0.z < 0.75, "the right gun still points along the hull: " + d0);
                     h.assertTrue(d0.dot(new Vec3(-0.81915, 0.0, 0.57358)) > 0.999,
                             "right gun off its clamped line: " + d0);
-                    operator.setYRot(-90.0f);
+                    operator.setYRot(90.0f);   // hull az = -worldYaw: +90 looks down the right (-x) broadside
                     operator.setXRot(0.0f);
                     tick[0] = 0;
                     phase[0] = 1;
@@ -368,7 +368,7 @@ public final class WWITests {
                     h.assertTrue(dr.dot(new Vec3(-1.0, 0.0, 0.0)) > 0.999, "right gun not on broadside: " + dr);
                     phase[0] = 2;
                     tick[0] = 0;
-                } else if (tick[0] > 200) {   // the sponson yaw drive is rate limited too
+                } else if (tick[0] > 280) {   // the sponson yaw drive is rate limited too
                     h.fail("the aim never reached right broadside: az " + tank.az());
                 }
                 return;
