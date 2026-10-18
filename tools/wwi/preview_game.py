@@ -142,8 +142,7 @@ overrideHeight:800
         game.command("kill @e[type=minecraft:item_display]")
         scalar = f"{scale:g}f"
         summon = (
-            f'execute at TestPlayer anchored eyes positioned ^ ^ ^{distance:g} run '
-            f'summon minecraft:item_display ~ ~ ~ '
+            f'summon minecraft:item_display 20.6 -57.7 {distance:g} '
             f'{{item:{{id:"aiarsenal:{item}",Count:1b}},item_display:"fixed",'
             f'transformation:{{translation:[0f,0f,0f],left_rotation:{rotation},'
             f'scale:[{scalar},{scalar},{scalar}],right_rotation:[0f,0f,0f,1f]}}}}'
