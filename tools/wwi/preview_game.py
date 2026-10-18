@@ -84,7 +84,7 @@ overrideHeight:800
         sz = -24 + idx * 14
         game.command(
             f"summon aiarsenal:{spaag} {sx} -60 {sz} {{PersistenceRequired:1b,az:-22f,el:16f}}",
-            f"Summoned new entity.aiarsenal.{spaag}",
+            "Summoned new ",
         )
         game.command(f"tp TestPlayer {sx - 4.2:.1f} -58.9 {sz + 4.8:.1f} -138 7")
         time.sleep(2.5)

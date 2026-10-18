@@ -139,6 +139,9 @@ public final class FortWeaponTests {
         });
         h.onEachTick(() -> {
             AtMissileEntity m = mm[0];
+            if (m != null && !m.isRemoved() && !level.isPositionEntityTicking(m.blockPosition())) {
+                m.tick();
+            }
             if (m != null && m.isRemoved()) {
                 h.assertTrue(!ph.isAlive() || ph.getHealth() < ph.getMaxHealth(), "Igla burst without hurting the target: " + AtMissileEntity.lastDetonation + " phantom@" + ph.blockPosition().toShortString());
                 ph.discard();
@@ -174,6 +177,9 @@ public final class FortWeaponTests {
         });
         h.onEachTick(() -> {
             AtMissileEntity m = mm[0];
+            if (m != null && !m.isRemoved() && !level.isPositionEntityTicking(m.blockPosition())) {
+                m.tick();
+            }
             if (m != null && m.isRemoved()) {
                 h.assertTrue(!ph.isAlive() || ph.getHealth() < ph.getMaxHealth(), "Stinger burst without hurting the target: " + AtMissileEntity.lastDetonation + " phantom@" + ph.blockPosition().toShortString());
                 ph.discard();
