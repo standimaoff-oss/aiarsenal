@@ -124,10 +124,9 @@ overrideHeight:800
     game.screenshot("wex-flame")
     game.key("mouseup", "3")
 
-    # Place each real item renderer in a staged Minecraft item_display. Tiny 1:1
-    # hand grenades are otherwise only a few pixels wide at the player's hand.
-    # F2 files remain untouched captures from the running client; per-item scale
-    # keeps the full, metre-scale meshes legible without editing the screenshots.
+    # Stage the three readable item_display portraits; retain the Mills fixed-context
+    # capture for QA, while its public portrait comes from the fresh first-person F2 view.
+    # Per-item scale is only a showcase transform; the GLB geometry remains metre-accurate.
     game.command("tp TestPlayer 20 -60 0 0 0")
     game.command("kill @e[type=aiarsenal:mark_i]")
     game.command("fill 16 -61 5 24 -55 5 minecraft:gray_concrete")
