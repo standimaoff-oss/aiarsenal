@@ -1,4 +1,6 @@
 Regression tests: success
 Visual validation: failure
-Source: 1a9dff27b1b6d473825308a8da038434c52d8a41
-Run: https://github.com/standimaoff-oss/aiarsenal/actions/runs/39291762323
+Source: a80bd127737f264f5e738ae4193f3773eef9d9af
+Run: https://github.com/standimaoff-oss/aiarsenal/actions/runs/39294071424
+Mills GLB runtime trace:
+[17:39:25] [Render thread/INFO] [ru.ai.re.cl.re.GlbAssets/]: [realwar] GLB aiarsenal:models/glb/mills_bomb.glb: 6204 вершин, 2068 треугольников, 5 узлов, 0 анимаций
