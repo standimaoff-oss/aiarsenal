@@ -1,3 +1,4 @@
 Regression tests: success
-Source: fba4656b0b4c049025b23244f9b459421f45efd8
-Run: https://github.com/standimaoff-oss/aiarsenal/actions/runs/39154301572
+Visual validation: failure
+Source: 196e62e6f7d254e4260a544a8a04efeaae5b290e
+Run: https://github.com/standimaoff-oss/aiarsenal/actions/runs/39276085962
