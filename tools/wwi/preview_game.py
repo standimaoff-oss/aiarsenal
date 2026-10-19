@@ -110,9 +110,12 @@ overrideHeight:800
     game.screenshot("gewehr98-aim")
     game.key("mouseup", "3")
     for item in ("mills_bomb", "stielhandgranate", "wex", "wwi_fuel"):
-        game.command("clear TestPlayer")
-        game.command(f"item replace entity TestPlayer hotbar.0 with aiarsenal:{item}")
         game.key("key", "1")
+        game.command("clear TestPlayer")
+        game.command(f"item replace entity TestPlayer weapon.mainhand with aiarsenal:{item} 1")
+        selected = game.command("data get entity TestPlayer SelectedItem")
+        if f"aiarsenal:{item}" not in selected:
+            raise AssertionError(f"{item} is not held for its F2 portrait: {selected}")
         time.sleep(3)
         game.screenshot(item+"-in-hand")
     game.command("clear TestPlayer")
