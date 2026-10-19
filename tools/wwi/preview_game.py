@@ -127,9 +127,9 @@ overrideHeight:800
     game.screenshot("wex-flame")
     game.key("mouseup", "3")
 
-    # Stage the three readable item_display portraits; retain the Mills fixed-context
-    # capture for QA, while its public portrait comes from the fresh first-person F2 view.
-    # Per-item scale is only a showcase transform; the GLB geometry remains metre-accurate.
+    # Stage fixed-context portraits and diagnostic variants of the Mills item-display context.
+    # The current GLB is invisible in both Mills' fixed and held captures, so try GUI/hand contexts
+    # directly and keep those fresh F2 frames for diagnosis. Showcase scale never changes GLB geometry.
     game.command("tp TestPlayer 20 -60 0 0 0")
     game.command("kill @e[type=aiarsenal:mark_i]")
     game.command("fill 16 -61 5 24 -55 5 minecraft:gray_concrete")
@@ -160,6 +160,22 @@ overrideHeight:800
             raise AssertionError(f"The {item} item display contains the wrong item: {selected_display}")
         time.sleep(2)
         game.screenshot(item+"-showcase")
+
+    # Compare the item-model transforms used by inventory, first-person and third-person views.
+    scale, distance, y, rotation = display_settings["mills_bomb"]
+    scalar = f"{scale:g}f"
+    for context in ("gui", "firstperson_righthand", "thirdperson_righthand"):
+        game.command("kill @e[type=minecraft:item_display]")
+        summon = (
+            f'summon minecraft:item_display 19.4 {y:g} {distance:g} '
+            f'{{item:{{id:"aiarsenal:mills_bomb",Count:1b}},item_display:"{context}",'
+            f'transformation:{{translation:[0f,0f,0f],left_rotation:{rotation},'
+            f'scale:[{scalar},{scalar},{scalar}],right_rotation:[0f,0f,0f,1f]}}}}'
+        )
+        game.command(summon, "Summoned new Item Display")
+        time.sleep(2)
+        game.screenshot("mills_bomb-context-" + context)
+
     game.command("kill @e[type=minecraft:item_display]")
     game.key("key", "F1")
 

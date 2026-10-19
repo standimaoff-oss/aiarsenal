@@ -74,8 +74,10 @@ jobs:
           cp verification/shots/public-preview-mark-i-burning.png previews/mark-i-burning.png
           cp verification/shots/public-preview-gewehr98-first-person.png previews/gewehr98.png
           cp verification/shots/public-preview-gewehr98-aim.png previews/gewehr98-aim.png
-          # Mills is visible in the held-item view; its fixed item_display is retained only for QA diagnostics.
-          cp verification/shots/public-preview-mills_bomb-in-hand.png previews/mills_bomb.png
+          # Use the GUI-oriented in-world item_display candidate for Mills; retain context probes for QA only.
+          cp verification/shots/public-preview-mills_bomb-context-gui.png previews/mills_bomb.png
+          cp verification/shots/public-preview-mills_bomb-context-firstperson_righthand.png previews/mills-debug-firstperson.png
+          cp verification/shots/public-preview-mills_bomb-context-thirdperson_righthand.png previews/mills-debug-thirdperson.png
           for item in stielhandgranate wex wwi_fuel; do
             cp "verification/shots/public-preview-${item}-showcase.png" "previews/${item}.png"
           done
@@ -115,7 +117,7 @@ jobs:
           set -euo pipefail
           version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
           sha256sum mods/aiarsenal/build/libs/aiarsenal-${version}.jar > SHA256SUMS
-          gh release create "v${version}" --repo "$GITHUB_REPOSITORY" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/mark-i.png previews/mark-i-burning.png previews/gewehr98.png previews/gewehr98-aim.png previews/mills_bomb.png previews/stielhandgranate.png previews/wex.png previews/wwi_fuel.png previews/wex-flame.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23, Java 17. Includes the GLB-rendered WWI Mills bomb No. 5, Stielhandgranate M1915, German Wex M.1917 and fuel item. The attached PNGs are unedited Minecraft F2 captures from this workflow; the Mills portrait is a held-item view, while the Stielhandgranate, Wex and fuel views use in-world item-display showcases for legibility. Older preview files are not release assets. Alpha build: back up worlds before installing." --prerelease 2> release-error.txt || { cat release-error.txt; echo "::error title=Release publication::$(cat release-error.txt)"; exit 1; }
+          gh release create "v${version}" --repo "$GITHUB_REPOSITORY" mods/aiarsenal/build/libs/aiarsenal-${version}.jar previews/mark-i.png previews/mark-i-burning.png previews/gewehr98.png previews/gewehr98-aim.png previews/mills_bomb.png previews/stielhandgranate.png previews/wex.png previews/wwi_fuel.png previews/wex-flame.png SHA256SUMS --target "$GITHUB_SHA" --title "AI Arsenal ${version}" --notes "Minecraft 1.20.1 / Forge 47.4.23, Java 17. Includes the GLB-rendered WWI Mills bomb No. 5, Stielhandgranate M1915, German Wex M.1917 and fuel item. The attached PNGs are unedited Minecraft F2 captures from this workflow; all four equipment portraits use in-world item-display showcases, with a GUI-oriented display context for Mills and centered fixed-context views for Stielhandgranate, Wex and fuel. Older preview files are not release assets. Alpha build: back up worlds before installing." --prerelease 2> release-error.txt || { cat release-error.txt; echo "::error title=Release publication::$(cat release-error.txt)"; exit 1; }
       - name: Fail delivery when regression tests fail
         if: steps.regression.outcome != 'success'
         run: |
