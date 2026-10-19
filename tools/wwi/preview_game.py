@@ -176,6 +176,13 @@ overrideHeight:800
         time.sleep(2)
         game.screenshot("mills_bomb-context-" + context)
 
+    runtime_trace = [
+        line for line in client_log.read_text(errors="replace").splitlines()
+        if "models/glb/mills_bomb.glb" in line
+    ]
+    print("Mills GLB runtime trace:", flush=True)
+    print("\n".join(runtime_trace[-8:]) if runtime_trace else "no matching client-log entry", flush=True)
+
     game.command("kill @e[type=minecraft:item_display]")
     game.key("key", "F1")
 

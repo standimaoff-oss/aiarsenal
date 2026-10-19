@@ -103,6 +103,12 @@ jobs:
           VISUAL_RESULT: ${{ steps.visibility.outcome }}
         run: |
           printf 'Regression tests: %s\nVisual validation: %s\nSource: %s\nRun: %s/%s/actions/runs/%s\n' "$TEST_RESULT" "$VISUAL_RESULT" "$GITHUB_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > previews/verification.txt
+          printf 'Mills GLB runtime trace:\n' >> previews/verification.txt
+          if [ -f verification/logs/client.log ]; then
+            grep -F 'models/glb/mills_bomb.glb' verification/logs/client.log | tail -n 8 >> previews/verification.txt || printf 'no matching client-log entry\n' >> previews/verification.txt
+          else
+            printf 'client log unavailable\n' >> previews/verification.txt
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add previews/
