@@ -89,11 +89,16 @@ jobs:
                   image.verify()
               print(f'{path}: {path.stat().st_size} bytes')
           PY
+      - name: Validate centered WWI item showcases
+        id: visibility
+        continue-on-error: true
+        run: python tools/wwi/validate_game_previews.py
       - name: Save authentic previews to the mod page
         env:
           TEST_RESULT: ${{ steps.regression.outcome }}
+          VISUAL_RESULT: ${{ steps.visibility.outcome }}
         run: |
-          printf 'Regression tests: %s\nSource: %s\nRun: %s/%s/actions/runs/%s\n' "$TEST_RESULT" "$GITHUB_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > previews/verification.txt
+          printf 'Regression tests: %s\nVisual validation: %s\nSource: %s\nRun: %s/%s/actions/runs/%s\n' "$TEST_RESULT" "$VISUAL_RESULT" "$GITHUB_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > previews/verification.txt
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add previews/
@@ -101,7 +106,7 @@ jobs:
           git pull --rebase origin arena/6c00ee44-aiarsenal
           git push origin HEAD:arena/6c00ee44-aiarsenal
       - name: Publish verified build and screenshots
-        if: steps.regression.outcome == 'success'
+        if: steps.regression.outcome == 'success' && steps.visibility.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -113,6 +118,11 @@ jobs:
         if: steps.regression.outcome != 'success'
         run: |
           echo "Regression tests failed; screenshots/logs are retained as CI artifacts but no public release is created."
+          exit 1
+      - name: Fail delivery when equipment previews are visually empty or off-center
+        if: steps.visibility.outcome != 'success'
+        run: |
+          echo "A WWI equipment screenshot did not show its item near the frame center; screenshots are saved for diagnosis, but no public release is created."
           exit 1
       - name: Report test outcome
         if: always()

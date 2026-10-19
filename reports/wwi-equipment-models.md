@@ -19,7 +19,7 @@ python3 tools/wwi/test_equipment_assets.py
 python3 tools/wwi/verify_assets.py
 ```
 
-The offline test checks GLB structure, required named parts, triangle budgets, metre-scale dimensions, item wrappers, recipes, translations, and GLB-renderer hooks. `tools/wwi/requirements.txt` pins NumPy/SciPy/Pillow so the voxel collision-deck rebuild is reproducible as well. `render_preview.py` is a geometry-only inspection aid: it applies back-face culling, but it is **not** a Minecraft screenshot and does not validate Minecraft lighting or item transforms.
+The offline test checks GLB structure, required named parts, triangle budgets, metre-scale dimensions, item wrappers, recipes, translations, and GLB-renderer hooks. `tools/wwi/requirements.txt` pins NumPy/SciPy/Pillow so the voxel collision-deck rebuild is reproducible as well. `render_preview.py` is a geometry-only inspection aid: it applies back-face culling, but it is **not** a Minecraft screenshot and does not validate Minecraft lighting or item transforms. The delivery workflow also runs `tools/wwi/validate_game_previews.py` against the four fresh in-game item-display captures; a missing or off-center model blocks release while retaining screenshots for diagnosis.
 
 ## In-game verification and screenshots
 
