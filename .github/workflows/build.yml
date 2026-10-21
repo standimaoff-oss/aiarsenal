@@ -38,11 +38,39 @@ jobs:
         run: python3 tools/restore_models.py
 
       - name: Build distributable
+        id: build
+        continue-on-error: true
         working-directory: mods/aiarsenal
-        run: ./gradlew build --no-daemon --stacktrace --warning-mode=summary
+        run: ./gradlew build --no-daemon --stacktrace --warning-mode=summary 2>&1 | tee build.log
+
+      # A failed compile is reported back into the branch: the agent reads ci/build-failure.txt.
+      - name: Report compile errors
+        if: steps.build.outcome == 'failure'
+        run: |
+          set -uo pipefail
+          mkdir -p ci
+          {
+            echo "# Gradle build failure"
+            echo
+            grep -nE "error:|warning: \[|FAILURE:|Execution failed|Caused by:|> Task .* FAILED|^\s+> " mods/aiarsenal/build.log | head -300
+            echo
+            echo "## Tail"
+            tail -120 mods/aiarsenal/build.log
+          } > ci/build-failure.txt || true
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ci/build-failure.txt
+          git commit -m "ci: compile report [skip ci]" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          exit 1
+
+      - name: Build succeeded
+        if: steps.build.outcome == 'success'
+        run: rm -rf ci
 
       - name: Collect jar
         id: jar
+        if: steps.build.outcome == 'success'
         run: |
           set -euo pipefail
           version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
