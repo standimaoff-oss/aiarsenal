@@ -1,0 +1,90 @@
+time set 6000 -> Set the time to 6000
+
+gamerule doDaylightCycle false -> Gamerule doDaylightCycle is now set to: false
+
+weather clear -> Set the weather to clear
+
+gamerule doWeatherCycle false -> Gamerule doWeatherCycle is now set to: false
+
+gamerule doMobSpawning false -> Gamerule doMobSpawning is now set to: false
+
+gamemode creative TestPlayer -> 
+clear TestPlayer -> No items were found on player TestPlayer
+
+summon aiarsenal:soldier 0.6 -60 0.6 {rw_class:0b,PersistenceRequired:1b} -> Summoned new Soldier
+
+summon aiarsenal:soldier 2.2 -60 0.6 {rw_class:2b,PersistenceRequired:1b} -> Summoned new Soldier
+
+summon aiarsenal:soldier -1.0 -60 0.6 {rw_class:3b,PersistenceRequired:1b} -> Summoned new Soldier
+
+summon aiarsenal:soldier 3.8 -60 0.6 {rw_class:1b,PersistenceRequired:1b} -> Summoned new Soldier
+
+tp TestPlayer 1.4 -60 6.5 180 0 -> Teleported TestPlayer to 1.400000, -60.000000, 6.500000
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-soldiers-on-foot.png
+summon aiarsenal:zu23 30 -60 0 {PersistenceRequired:1b} -> Summoned new ZU-23-2
+
+summon aiarsenal:soldier 33 -60 1.5 {rw_class:1b,PersistenceRequired:1b} -> Summoned new Soldier
+
+tp TestPlayer 30 -60 -7 0 0 -> Teleported TestPlayer to 30.500000, -60.000000, -6.500000
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-soldier-in-zu23.png
+summon aiarsenal:ural -30 -60 0 {PersistenceRequired:1b} -> Summoned new Ural-4320
+
+summon aiarsenal:soldier -27 -60 3 {rw_class:1b,PersistenceRequired:1b} -> Summoned new Soldier
+
+summon aiarsenal:soldier -34 -60 7 {rw_class:0b,PersistenceRequired:1b} -> Summoned new Soldier
+
+summon aiarsenal:soldier -30 -60 8 {rw_class:0b,PersistenceRequired:1b} -> Summoned new Soldier
+
+data get entity @e[type=aiarsenal:ural,limit=1,sort=nearest] Passengers -> Ural-4320 has the following entity data: [{Brain: {memories: {}}, HurtByTimestamp: 0, Attributes: [{Base: 0.08d, Name: "forge:entity_gravity"}, {Base: 0.0d, Name: "forge:step_height_addition"}, {Base: 0.3d, Name: "minecraft:generic.movement_speed"}], Invulnerable: 0b, FallFlying: 0b, PortalCooldown: 0, AbsorptionAmount: 0.0f, FallDistance: 0.0f, CanUpdate: 1b, DeathTime: 0s, HandDropChances: [0.085f, 0.085f], PersistenceRequired: 1b, id: "aiarsenal:soldier", UUID: [I; 1432131168, 62279586, -1516492724, -1090257441], Motion: [0.0d, -0.0784000015258789d, 0.0d], Health: 20.0f, LeftHanded: 0b, Air: 300s, OnGround: 0b, Rotation: [0.0f, 0.0f], HandItems: [{}, {}], ArmorDropChances: [0.085f, 0.085f, 0.085f, 0.085f], rw_class: 1, Pos: [-29.5d, -59.37000000476837d, 0.5d], Fire: -1s, ArmorItems: [{}, {}, {}, {}], CanPickUpLoot: 0b, HurtTime: 0s}]
+
+data get entity @e[type=aiarsenal:ural,limit=1,sort=nearest] Passengers -> Ural-4320 has the following entity data: [{Brain: {memories: {}}, HurtByTimestamp: 0, Attributes: [{Base: 0.08d, Name: "forge:entity_gravity"}, {Base: 0.0d, Name: "forge:step_height_addition"}, {Base: 0.3d, Name: "minecraft:generic.movement_speed"}], Invulnerable: 0b, FallFlying: 0b, PortalCooldown: 0, AbsorptionAmount: 0.0f, FallDistance: 0.0f, CanUpdate: 1b, DeathTime: 0s, HandDropChances: [0.085f, 0.085f], PersistenceRequired: 1b, id: "aiarsenal:soldier", UUID: [I; 1432131168, 62279586, -1516492724, -1090257441], Motion: [0.0d, -0.0784000015258789d, 0.0d], Health: 20.0f, LeftHanded: 0b, Air: 300s, OnGround: 0b, Rotation: [0.0f, 0.0f], HandItems: [{}, {}], ArmorDropChances: [0.085f, 0.085f, 0.085f, 0.085f], rw_class: 1, Pos: [-29.5d, -59.37000000476837d, 0.5d], Fire: -1s, ArmorItems: [{}, {}, {}, {}], CanPickUpLoot: 0b, HurtTime: 0s}, {Brain: {memories: {}}, HurtByTimestamp: 0, Attributes: [{Base: 0.08d, Name: "forge:entity_gravity"}, {Base: 0.0d, Name: "forge:step_height_addition"}, {Base: 0.3d, Name: "minecraft:generic.movement_speed"}], Invulnerable: 0b, FallFlying: 0b, PortalCooldown: 0, AbsorptionAmount: 0.0f, FallDistance: 0.0f, CanUpdate: 1b, DeathTime: 0s, HandDropChances: [0.085f, 0.085f], PersistenceRequired: 1b, id: "aiarsenal:soldier", UUID: [I; 34910806, 364005028, -1472504731, -54949966], Motion: [0.0d, -0.0784000015258789d, 0.0d], Health: 20.0f, LeftHanded: 0b, Air: 300s, OnGround: 0b, Rotation: [0.0f, 0.0f], HandItems: [{}, {}], ArmorDropChances: [0.085f, 0.085f, 0.085f, 0.085f], rw_class: 0, Pos: [-29.5d, -59.37000000476837d, 0.5d], Fire: -1s, ArmorItems: [{}, {}, {}, {}], CanPickUpLoot: 0b, HurtTime: 0s}]
+
+soldiers riding in the Ural: 2
+tp TestPlayer -22 -59 10 141 10 -> Teleported TestPlayer to -21.500000, -59.000000, 10.500000
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-soldier-in-truck.png
+item replace entity TestPlayer hotbar.0 with aiarsenal:soldier_egg_commander -> Replaced a slot on TestPlayer with [Summon egg: Commander]
+
+item replace entity TestPlayer hotbar.1 with aiarsenal:soldier_egg_tanker -> Replaced a slot on TestPlayer with [Summon egg: Tanker]
+
+item replace entity TestPlayer hotbar.2 with aiarsenal:soldier_egg_assault -> Replaced a slot on TestPlayer with [Summon egg: Assault]
+
+item replace entity TestPlayer hotbar.3 with aiarsenal:soldier_egg_medic -> Replaced a slot on TestPlayer with [Summon egg: Medic]
+
+tp TestPlayer 0 -60 -30 90 0 -> Teleported TestPlayer to 0.500000, -60.000000, -29.500000
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-unit-eggs-in-hand.png
+arsenal_visual_test client view_units TestPlayer -> Client QA sent: view_units
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-unit-eggs-tab.png
+item replace entity TestPlayer hotbar.0 with aiarsenal:gewehr98{Ammo:5} -> Replaced a slot on TestPlayer with [Gewehr 98 (7.92×57 Mauser)]
+
+summon aiarsenal:soldier 2.5 -60 -34.5 {rw_class:0b,PersistenceRequired:1b,Rotation:[180f,0f]} -> Summoned new Soldier
+
+arsenal_visual_test client view_back TestPlayer -> Client QA sent: view_back
+
+tp TestPlayer 2.5 -60 -30.5 180 0 -> Teleported TestPlayer to 2.500000, -60.000000, -30.500000
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-soldier-weapon-3p.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-variant-a.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-variant-b.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-variant-c.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-variant-d.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-variant-e.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-variant-f.png
+arsenal_visual_test client view_first TestPlayer -> Client QA sent: view_first
+
+tp TestPlayer 0 -60 -30 205 0 -> Teleported TestPlayer to 0.500000, -60.000000, -29.500000
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-first-person.png
+arsenal_visual_test client view_front TestPlayer -> Client QA sent: view_front
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-weapon-in-hand-3p.png
+tp TestPlayer 60 -60 0 0 0 -> Teleported TestPlayer to 60.500000, -60.000000, 0.500000
+
+realwar blast 8 60 -59 7 -> Explosion: 8 kg TNT equivalent
+
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-explosion-smoke.png
+Minecraft F2: /home/runner/work/aiarsenal/aiarsenal/verification/shots/ai-review-explosion-smoke-late.png
