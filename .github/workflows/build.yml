@@ -41,7 +41,9 @@ jobs:
         id: build
         continue-on-error: true
         working-directory: mods/aiarsenal
-        run: ./gradlew build --no-daemon --stacktrace --warning-mode=summary 2>&1 | tee build.log
+        run: |
+          set -o pipefail
+          ./gradlew build --no-daemon --stacktrace --warning-mode=summary 2>&1 | tee build.log
 
       # A failed compile is reported back into the branch: the agent reads ci/build-failure.txt.
       - name: Report compile errors
@@ -73,9 +75,10 @@ jobs:
         if: steps.build.outcome == 'success'
         run: |
           set -euo pipefail
-          version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties)"
+          version="$(sed -n 's/^mod_version=//p' mods/aiarsenal/gradle.properties | tr -d '\r')"
           jar="mods/aiarsenal/build/libs/aiarsenal-${version}.jar"
-          test -f "$jar"
+          ls -l mods/aiarsenal/build/libs || true
+          test -f "$jar" || { echo "::error title=Jar missing::$jar was not produced"; exit 1; }
           sha256sum "$jar" > SHA256SUMS.txt
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "jar=$jar" >> "$GITHUB_OUTPUT"
