@@ -1,6 +1,5 @@
 package ru.aiforge.realwar.soldier.client;
 
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
@@ -15,9 +14,9 @@ public class SoldierRenderer extends MobRenderer<SoldierEntity, SoldierModel> {
             new ResourceLocation("aiarsenal", "textures/entity/soldier/skin_steve.png");
 
     public SoldierRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new SoldierModel(ctx.bakeLayer(HumanoidModel.LAYER_BODY)), 0.5f);
+        super(ctx, new SoldierModel(ctx.bakeLayer(SoldierModel.LAYER)), 0.5f);
         this.addLayer(new SoldierUniformLayer(this));
-        this.addLayer(new ItemInHandLayer<>(this, this.model));
+        this.addLayer(new ItemInHandLayer<>(this, ctx.getItemInHandRenderer()));
     }
 
     @Override

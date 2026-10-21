@@ -182,7 +182,8 @@ public final class ConvFx {
                 pp.translate(pp.getDeltaX(), pp.getDeltaY(), pp.getDeltaZ());
                 pp.scaleVelocity(0.985);
                 float in = f < 0.08f ? f / 0.08f : 1.0f;
-                float out = (float) (1.0 - net.minecraft.util.Mth.smoothStep(0.6, 1.0, f));
+                double tf = Math.max(0.0, Math.min(1.0, (f - 0.6) / 0.4));
+                float out = (float) (1.0 - tf * tf * (3.0 - 2.0 * tf));
                 pp.color(0.3f, 0.3f, 0.31f);
                 pp.alpha(0.55f * in * out);
                 pp.size = base * (0.7f + 1.3f * (float)Math.sqrt(f));

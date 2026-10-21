@@ -1,10 +1,10 @@
 package ru.aiforge.realwar.soldier.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.resources.ResourceLocation;
 import ru.aiforge.realwar.soldier.SoldierEntity;
 
@@ -14,12 +14,15 @@ import ru.aiforge.realwar.soldier.SoldierEntity;
  * overlay pass over the same geometry (see {@link SoldierUniformLayer}).
  */
 public class SoldierModel extends HumanoidModel<SoldierEntity> {
+    public static final ModelLayerLocation LAYER =
+            new ModelLayerLocation(new ResourceLocation("aiarsenal", "soldier"), "main");
+
     public SoldierModel(ModelPart root) {
         super(root);
     }
 
-    /** Renders the whole humanoid silhouette with the given (overlay) texture. */
-    public void renderOverlay(PoseStack ps, MultiBufferSource buf, int light, ResourceLocation tex) {
-        this.renderToBuffer(ps, buf, light, OverlayTexture.NO_OVERLAY, tex, 1f, 1f, 1f, 1f);
+    /** 64x64 Steve/player humanoid geometry. */
+    public static LayerDefinition createBodyLayer() {
+        return LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0f), 64, 64);
     }
 }

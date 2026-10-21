@@ -31,7 +31,7 @@ public final class GrenadeEntity extends ThrowableItemProjectile {
             level().explode(this, getX(), getY(), getZ(), 2.2f, Level.ExplosionInteraction.MOB);
             // r27: volumetric smoke column on top of the vanilla flash (FX-only packet -
             // damage and terrain are already handled by the explosion above).
-            ru.aiforge.realwar.network.ModNetwork.sendNear(level(), getX(), getY(), getZ(), 120.0,
+            ru.aiforge.realwar.network.ModNetwork.sendNear((net.minecraft.server.level.ServerLevel) level(), getX(), getY(), getZ(), 120.0,
                     new ru.aiforge.realwar.network.ConventionalEffectPacket(getX(), getY(), getZ(), 1.2f, true, level().random.nextLong()));
             discard();
         }

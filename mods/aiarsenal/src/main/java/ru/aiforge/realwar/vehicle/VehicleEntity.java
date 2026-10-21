@@ -257,7 +257,8 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
     }
 
     protected boolean canAddPassenger(Entity p) {
-        return this.getPassengers().size() < this.spec.seatCount();
+        // r27: AI soldiers must not climb into a burnt-out wreck (players keep the old behaviour).
+        return this.getPassengers().size() < this.spec.seatCount() && (!this.dmg.dead() || p instanceof net.minecraft.world.entity.player.Player);
     }
 
     protected void addPassenger(Entity p) {
@@ -328,11 +329,6 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
         boolean ok = p.startRiding((Entity)this);
         this.pendingSeat = -1;
         return ok;
-    }
-
-    @Override
-    public boolean checkPassenger(Entity p) {
-        return !p.isPassenger() && this.canAddPassenger(p) && !this.dmg.dead();
     }
 
     public boolean switchSeat(Entity p) {

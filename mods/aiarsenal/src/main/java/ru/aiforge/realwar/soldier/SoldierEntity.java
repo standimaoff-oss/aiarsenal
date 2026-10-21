@@ -100,9 +100,9 @@ public class SoldierEntity extends PathfinderMob {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(CLASS, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(CLASS, 0);
     }
 
     @Override
@@ -125,8 +125,13 @@ public class SoldierEntity extends PathfinderMob {
         return true; // commander: any remaining seat
     }
 
+    /**
+     * 1.20.1 hook: called from the final Mob#serverAiStep after the navigation
+     * tick and before the movement controls, so a moveTo() issued here takes
+     * effect the same tick.
+     */
     @Override
-    public void serverAiStep() {
+    protected void customServerAiStep() {
         if (this.isPassenger()) {
             // seated: no own movement, face the vehicle, watch for a destroyed carrier
             this.setDeltaMovement(Vec3.ZERO);
@@ -138,7 +143,6 @@ public class SoldierEntity extends PathfinderMob {
             this.setYRot(v.getYRot());
             return;
         }
-        super.serverAiStep();
         this.think();
     }
 
@@ -163,7 +167,7 @@ public class SoldierEntity extends PathfinderMob {
             VehicleEntity best = null;
             int bestSeat = -1;
             float bestScore = Float.MAX_VALUE;
-            for (VehicleEntity v : this.level().getEntities(VehicleEntity.class,
+            for (VehicleEntity v : this.level().getEntitiesOfClass(VehicleEntity.class,
                     this.getBoundingBox().inflate(BOARD_RADIUS), e -> !e.dmg.dead())) {
                 for (int s = 0; s < v.spec.seatCount(); ++s) {
                     if (v.seatUuid(s) != null || !takesRole(this.soldierClass(), v.seatRole(s))) continue;
@@ -218,7 +222,7 @@ public class SoldierEntity extends PathfinderMob {
         if (this.tickCount % GROUP_TICKS != 0) return;
         Vec3 target = null;
         float best = 9.0f * 9.0f;
-        for (SoldierEntity s : this.level().getEntities(SoldierEntity.class,
+        for (SoldierEntity s : this.level().getEntitiesOfClass(SoldierEntity.class,
                 this.getBoundingBox().inflate(20.0), e -> e != this && !e.isPassenger() && !e.isDeadOrDying())) {
             float d2 = (float) this.distanceToSqr(s);
             if (d2 < best) {
@@ -227,7 +231,7 @@ public class SoldierEntity extends PathfinderMob {
             }
         }
         if (target == null) {
-            for (VehicleEntity v : this.level().getEntities(VehicleEntity.class,
+            for (VehicleEntity v : this.level().getEntitiesOfClass(VehicleEntity.class,
                     this.getBoundingBox().inflate(20.0), e -> !e.dmg.dead())) {
                 float d2 = (float) this.distanceToSqr(v.position());
                 if (d2 < best) {
@@ -245,7 +249,7 @@ public class SoldierEntity extends PathfinderMob {
 
     private void healNearby() {
         if (this.tickCount % 40 != 0) return;
-        for (SoldierEntity s : this.level().getEntities(SoldierEntity.class,
+        for (SoldierEntity s : this.level().getEntitiesOfClass(SoldierEntity.class,
                 this.getBoundingBox().inflate(4.0), e -> !e.isDeadOrDying() && e.getHealth() < e.getMaxHealth() - 0.5f)) {
             s.heal(4.0f);
             this.level().sendParticles(net.minecraft.core.particles.ParticleTypes.HEART,

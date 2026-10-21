@@ -104,6 +104,12 @@ public final class ClientModEvents {
     }
 
     @SubscribeEvent
+    public static void layerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions e) {
+        e.registerLayerDefinition(ru.aiforge.realwar.soldier.client.SoldierModel.LAYER,
+                ru.aiforge.realwar.soldier.client.SoldierModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
     public static void renderers(EntityRenderersEvent.RegisterRenderers e) {
         e.registerEntityRenderer(ModEntities.CANNON_FR6.get(), ru.aiforge.realwar.client.render.PowderCannonRenderer::new);
         e.registerEntityRenderer(ModEntities.CANNON_RI12.get(), ru.aiforge.realwar.client.render.PowderCannonRenderer::new);
