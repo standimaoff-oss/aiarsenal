@@ -92,6 +92,8 @@ public final class ClientModEvents {
             PlayerRenderer pr = (PlayerRenderer)r;
             pr.addLayer((RenderLayer)new HazmatLayer((RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>)pr));
             pr.addLayer((RenderLayer)new ru.aiforge.realwar.client.render.UniformLayer((RenderLayerParent)pr));
+            // third-person firearm: posed from the synced gun state of the holder
+            pr.addLayer((RenderLayer)new ru.aiforge.realwar.client.render.GunHoldLayer((RenderLayerParent)pr));
         }
         // r15: uniforms also show on armour stands and humanoid zombies (display / NPC use)
         for (net.minecraft.world.entity.EntityType<?> t : new net.minecraft.world.entity.EntityType<?>[]{

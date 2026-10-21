@@ -222,6 +222,7 @@ public final class GunClient {
             case GunFxPacket.SHOT -> {
                 shotN = System.nanoTime();
                 shotCount++;
+                localMuzzleBlast(k);
                 if (k != null && k.boltAction()) ads = adsPrev = 0f;
                 if (k != null) {
                     float m = (ads > 0.5f ? 0.65f : 1f);
@@ -243,6 +244,17 @@ public final class GunClient {
             default -> {
             }
         }
+    }
+
+    /** The shooter's own muzzle blast: sparks and the cordite cloud that drifts into his view. */
+    private static void localMuzzleBlast(GunKind k) {
+        Minecraft mc = Minecraft.getInstance();
+        if (!(mc.level instanceof net.minecraft.client.multiplayer.ClientLevel level) || mc.player == null) return;
+        var look = mc.player.getViewVector(1f);
+        var eye = mc.player.getEyePosition();
+        float reach = k == null ? 0.95f : k.flintlock() && !k.pistol() ? 1.35f : k.pistol() ? 0.6f : 0.95f;
+        var at = eye.add(look.scale(reach)).add(0, -0.10, 0);
+        ru.aiforge.realwar.client.fx.MuzzleFx.blast(level, at, look, k, shotCount);
     }
 
     /** smooth recoil: the kick is applied over ~40 ms, 75 % of it recovers once the burst ends */

@@ -268,6 +268,82 @@ public final class GunRenderer {
         BOUNDS.clear();
     }
 
+    // ------------------------------------------------------------------ third person (remote holders)
+
+    /** Loaded model of the gun in the given item, null when the asset is missing. */
+    static GlbAssets.Loaded model(FirearmItem g) {
+        return g == null ? null : GlbAssets.get(glb(g.kind.id));
+    }
+
+    /**
+     * Draws a firearm in the hand of somebody else, posed from the synced state.
+     *
+     * @return camera-relative {muzzleX, muzzleY, muzzleZ, dirX, dirY, dirZ} while the muzzle flash burns, else null
+     */
+    static float[] renderHeld(ItemStack stack, PoseStack ps, MultiBufferSource buf, int light, float aim,
+                              float reloadTime, boolean reloadEmpty, float shotAge, int shotSeq) {
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        if (key == null || !(stack.getItem() instanceof FirearmItem fi)) return null;
+        String id = key.getPath();
+        ResourceLocation modelId = glb(id);
+        GlbAssets.Loaded lm = GlbAssets.get(modelId);
+        if (lm == null) return null;
+        GunKind k = fi.kind;
+        Pose pose = lm.scratch();
+        boolean rel = reloadTime >= 0f;
+        boolean flash = shotAge >= 0f && shotAge < (k.launcher() ? 0.09f : 0.05f);
+        ps.pushPose();
+        HandheldView.apply(ps, HandheldView.get(id, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, aim > 0.5f), bounds(modelId, lm));
+        float[] grip = node(lm, id + ".arm_r");
+        ps.translate(-grip[0], -grip[1], -grip[2]);
+        pose.hide(id + ".arm_l", true);
+        pose.hide(id + ".arm_r", true);
+        pose.hide(id + ".ramrod", true);
+        pose.hide(id + ".charge", true);
+        if (k == GunKind.C96) pose.hide(id + ".clip", !rel);
+        if (k.singleLoad()) pose.hide(id + ".round", !rel);
+        if (rel) {
+            GlbModel.Animation an = reloadEmpty ? lm.model.animation(id + "_reload_empty") : null;
+            if (an == null) an = lm.model.animation(id + "_reload");
+            if (an != null) pose.sample(an, Math.min(Math.max(0f, reloadTime), Math.max(0f, an.duration - 0.001f)));
+        } else if (k.manual() && shotAge > 0.12f) {
+            GlbModel.Animation an = lm.model.animation(id + (k.boltAction() ? "_bolt" : "_pump"));
+            if (an != null && shotAge - 0.12f < an.duration) pose.sample(an, Math.min(shotAge - 0.12f, an.duration - 0.001f));
+        }
+        pose.hide(id + ".flash", !flash);
+        if (flash) {
+            pose.rotate(id + ".flash", (shotSeq * 1.9f) % 6.283f, 0f, 0f, 1f);
+            float fs = 0.75f + (shotSeq * 37 % 10) * 0.045f;
+            pose.scale(id + ".flash", fs, fs, fs);
+        }
+        pose.compute();
+        GlbRenderer.render(lm, pose, ps, buf, flash ? 0xF000F0 : light, OverlayTexture.NO_OVERLAY);
+        float[] out = null;
+        if (flash) {
+            Vector4f m = nodeOrigin(lm, pose, ps, id + ".flash");
+            Vector4f s2 = nodeOrigin(lm, pose, ps, id + ".sight");
+            Vector4f d = new Vector4f(0f, 0f, 1f, 0f);
+            if (m != null && s2 != null) {
+                d.set(m.x - s2.x, m.y - s2.y, m.z - s2.z, 0f);
+                if (d.lengthSquared() < 1e-6f) d.set(0f, 0f, 1f, 0f);
+                d.normalize();
+            }
+            out = m == null ? null : new float[]{m.x, m.y, m.z, d.x, d.y, d.z};
+        }
+        ps.popPose();
+        return out;
+    }
+
+    /** Animated node origin in camera-relative space; null when the node does not exist. */
+    private static Vector4f nodeOrigin(GlbAssets.Loaded lm, Pose pose, PoseStack ps, String name) {
+        int i = lm.model.nodeIndex(name);
+        if (i < 0) return null;
+        Vector4f q = new Vector4f(0f, 0f, 0f, 1f);
+        pose.world[i].transform(q);
+        ps.last().pose().transform(q);
+        return q;
+    }
+
     // ------------------------------------------------------------------ inventory / third person / ground / frame
 
     static final class Item extends BlockEntityWithoutLevelRenderer {
@@ -279,6 +355,11 @@ public final class GunRenderer {
         public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack ps, MultiBufferSource buf, int light, int overlay) {
             ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
             if (key == null) return;
+            // a held firearm is drawn by GunHoldLayer on top of the holder's hand: never twice
+            if (stack.getItem() instanceof FirearmItem
+                    && (ctx == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || ctx == ItemDisplayContext.THIRD_PERSON_LEFT_HAND)) {
+                return;
+            }
             String id = key.getPath();
             ResourceLocation model = glb(id);
             GlbAssets.Loaded lm = GlbAssets.get(model);

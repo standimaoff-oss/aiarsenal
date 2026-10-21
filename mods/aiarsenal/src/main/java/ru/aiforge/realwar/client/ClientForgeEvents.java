@@ -111,6 +111,7 @@ public final class ClientForgeEvents {
             return;
         }
         ClientBlastManager.tick(mc.level);
+        ru.aiforge.realwar.client.GunAnimClient.tick();
         TrailFx.tick(mc.level);
         ru.aiforge.realwar.client.fx.TrackMarks.tick();
         if (!ru.aiforge.realwar.client.craft.CraftClient.clientTick(mc)) VehicleClient.clientTick(mc);
@@ -227,6 +228,7 @@ public final class ClientForgeEvents {
     @SubscribeEvent
     public static void logout(ClientPlayerNetworkEvent.LoggingOut e) {
         ClientBlastManager.clear();
+        GunAnimClient.clear();
         ClientRadiation.reset();
         ru.aiforge.realwar.client.fx.TrackMarks.clear();
         VehicleClient.reset();

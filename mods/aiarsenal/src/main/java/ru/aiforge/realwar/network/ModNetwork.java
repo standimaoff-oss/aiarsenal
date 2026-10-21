@@ -69,6 +69,7 @@ public final class ModNetwork {
         CHANNEL.registerMessage(id++, SelectWeaponPacket.class, SelectWeaponPacket::encode, SelectWeaponPacket::decode, SelectWeaponPacket::handle);
         CHANNEL.registerMessage(id++, GunActionPacket.class, GunActionPacket::encode, GunActionPacket::decode, GunActionPacket::handle);
         CHANNEL.registerMessage(id++, GunFxPacket.class, GunFxPacket::encode, GunFxPacket::decode, GunFxPacket::handle);
+        CHANNEL.registerMessage(id++, PlayerGunStatePacket.class, PlayerGunStatePacket::encode, PlayerGunStatePacket::decode, PlayerGunStatePacket::handle);
     }
 
     public static void sendToDimension(ServerLevel level, Object msg) {
@@ -77,6 +78,11 @@ public final class ModNetwork {
 
     public static void sendNear(ServerLevel level, double x, double y, double z, double radius, Object msg) {
         CHANNEL.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(x, y, z, radius, level.dimension())), msg);
+    }
+
+    /** Everyone who can see the entity (and the entity's own client): used for pose/animation broadcasts. */
+    public static void sendTracking(net.minecraft.world.entity.Entity e, Object msg) {
+        CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> e), msg);
     }
 
     public static void sendToPlayer(ServerPlayer p, Object msg) {

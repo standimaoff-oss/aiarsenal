@@ -23,6 +23,7 @@ public class SoldierRenderer extends HumanoidMobRenderer<SoldierEntity, Humanoid
     public SoldierRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER)), 0.5f);
         this.addLayer(new UniformLayer<>(this));
+        this.addLayer(new GunHoldLayer<>(this));
     }
 
     private static ResourceLocation tex(String name) {

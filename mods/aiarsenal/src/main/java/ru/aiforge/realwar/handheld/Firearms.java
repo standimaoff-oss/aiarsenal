@@ -36,6 +36,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import ru.aiforge.realwar.blast.ModDamage;
 import ru.aiforge.realwar.damage.HitContext;
 import ru.aiforge.realwar.network.GunFxPacket;
+import ru.aiforge.realwar.network.PlayerGunStatePacket;
 import ru.aiforge.realwar.network.ModNetwork;
 
 /**
@@ -97,8 +98,14 @@ public final class Firearms {
                 s.dryDone = false;
             }
             case TRIGGER_UP -> s.trigger = false;
-            case AIM_ON -> s.aiming = true;
-            case AIM_OFF -> s.aiming = false;
+            case AIM_ON -> {
+                s.aiming = true;
+                anim(p, PlayerGunStatePacket.AIM, 0);
+            }
+            case AIM_OFF -> {
+                s.aiming = false;
+                anim(p, 0, 0);
+            }
             case RELOAD -> startReload(p, stack, g.kind, s);
             case MODE -> {
                 if (g.kind.selector() && s.reload == 0) {
@@ -162,6 +169,8 @@ public final class Firearms {
         if (k.clipFed() || k.singleLoad()) sound(p, "bolt_cycle", 0.8f, 1.1f);   // bolt opened
         else if (!k.incrementalReload() && !k.flintlock()) sound(p, "mag_out", 0.7f, k.launcher() ? 0.7f : 1.0f);
         fx(p, s.reloadEmpty && !k.launcher() ? GunFxPacket.RELOAD_EMPTY : GunFxPacket.RELOAD, ammo);
+        anim(p, PlayerGunStatePacket.RELOAD | (s.reloadEmpty ? PlayerGunStatePacket.RELOAD_EMPTY : 0)
+                | (s.aiming ? PlayerGunStatePacket.AIM : 0), s.reloadTotal);
         return true;
     }
 
@@ -219,6 +228,7 @@ public final class Firearms {
         ItemStack stack = p.getMainHandItem();
         if (!(stack.getItem() instanceof FirearmItem g) || p.getVehicle() != null || !p.isAlive()) {
             if (s.reload > 0) fx(p, GunFxPacket.CANCEL, 0);
+            if (s.reload > 0 || s.aiming) anim(p, 0, 0);
             s.reload = 0;
             s.trigger = false;
             s.aiming = false;
@@ -231,11 +241,13 @@ public final class Firearms {
             if (s.gun != stack.getItem()) {
                 s.reload = 0;
                 fx(p, GunFxPacket.CANCEL, FirearmItem.ammo(stack));
+                anim(p, 0, 0);
                 return;
             }
             if (k.incrementalReload() && s.trigger && !s.reloadEmpty && FirearmItem.ammo(stack) > 0) {
                 s.reload = 0;                                   // r24: LMB interrupts the shell-by-shell loading
                 fx(p, GunFxPacket.LOADED, FirearmItem.ammo(stack));
+                anim(p, s.aiming ? PlayerGunStatePacket.AIM : 0, 0);
             } else {
             int done = s.reloadTotal - s.reload;
             if (k.flintlock()) {
@@ -260,8 +272,10 @@ public final class Firearms {
                     s.reloadTotal = k.reload;
                     s.reload = k.reload;
                     fx(p, GunFxPacket.RELOAD, now);
+                    anim(p, PlayerGunStatePacket.RELOAD | (s.aiming ? PlayerGunStatePacket.AIM : 0), s.reloadTotal);
                 } else {
                     fx(p, GunFxPacket.LOADED, now);
+                    anim(p, s.aiming ? PlayerGunStatePacket.AIM : 0, 0);
                 }
             }
             return;
@@ -283,6 +297,7 @@ public final class Firearms {
             if (!s.dryDone) {
                 sound(p, "dry_fire", 0.7f, 1.0f);
                 fx(p, GunFxPacket.DRY, 0);
+                anim(p, PlayerGunStatePacket.DRY | (s.aiming ? PlayerGunStatePacket.AIM : 0), 0);
                 s.dryDone = true;
             }
             s.credit = 0;
@@ -371,6 +386,7 @@ public final class Firearms {
             sl.sendParticles(smoke, m.x, m.y, m.z, 0, look.x, look.y, look.z, 1);
         }
         fx(p, GunFxPacket.SHOT, FirearmItem.ammo(stack));
+        anim(p, PlayerGunStatePacket.SHOT | (aiming ? PlayerGunStatePacket.AIM : 0), 0);
     }
 
     /**
@@ -404,6 +420,8 @@ public final class Firearms {
         sl.sendParticles(k.flintlock() ? ru.aiforge.arsenal.volumetric.VolumetricParticles.POWDER.get()
                         : ru.aiforge.arsenal.volumetric.VolumetricParticles.MUZZLE.get(),
                 from.x + dir.x, from.y + dir.y, from.z + dir.z, 0, dir.x, dir.y, dir.z, 1);
+        // the AI soldier's muzzle flash and recoil are drawn by every client watching him
+        ModNetwork.sendTracking(owner, new PlayerGunStatePacket(owner.getId(), PlayerGunStatePacket.SHOT, 0));
     }
 
     private static Vec3 jitter(Vec3 d, double cone, ServerLevel sl) {
@@ -588,6 +606,12 @@ public final class Firearms {
     private static void sound(Player p, String name, float vol, float pitch) {
         SoundEvent ev = ForgeRegistries.SOUND_EVENTS.getValue(new net.minecraft.resources.ResourceLocation("aiarsenal", name));
         if (ev != null) p.level().playSound(null, p.getX(), p.getEyeY(), p.getZ(), ev, SoundSource.PLAYERS, vol, pitch);
+    }
+
+    /** Third-person pose of this shooter for everyone who can see him (aim, reload, recoil). */
+    private static void anim(Player p, int flags, int ticks) {
+        if (p instanceof net.minecraftforge.common.util.FakePlayer) return;
+        ModNetwork.sendTracking(p, new PlayerGunStatePacket(p.getId(), flags, ticks));
     }
 
     private static void fx(Player p, int fx, int ammo) {
