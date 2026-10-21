@@ -253,8 +253,8 @@ public final class NpcTests {
                 h.absolutePos(new BlockPos(15, 0, 15)).getZ() + 0.5);
         SoldierEntity storm = SoldierSpawner.spawnOne(h.getLevel(), at, Faction.GERMANY, Era.WW2, Rank.PRIVATE);
         h.assertTrue(storm != null, "assault egg soldier did not spawn");
-        storm.setProfession(Profession.ASSAULT);
-        h.assertTrue(storm.profession() == Profession.ASSAULT && storm.faction() == Faction.GERMANY
+        storm.setProfession(ru.aiforge.realwar.npc.Profession.ASSAULT);
+        h.assertTrue(storm.profession() == ru.aiforge.realwar.npc.Profession.ASSAULT && storm.faction() == Faction.GERMANY
                 && storm.era() == Era.WW2, "the Wehrmacht assault trooper keeps his army and period");
         storm.discard();
         h.succeed();
