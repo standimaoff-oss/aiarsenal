@@ -41,6 +41,7 @@ public class SoldierRenderer extends HumanoidMobRenderer<SoldierEntity, Humanoid
             };
             case GERMANY -> GERMANY;
             case FRANCE -> FRANCE;
+            case PLAYER -> NATO;
         };
     }
 }

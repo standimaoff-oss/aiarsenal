@@ -67,8 +67,7 @@ public final class VolumetricEffects {
         if (event.phase != TickEvent.Phase.END) return;
         checkWorld();
         if (world == null) return;
-        if (VolumeGlRenderer.available()) VolumetricFxManager.tick(world);
-        else VolumetricFxManager.clear();
+        VolumetricFxManager.tick(world);   // simulation never stops; only the GL pass may be in its retry window
     }
 
     @SubscribeEvent public static void render(RenderLevelStageEvent event) {

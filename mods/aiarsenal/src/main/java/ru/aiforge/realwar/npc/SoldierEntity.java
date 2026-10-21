@@ -51,6 +51,11 @@ public class SoldierEntity extends PathfinderMob {
     private static final EntityDataAccessor<Integer> D_ERA = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> D_RANK = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> D_SQUAD = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> D_PROFESSION = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.INT);
+
+    /** The player who recruited this soldier (villager draft), null for the AI armies. */
+    private java.util.UUID ownerUuid;
+    private int healCooldown;
 
     private int leaderId = -1;
     private int squadId;
@@ -95,6 +100,7 @@ public class SoldierEntity extends PathfinderMob {
         this.entityData.define(D_ERA, 2);
         this.entityData.define(D_RANK, 0);
         this.entityData.define(D_SQUAD, 0);
+        this.entityData.define(D_PROFESSION, 0);
     }
 
     // ------------------------------------------------------------------ data
@@ -113,6 +119,23 @@ public class SoldierEntity extends PathfinderMob {
 
     public int squadId() {
         return this.entityData.get(D_SQUAD);
+    }
+
+    public Profession profession() {
+        return Profession.values()[Math.floorMod(this.entityData.get(D_PROFESSION), Profession.values().length)];
+    }
+
+    public void setProfession(Profession p) {
+        this.entityData.set(D_PROFESSION, p.ordinal());
+    }
+
+    @javax.annotation.Nullable
+    public java.util.UUID owner() {
+        return this.ownerUuid;
+    }
+
+    public void setOwner(java.util.UUID uuid) {
+        this.ownerUuid = uuid;
     }
 
     public int leaderId() {
@@ -157,6 +180,7 @@ public class SoldierEntity extends PathfinderMob {
             case OFFICER -> 24.0;
             case CREW -> 26.0;
             case PILOT -> 22.0;
+            case COMMANDER -> 26.0;
         };
         if (this.getAttribute(Attributes.MAX_HEALTH) != null) {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(hp);
@@ -211,6 +235,8 @@ public class SoldierEntity extends PathfinderMob {
             crewTick();
             return;
         }
+        if (this.rank() == Rank.COMMANDER && CommanderAi.tick(this)) return;
+        if (this.profession() == Profession.MEDIC) medicTick();
         if (this.assignedVehicle >= 0 && tryMountVehicle()) return;
         if (this.assignedCraft >= 0 && tryMountCraft()) return;
         if (this.rank() == Rank.CREW) {
@@ -241,6 +267,8 @@ public class SoldierEntity extends PathfinderMob {
             if (v.seatOf(this) == 0) {
                 v.aiStartEngine();
                 VehicleAi.tick(v, this);
+            } else if (this.rank() == Rank.COMMANDER && this.tickCount % 20 == 0) {
+                VehicleAi.commanderScan(v, this);   // the commander rides with his eyes out, not on the wheel
             }
         } else if (vehicle instanceof CraftEntity c) {
             if (c.dmg.dead()) {
@@ -281,7 +309,19 @@ public class SoldierEntity extends PathfinderMob {
         List<VehicleEntity> list = this.level().getEntitiesOfClass(VehicleEntity.class,
                 this.getBoundingBox().inflate(28.0), v -> !v.isRemoved() && !v.dmg.dead()
                         && NpcGear.canUseVehicle(this.faction(), this.era(), v.kind) && v.seatUuid(0) == null);
-        if (!list.isEmpty()) this.assignedVehicle = list.get(0).getId();
+        if (list.isEmpty()) return;
+        // the AA gunner wants the flak gun, the artilleryman a piece with a real gun on it
+        list.sort((a, b) -> Integer.compare(vehicleScore(b), vehicleScore(a)));
+        this.assignedVehicle = list.get(0).getId();
+    }
+
+    private int vehicleScore(VehicleEntity v) {
+        return switch (this.profession()) {
+            case AA_GUNNER -> v.kind.isFlak() ? 10 : 0;
+            case ARTILLERY -> v instanceof ru.aiforge.realwar.vehicle.LauncherVehicle ? 10 : 2;
+            case TANK_CREW -> v instanceof ru.aiforge.realwar.vehicle.GunVehicle ? 10 : 2;
+            default -> 1;
+        };
     }
 
     private void claimFreeAircraft() {
@@ -319,6 +359,34 @@ public class SoldierEntity extends PathfinderMob {
         return true;
     }
 
+    /** A recruited medic: patches up wounded allies and his employer, shoots only when cornered. */
+    private void medicTick() {
+        if (this.healCooldown > 0) {
+            this.healCooldown--;
+            return;
+        }
+        this.healCooldown = 40;
+        java.util.List<LivingEntity> allies = this.level().getEntitiesOfClass(LivingEntity.class,
+                this.getBoundingBox().inflate(7.0), e -> e != this && e.isAlive()
+                        && e.getHealth() < e.getMaxHealth() && isAllyPatient(e));
+        if (allies.isEmpty()) return;
+        LivingEntity patient = allies.get(0);
+        if (this.distanceTo(patient) > 2.6) {
+            this.getNavigation().moveTo(patient, 1.1);
+        } else {
+            this.getNavigation().stop();
+            this.getLookControl().setLookAt(patient, 30f, 30f);
+            patient.heal(3.0f);
+            this.swing(InteractionHand.MAIN_HAND, true);
+        }
+    }
+
+    private boolean isAllyPatient(LivingEntity e) {
+        if (e instanceof SoldierEntity s2) return s2.faction() == this.faction();
+        if (e instanceof Player pl) return this.ownerUuid != null && this.ownerUuid.equals(pl.getUUID());
+        return false;
+    }
+
     // ------------------------------------------------------------------ infantry combat
 
     @Nullable
@@ -354,7 +422,9 @@ public class SoldierEntity extends PathfinderMob {
                     return;
                 }
                 this.getLookControl().setLookAt(target, 30f, 30f);
-                double preferred = this.era() == Era.NAPOLEONIC ? 30.0 : this.era() == Era.WW2 ? 24.0 : 26.0;
+                double preferred = this.rank() == Rank.COMMANDER ? (this.era() == Era.NAPOLEONIC ? 42.0 : 58.0)
+                        : this.profession() == Profession.MEDIC ? 18.0
+                        : this.era() == Era.NAPOLEONIC ? 30.0 : this.era() == Era.WW2 ? 24.0 : 26.0;
                 if (d > preferred + 6.0) {
                     this.moveToward(target.position(), 1.05);
                 } else if (d < preferred - 8.0 && this.era() != Era.NAPOLEONIC && this.moveCooldown <= 0) {
@@ -394,12 +464,22 @@ public class SoldierEntity extends PathfinderMob {
     }
 
     private boolean isEnemy(Entity e) {
-        if (e instanceof Player p) return !p.isCreative() && !p.isSpectator() && p.isAlive();
+        if (e instanceof Player p) {
+            if (this.ownerUuid != null && this.ownerUuid.equals(p.getUUID())) return false;
+            if (this.faction() == Faction.PLAYER) return false;
+            return !p.isCreative() && !p.isSpectator() && p.isAlive();
+        }
         if (e instanceof SoldierEntity s) return s.faction().hostileTo(this.faction());
         return false;
     }
 
     private Vec3 leaderPoint() {
+        if (this.ownerUuid != null && this.level() instanceof ServerLevel sl) {
+            net.minecraft.server.level.ServerPlayer employer = sl.getServer().getPlayerList().getPlayer(this.ownerUuid);
+            if (employer != null && employer.isAlive() && employer.level() == this.level()) {
+                return employer.position();          // a recruit stays with the man who paid him
+            }
+        }
         if (this.leaderId >= 0 && this.level() instanceof ServerLevel sl) {
             Entity leader = sl.getEntity(this.leaderId);
             if (leader != null && leader.isAlive()) return leader.position();
@@ -410,9 +490,34 @@ public class SoldierEntity extends PathfinderMob {
     private void followSquad(Vec3 point) {
         if (point == null || point.equals(Vec3.ZERO)) return;
         int slot = Math.floorMod(this.getId(), 7);
+        Vec3 goal;
+        if (this.era() == Era.NAPOLEONIC && this.leaderId >= 0 && this.level() instanceof ServerLevel sl2) {
+            // 1812: two dressed ranks behind the commander, shoulder to shoulder, at marching pace
+            Entity leader = sl2.getEntity(this.leaderId);
+            if (leader != null) {
+                int file = slot % 4;
+                int row = slot / 4;
+                double yaw = Math.toRadians(leader.getYRot());
+                double fx = -Math.sin(yaw), fz = Math.cos(yaw);        // leader's forward
+                double rx = Math.cos(yaw), rz = Math.sin(yaw);         // leader's right
+                double back = 2.1 + row * 1.9;
+                double side = (file - 1.5) * 1.7;
+                goal = point.add(-fx * back + rx * side, 0, -fz * back + rz * side);
+                double d0 = NpcGear.horizontalDistance(this, point);
+                if (d0 > 3.2 && this.moveCooldown <= 0) {
+                    this.getNavigation().moveTo(goal.x, goal.y, goal.z, 0.92);   // the march: nobody runs
+                    this.setSprinting(false);
+                    this.moveCooldown = 10;
+                } else if (d0 <= 3.2) {
+                    this.getNavigation().stop();
+                    this.getLookControl().setLookAt(leader, 20f, 20f);
+                }
+                return;
+            }
+        }
         double angle = Math.toRadians(slot * 51.4);
         double radius = slot == 0 ? 0.0 : 2.8 + (slot % 3) * 1.1;
-        Vec3 goal = point.add(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+        goal = point.add(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
         double d = NpcGear.horizontalDistance(this, point);
         this.strayTicks = d > LEASH ? this.strayTicks + 1 : 0;
         if (d > 3.2 && this.moveCooldown <= 0) {
@@ -581,6 +686,8 @@ public class SoldierEntity extends PathfinderMob {
         tag.putDouble("npcAnchorY", this.anchor.y);
         tag.putDouble("npcAnchorZ", this.anchor.z);
         tag.putInt("npcMag", this.magLeft);
+        tag.putInt("npcProfession", this.profession().ordinal());
+        if (this.ownerUuid != null) tag.putUUID("npcOwner", this.ownerUuid);
     }
 
     @Override
@@ -596,6 +703,9 @@ public class SoldierEntity extends PathfinderMob {
         this.assignedCraft = tag.contains("npcCraft") ? tag.getInt("npcCraft") : -1;
         this.anchor = new Vec3(tag.getDouble("npcAnchorX"), tag.getDouble("npcAnchorY"), tag.getDouble("npcAnchorZ"));
         this.magLeft = tag.contains("npcMag") ? tag.getInt("npcMag") : -1;
+        if (tag.contains("npcProfession")) this.entityData.set(D_PROFESSION, tag.getInt("npcProfession"));
+        this.ownerUuid = tag.hasUUID("npcOwner") ? tag.getUUID("npcOwner") : null;
+        this.entityData.set(D_SQUAD, this.squadId);
     }
 
     /** Spawn hook used by the spawn eggs / command: the faction data is set before the entity joins the world. */

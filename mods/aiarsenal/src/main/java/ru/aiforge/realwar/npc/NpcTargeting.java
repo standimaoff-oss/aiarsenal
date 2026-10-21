@@ -38,12 +38,32 @@ public final class NpcTargeting {
     /** Is this entity a valid target for the given army? */
     public static boolean hostile(Faction f, Entity e) {
         if (e == null || !e.isAlive() || e.isSpectator()) return false;
-        if (e instanceof Player p) return !p.isCreative() && !p.isSpectator();
+        if (e instanceof Player p) {
+            // a player's own recruits never turn on players; every AI army still fights them
+            return f != Faction.PLAYER && !p.isCreative() && !p.isSpectator();
+        }
         if (e instanceof SoldierEntity s) return s.faction() != f;
         Faction cf = factionOf(e);
         if (cf != null) return cf != f;
         // an uncrewed vehicle is not a target; a player-driven one is
         return (e instanceof VehicleEntity || e instanceof CraftEntity) && crewedByPlayer(e);
+    }
+
+    /** Nearest hostile aircraft — the whole job of an AA crew. */
+    @Nullable
+    public static Entity findAir(ServerLevel sl, Vec3 from, Faction f, double range) {
+        List<CraftEntity> air = sl.getEntitiesOfClass(CraftEntity.class,
+                new AABB(from, from).inflate(range), c -> c.kind.isAir() && hostile(f, c));
+        Entity best = null;
+        double bd = range * range;
+        for (CraftEntity c : air) {
+            double d = c.position().distanceToSqr(from);
+            if (d < bd) {
+                bd = d;
+                best = c;
+            }
+        }
+        return best;
     }
 
     /** Nearest hostile, split into infantry (priority) and hard targets. */

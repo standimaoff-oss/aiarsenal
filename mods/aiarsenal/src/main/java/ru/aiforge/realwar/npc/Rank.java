@@ -10,7 +10,9 @@ public enum Rank {
     SERGEANT("sergeant", 0.78, 2),
     OFFICER("officer", 0.84, 3),
     CREW("crew", 0.90, 2),
-    PILOT("pilot", 0.93, 1);
+    PILOT("pilot", 0.93, 1),
+    /** Commands the squad / regiment; in a vehicle he picks targets instead of driving. */
+    COMMANDER("commander", 0.88, 4);
 
     public final String id;
     public final double skill;

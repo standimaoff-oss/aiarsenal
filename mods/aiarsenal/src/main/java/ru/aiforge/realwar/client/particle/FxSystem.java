@@ -44,17 +44,9 @@ public final class FxSystem {
     private FxSystem() {
     }
 
-    private static void handToParticleEngine(FxParticle p) {
-        p.useShaderSafeRendering();
-        shaderSafeParticles++;
-        Minecraft.getInstance().particleEngine.add(p);
-    }
-
     public static void add(FxParticle p) {
-        if (ShaderPackCompatibility.blocked()) {
-            handToParticleEngine(p);
-            return;
-        }
+        // Smoke always becomes a raymarched volume first (also under Photon/Iris); the mod's own billboards
+        // below only carry flash cores and sparks. Nothing is ever handed to the vanilla ParticleEngine.
         if (p.volumetricSmoke() && ru.aiforge.arsenal.volumetric.client.VolumetricEffects.smoke(p.px(), p.py(), p.pz(), p.size, p.lifeSeconds())) return;
         ALL.add(p);
     }
@@ -69,13 +61,6 @@ public final class FxSystem {
     }
 
     public static void tick() {
-        if (ShaderPackCompatibility.blocked()) {
-            // Transfer ownership exactly once when a pack is enabled mid-effect.
-            // The vanilla engine now owns both ticking and rendering.
-            for (FxParticle p : ALL) handToParticleEngine(p);
-            ALL.clear();VISIBLE.clear();
-            return;
-        }
         Iterator<FxParticle> it = ALL.iterator();
         while (it.hasNext()) {
             FxParticle p = it.next();
@@ -86,7 +71,7 @@ public final class FxSystem {
     }
 
     public static void render(PoseStack levelPose, Camera camera, float partial, Frustum frustum) {
-        if (ShaderPackCompatibility.blocked() || ALL.isEmpty() || renderFailed) {
+        if (ALL.isEmpty() || renderFailed) {
             return;
         }
         try {

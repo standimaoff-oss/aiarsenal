@@ -2095,5 +2095,17 @@
   "npc.aiarsenal.cmd.era_mismatch": "%s не воевала в эту эпоху (%s)",
   "itemGroup.aiarsenal.modern_troops": "Современность · Личный состав",
   "itemGroup.aiarsenal.ww2_troops": "ВМВ · Личный состав",
-  "itemGroup.aiarsenal.napoleonic_troops": "1812 · Личный состав"
+  "itemGroup.aiarsenal.napoleonic_troops": "1812 · Личный состав",
+  "npc.aiarsenal.rank.commander": "командир",
+  "npc.aiarsenal.faction.player": "ополчение игрока",
+  "npc.aiarsenal.profession.assault": "штурмовик",
+  "npc.aiarsenal.profession.medic": "медик",
+  "npc.aiarsenal.profession.artillery": "артиллерист",
+  "npc.aiarsenal.profession.tank_crew": "танкист",
+  "npc.aiarsenal.profession.aa_gunner": "зенитчик",
+  "npc.aiarsenal.profession.pilot": "лётчик",
+  "npc.aiarsenal.profession.commander": "командир",
+  "msg.aiarsenal.recruit.profession": "Профессия рекрута: %s (Shift + ПКМ изумрудом — сменить)",
+  "msg.aiarsenal.recruit.price": "Рекрут стоит %s изумруда(ов)",
+  "msg.aiarsenal.recruit.done": "Завербован: %s. Идёт за вами и воюет с вашими врагами."
 }

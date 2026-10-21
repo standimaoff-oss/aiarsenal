@@ -11,7 +11,9 @@ public enum Faction {
     NATO("nato", 0x4C7BB5),
     RUSSIA("russia", 0xB5433B),
     GERMANY("germany", 0x6B6F5A),
-    FRANCE("france", 0x3E5C9A);
+    FRANCE("france", 0x3E5C9A),
+    /** Villagers recruited and equipped by a player: his private army, hostile to every AI faction. */
+    PLAYER("player", 0x3FA34D);
 
     public final String id;
     public final int colour;
@@ -27,6 +29,7 @@ public enum Faction {
             case NATO -> era == Era.MODERN;
             case GERMANY -> era == Era.WW2;
             case FRANCE -> era == Era.NAPOLEONIC;
+            case PLAYER -> true;              // a player's recruits take whatever period he equips them for
             case RUSSIA -> true;              // Russian Empire 1812, USSR 1943, Russian Federation today
         };
     }
@@ -49,6 +52,7 @@ public enum Faction {
                 case NAPOLEONIC -> rank == Rank.OFFICER ? "pistol_1809" : "musket_1808";
             };
             case GERMANY -> rank == Rank.SERGEANT ? "mp40" : rank == Rank.OFFICER ? "c96" : "k98k";
+            case PLAYER -> rank == Rank.COMMANDER || rank == Rank.OFFICER ? "tt33" : "ak12";
             case FRANCE -> rank == Rank.OFFICER ? "pistol_an13" : "musket_1777";
         };
     }
@@ -89,6 +93,13 @@ public enum Faction {
                 case PILOT -> "ww2_de_pilot";
                 default -> "ww2_de_infantry";
             };
+            case PLAYER -> switch (rank) {
+                case SERGEANT -> "us_sergeant";
+                case OFFICER, COMMANDER -> "us_captain";
+                case PILOT -> "ru_pilot";
+                case CREW -> "ru_vdv";
+                default -> "us_private";
+            };
             case FRANCE -> rank == Rank.OFFICER ? "nap_fr_officer" : "nap_fr_infantry";
         };
     }
@@ -101,11 +112,14 @@ public enum Faction {
             case RUSSIA -> switch (era) {
                 case WW2 -> new VehicleKind[]{VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BM13};
                 case MODERN -> new VehicleKind[]{VehicleKind.T90M, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.TOS1A,
-                        VehicleKind.GRAD, VehicleKind.SMERCH};
+                        VehicleKind.GRAD, VehicleKind.SMERCH, VehicleKind.ZU23};
                 case NAPOLEONIC -> new VehicleKind[0];
             };
             case GERMANY -> era == Era.WW2
                     ? new VehicleKind[]{VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.PZ2, VehicleKind.MAUS}
+                    : new VehicleKind[0];
+            case PLAYER -> era == Era.MODERN
+                    ? new VehicleKind[]{VehicleKind.ABRAMS, VehicleKind.BRADLEY, VehicleKind.ZU23, VehicleKind.M777}
                     : new VehicleKind[0];
             case FRANCE -> new VehicleKind[0];
         };
@@ -120,6 +134,7 @@ public enum Faction {
                 case NAPOLEONIC -> new CraftKind[0];
             };
             case GERMANY -> era == Era.WW2 ? new CraftKind[]{CraftKind.BF109, CraftKind.HE111} : new CraftKind[0];
+            case PLAYER -> era == Era.MODERN ? new CraftKind[]{CraftKind.AH64} : new CraftKind[0];
             case FRANCE -> new CraftKind[0];
         };
     }

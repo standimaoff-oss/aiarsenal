@@ -84,6 +84,11 @@ public final class MuzzleFx {
             FxSystem.add(s);
         }
 
+        // --- the smoke itself is a raymarched volume (mandatory, also under shaderpacks)
+        ru.aiforge.arsenal.volumetric.client.VolumetricEffects.smoke(
+                muzzle.x + d.x * 0.25, muzzle.y + d.y * 0.25, muzzle.z + d.z * 0.25,
+                (black ? 1.5f : 0.8f) * scale, black ? 7f : 3.5f);
+
         // --- cordite / black-powder cloud: quick forward roll, then slow buoyant drift
         int puffs = black ? 7 : 3;
         float puffSize = (black ? 0.34f : 0.16f) * scale;

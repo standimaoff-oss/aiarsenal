@@ -700,6 +700,11 @@ public abstract class CraftEntity extends Entity implements ru.aiforge.realwar.d
         return "throttle,steer,mouseX,mouseY,up,down";
     }
 
+    /** Current AI forced input (copy), null when a player flies. */
+    public float[] forcedInput() {
+        return this.forced == null ? null : java.util.Arrays.copyOf(this.forced, this.forced.length);
+    }
+
     public void setForcedInput(float... in) {
         float[] f = new float[8];
         System.arraycopy(in, 0, f, 0, Math.min(8, in.length));

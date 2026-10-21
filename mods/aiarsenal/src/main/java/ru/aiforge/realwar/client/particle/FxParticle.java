@@ -198,7 +198,7 @@ extends TextureSheetParticle {
     }
 
     public ParticleRenderType getRenderType() {
-        return shaderSafe ? ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT : this.additive ? ADDITIVE : SMOKE;
+        return this.additive ? ADDITIVE : SMOKE;
     }
 
     protected int getLightColor(float partial) {

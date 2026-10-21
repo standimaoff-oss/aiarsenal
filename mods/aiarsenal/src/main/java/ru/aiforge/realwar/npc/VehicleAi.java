@@ -42,6 +42,30 @@ final class VehicleAi {
 
         Vec3 leader = s.squadAnchor();
         double squadDist = leader == null || leader.equals(Vec3.ZERO) ? 0 : leader.distanceTo(v.position());
+
+        // --- knocked about but not knocked out: fall back and let the crew repair (module repair needs a halt)
+        boolean battered = v.dmg.any() || v.hp() < v.kind.hp * 0.45f;
+        boolean canRetreat = ru.aiforge.realwar.damage.VehicleDamage.canDrive(v);   // false: track/engine gone
+        if (battered) {
+            if (!canRetreat) {
+                v.setAiInput(0f, 0f, true);                   // cannot move: repair where she stands
+                return;
+            }
+            if (target != null) {
+                Vec3 away = v.position().subtract(target.position());
+                if (away.lengthSqr() > 0.01) {
+                    Vec3 back = v.position().add(away.normalize().scale(35.0));
+                    if (leader != null && !leader.equals(Vec3.ZERO)) {
+                        back = back.add(leader.subtract(v.position()).scale(0.35));   // retire toward your own
+                    }
+                    driveToward(v, back);
+                }
+                return;
+            }
+            v.setAiInput(0f, 0f, true);                       // safe: halt and repair
+            return;
+        }
+
         Vec3 goal = null;
         if (leader != null && squadDist > SQUAD_LEASH) {
             goal = leader;                                    // never wander off from the squad
@@ -97,9 +121,16 @@ final class VehicleAi {
         v.setAiInput(throttle, steer, brake);
     }
 
+    /** A commander riding in the hull does the looking: same scan, handed to his gunner. */
+    static void commanderScan(VehicleEntity v, SoldierEntity s) {
+        if (v.level() instanceof ServerLevel sl) think(v, s, sl);
+    }
+
     private static void think(VehicleEntity v, SoldierEntity s, ServerLevel sl) {
         Vec3 eye = v.position().add(0, v.spec.height() * 0.7, 0);
-        Entity found = NpcTargeting.find(sl, eye, s.faction(),
+        // an AA crew lives for aircraft: nothing on the ground outranks a hostile plane
+        Entity found = v.kind.isFlak() ? NpcTargeting.findAir(sl, v.position(), s.faction(), 420.0) : null;
+        if (found == null) found = NpcTargeting.find(sl, eye, s.faction(),
                 v instanceof GunVehicle ? 210.0 : 260.0, 260.0);
         if (found != null && found.getVehicle() == v) found = null;
         v.aiTargetId = found == null ? -1 : found.getId();
@@ -134,6 +165,23 @@ final class VehicleAi {
             l.aiSpread = (float) (1.2 + (1.0 - skill) * 5.0);
             l.aiTrigger = true;
         }
+    }
+
+    /** Steers the hull at a point at cruising throttle (retreat driving; shooting continues via think()). */
+    private static void driveToward(VehicleEntity v, Vec3 goal) {
+        double dx = goal.x - v.getX();
+        double dz = goal.z - v.getZ();
+        float want = (float) Math.toDegrees(Math.atan2(-dx, dz));
+        float err = Mth.wrapDegrees(want - v.getYRot());
+        float steer = Mth.clamp(-err / 26.0f, -1f, 1f);
+        float throttle = Math.abs(err) > 110.0f ? 0f : 0.65f;
+        if (Math.abs(err) > 50.0f) throttle *= 0.4f;
+        boolean brake = Math.abs(err) > 110.0f;
+        if (v.level() instanceof ServerLevel sl && ownSoldierAhead(v, sl)) {
+            throttle = 0f;
+            brake = true;
+        }
+        v.setAiInput(throttle, steer, brake);
     }
 
     private static float headingError(VehicleEntity v, Vec3 to) {

@@ -2095,5 +2095,17 @@
   "npc.aiarsenal.cmd.era_mismatch": "%s did not fight in this period (%s)",
   "itemGroup.aiarsenal.modern_troops": "Modern · Troops",
   "itemGroup.aiarsenal.ww2_troops": "WWII · Troops",
-  "itemGroup.aiarsenal.napoleonic_troops": "1812 · Troops"
+  "itemGroup.aiarsenal.napoleonic_troops": "1812 · Troops",
+  "npc.aiarsenal.rank.commander": "commander",
+  "npc.aiarsenal.faction.player": "player's militia",
+  "npc.aiarsenal.profession.assault": "assault rifleman",
+  "npc.aiarsenal.profession.medic": "medic",
+  "npc.aiarsenal.profession.artillery": "artilleryman",
+  "npc.aiarsenal.profession.tank_crew": "tank crewman",
+  "npc.aiarsenal.profession.aa_gunner": "AA gunner",
+  "npc.aiarsenal.profession.pilot": "pilot",
+  "npc.aiarsenal.profession.commander": "commander",
+  "msg.aiarsenal.recruit.profession": "Recruit as: %s (sneak + emerald right-click to change)",
+  "msg.aiarsenal.recruit.price": "A recruit costs %s emeralds",
+  "msg.aiarsenal.recruit.done": "Recruited as %s. He follows you and fights your enemies."
 }

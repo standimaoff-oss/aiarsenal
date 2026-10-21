@@ -38,7 +38,42 @@ final class AircraftAi {
         Vec3 wp = waypoint(c, s, target);
         if (c.kind.isHeli()) heli(c, s, target, wp, sl);
         else plane(c, s, target, wp, sl);
+        evade(c, s, sl);
         trigger(c, target);
+    }
+
+    /**
+     * Under AA fire or with a missile out: pop flares and weave — gently. A hard break bleeds the speed
+     * a fixed wing needs to stay airborne and throws the helicopter into the ground, so the jink is a
+     * shallow, rolling S-turn that keeps the aircraft flying while it spoils the gunner's lead.
+     */
+    private static void evade(CraftEntity c, SoldierEntity s, ServerLevel sl) {
+        if (!threatened(c, s, sl)) return;
+        if (c.tickCount % 24 == 0) c.fireFlares();
+        float[] in = c.forcedInput();
+        if (in == null || in.length < 4) return;
+        double wave = Math.sin(c.tickCount * 0.22);
+        in[2] = Mth.clamp(in[2] + (float) wave * 0.38f, -1f, 1f);        // yaw/roll weave
+        in[3] = Mth.clamp(in[3] + (float) Math.cos(c.tickCount * 0.22) * 0.10f, -0.6f, 0.6f);
+        if (in.length > 4) in[4] = Math.max(in[4], 0.25f);               // helicopters also climb out of the cone
+        c.setForcedInput(in);
+    }
+
+    private static boolean threatened(CraftEntity c, SoldierEntity s, ServerLevel sl) {
+        // a launched missile homing on us
+        for (ru.aiforge.realwar.handheld.AtMissileEntity m : sl.getEntitiesOfClass(
+                ru.aiforge.realwar.handheld.AtMissileEntity.class, c.getBoundingBox().inflate(170.0))) {
+            Entity owner = m.getOwner();
+            if (owner == null || owner == c) continue;
+            if (NpcTargeting.hostile(s.faction(), owner)) return true;
+        }
+        // a crewed flak gun or an enemy aircraft close enough to matter
+        for (Entity e : sl.getEntitiesOfClass(Entity.class, c.getBoundingBox().inflate(320.0),
+                e -> e != c && (e instanceof ru.aiforge.realwar.vehicle.FlakEntity
+                        || e instanceof CraftEntity) && NpcTargeting.hostile(s.faction(), e))) {
+            return true;
+        }
+        return false;
     }
 
     private static void think(CraftEntity c, SoldierEntity s, ServerLevel sl) {

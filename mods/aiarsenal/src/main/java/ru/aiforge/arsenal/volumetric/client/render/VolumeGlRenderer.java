@@ -49,6 +49,7 @@ public final class VolumeGlRenderer {
     private static int lowWidth;
     private static int lowHeight;
     private static boolean failed;
+    private static long retryAtMillis;
     private static boolean qaFailNextShader;
     private static boolean warmed;
     private static boolean loggedRenderer;
@@ -98,8 +99,10 @@ public final class VolumeGlRenderer {
                     }
                 }
                 catch (Throwable throwable) {
+                    // Never degrade to vanilla particles: pause, then retry automatically.
                     failed = true;
-                    AiArsenal.LOGGER.error("VolPyro GL renderer disabled after an exception; gameplay remains available.", throwable);
+                    retryAtMillis = System.currentTimeMillis() + 4000L;
+                    AiArsenal.LOGGER.error("VolPyro GL frame failed; volumetric rendering retries in 4 s (no particle fallback).", throwable);
                     VolumetricFxManager.clear();
                 }
             }
@@ -388,8 +391,12 @@ public final class VolumeGlRenderer {
     }
 
     public static boolean available() {
-        return !failed && VolPyroClientConfig.ENABLE_VOLUMETRIC_RENDERER.get()
-                && !ShaderPackCompatibility.blocked();
+        if (failed && System.currentTimeMillis() >= retryAtMillis) {
+            failed = false;
+            warmed = false;
+            AiArsenal.LOGGER.info("VolPyro volumetric renderer retrying after a failed frame.");
+        }
+        return !failed && VolPyroClientConfig.ENABLE_VOLUMETRIC_RENDERER.get();
     }
 
     /** Render-thread resource reload / world teardown; also permits retry after a shader fix. */

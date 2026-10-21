@@ -4,11 +4,14 @@ import java.lang.reflect.Method;
 import net.minecraftforge.fml.ModList;
 import ru.aiforge.arsenal.AiArsenal;
 
-/** No GL calls: consulted BEFORE state capture, framebuffer creation or depth blits.
- * Oculus owns the render targets while a shaderpack is active. The vanilla depth
- * texture contract is not sufficient in that pipeline. Until an explicit integration
- * is tested, use the existing particle fallback instead of touching its framebuffer.
- * This mitigates a compatibility risk; it does not diagnose a native driver crash. */
+/**
+ * Volumetric rendering is mandatory in this mod — with or without a shaderpack.
+ * A pack (Photon/Iris/Oculus) never disables the raymarched smoke: the volume pass runs at AFTER_PARTICLES
+ * against the current main render target and restores every piece of GL state it touches (GlStateSnapshot).
+ * If a driver/pack combination ever makes a frame throw, VolumeGlRenderer backs off for a few seconds and
+ * retries on its own — effects pause, they never degrade to vanilla particles.
+ * This class now only reports whether a pack is active (diagnostics / QA status line).
+ */
 public final class ShaderPackCompatibility {
     private static boolean initialized;
     private static boolean unknown;
@@ -18,7 +21,13 @@ public final class ShaderPackCompatibility {
 
     private ShaderPackCompatibility() {}
 
+    /** Kept for call-site compatibility: volumetric effects are never blocked by a shaderpack. */
     public static boolean blocked() {
+        return false;
+    }
+
+    /** Diagnostics only: is an Iris/Oculus shaderpack currently rendering? */
+    public static boolean shaderPackActive() {
         if (!initialized) {
             initialized = true;
             boolean loader = ModList.get().isLoaded("oculus") || ModList.get().isLoaded("iris");

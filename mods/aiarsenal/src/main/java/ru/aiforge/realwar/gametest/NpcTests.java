@@ -63,13 +63,13 @@ public final class NpcTests {
         for (SoldierEntity s : squad) {
             h.assertTrue(s.faction() == Faction.RUSSIA, "wrong faction " + s.faction());
             h.assertTrue(s.era() == Era.WW2, "wrong era " + s.era());
-            if (s.rank() == Rank.SERGEANT) sergeants++;
+            if (s.rank() == Rank.COMMANDER) sergeants++;
             h.assertTrue(s.getMainHandItem().getItem() instanceof FirearmItem, "no firearm for " + s.rank());
             h.assertTrue(!s.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).isEmpty(), "no uniform");
             h.assertTrue(s.leaderId() == squad.get(0).getId(), "squad leader not wired");
             h.assertTrue(s.squadId() == squad.get(0).squadId(), "squad id mismatch");
         }
-        h.assertTrue(sergeants == 1, "exactly one sergeant expected, got " + sergeants);
+        h.assertTrue(sergeants == 1, "exactly one commander expected, got " + sergeants);
         h.succeed();
     }
 

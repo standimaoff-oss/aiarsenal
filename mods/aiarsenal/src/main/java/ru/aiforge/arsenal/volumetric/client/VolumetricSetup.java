@@ -2,7 +2,6 @@ package ru.aiforge.arsenal.volumetric.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
@@ -20,15 +19,15 @@ public final class VolumetricSetup {
         var types=java.util.List.of(VolumetricParticles.MUZZLE,VolumetricParticles.POWDER,VolumetricParticles.CANNON,VolumetricParticles.EXHAUST,VolumetricParticles.IMPACT);
         for(int i=0;i<types.size();i++) {
             final int profile=i+1;
+            // Volumetric only: if the volume pass is in its brief retry window the puff is dropped,
+            // never replaced by a vanilla particle.
             event.registerSpecial(types.get(i).get(),(type,level,x,y,z,vx,vy,vz)->{
-                if(!VolumetricEffects.profile(x,y,z,vx,vy,vz,profile))
-                    Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,x,y,z,vx*.08,vy*.08,vz*.08);
+                VolumetricEffects.profile(x,y,z,vx,vy,vz,profile);
                 return null;
             });
         }
         event.registerSpecial(VolumetricParticles.SMOKE.get(), (type, level, x, y, z, vx, vy, vz) -> {
-            if (!VolumetricEffects.smoke(x, y, z, 1.6f, 5f))
-                Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, vx, vy, vz);
+            VolumetricEffects.smoke(x, y, z, 1.6f, 5f);
             return null;
         });
     }

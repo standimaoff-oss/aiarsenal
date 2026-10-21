@@ -46,6 +46,7 @@ public final class SoldierSpawner {
             case NATO -> ModEntities.SOLDIER_NATO.get();
             case GERMANY -> ModEntities.SOLDIER_GERMANY.get();
             case FRANCE -> ModEntities.SOLDIER_FRANCE.get();
+            case PLAYER -> ModEntities.SOLDIER_NATO.get();
             case RUSSIA -> era == Era.WW2 ? ModEntities.SOLDIER_USSR.get() : ModEntities.SOLDIER_RUSSIA.get();
         };
     }
@@ -74,7 +75,8 @@ public final class SoldierSpawner {
         int n = Mth.clamp(count, 1, 24);
         int squadId = Math.abs(sl.random.nextInt()) % 90000 + 1000;
         List<SoldierEntity> squad = new ArrayList<>();
-        Rank leaderRank = n >= 6 ? Rank.OFFICER : Rank.SERGEANT;
+        // every real formation is led by its commander; a pair or a trio keeps a sergeant
+        Rank leaderRank = n >= 4 ? Rank.COMMANDER : Rank.SERGEANT;
 
         for (int i = 0; i < n; i++) {
             Rank rank = i == 0 ? leaderRank : Rank.PRIVATE;
