@@ -200,7 +200,10 @@ public final class NpcTests {
             if (heli.tickCount > 220) {
                 h.assertTrue(heli.getPassengers().contains(pilot), "the pilot never boarded the helicopter");
                 h.assertTrue(heli.getY() > y0 + 4.0,
-                        "the AI pilot did not lift off (gained " + String.format("%.2f", heli.getY() - y0) + " blocks)");
+                        "the AI pilot did not lift off (gained " + String.format("%.2f", heli.getY() - y0)
+                                + " blocks) engine=" + heli.engineOn() + " fuel=" + heli.fuel()
+                                + " seat=" + heli.seatOf(pilot) + " stab=" + heli.flag(CraftEntity.FLAG_STAB)
+                                + " forced=" + java.util.Arrays.toString(heli.forcedInput()));
                 h.succeed();
             }
         });
