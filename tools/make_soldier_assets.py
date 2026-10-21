@@ -35,13 +35,17 @@ def write_png(path: Path, w: int, h: int, px):
 # --------------------------------------------------------------------------- skin
 # Classic Steve palette.
 HAIR = (92, 64, 41, 255)
+HAIR_DARK = (66, 45, 29, 255)
 SKIN = (196, 148, 104, 255)
 SKIN_SHADE = (178, 128, 88, 255)
 WHITE = (255, 255, 255, 255)
 EYE = (70, 110, 170, 255)
+BROW = (78, 54, 34, 255)
 MOUTH = (120, 84, 58, 255)
 SHIRT = (0, 150, 145, 255)
+SHIRT_DARK = (0, 124, 120, 255)
 PANTS = (80, 60, 130, 255)
+PANTS_DARK = (66, 49, 108, 255)
 SHOES = (110, 110, 110, 255)
 
 
@@ -55,49 +59,95 @@ def fill(img, x0, y0, x1, y1, color):
             img[y][x] = list(color)
 
 
+# --- the vanilla 64x64 skin atlas (post-1.8 layout) ---------------------------
+# Every cuboid unwraps to: right | front | left | back in one row, top | bottom above.
+HEAD = (0, 0, 8, 8, 8)        # 8x8x8
+BODY = (16, 16, 8, 12, 4)     # 8x12x4
+RIGHT_ARM = (40, 16, 4, 12, 4)
+LEFT_ARM = (32, 48, 4, 12, 4)
+RIGHT_LEG = (0, 16, 4, 12, 4)
+LEFT_LEG = (16, 48, 4, 12, 4)
+
+
+def faces(box):
+    """(x, y, w, h, d) -> dict of 6 face rectangles, vanilla skin layout."""
+    x, y, w, h, d = box
+    return {
+        'right': (x, y + d, d, h),
+        'front': (x + d, y + d, w, h),
+        'left': (x + d + w, y + d, d, h),
+        'back': (x + 2 * d + w, y + d, w, h),
+        'top': (x + d, y, w, d),
+        'bottom': (x + d + w, y, w, d),
+    }
+
+
+def poly(img, rect, color):
+    fill(img, rect[0], rect[1], rect[0] + rect[2], rect[1] + rect[3], color)
+
+
 def skin_steve():
-    """64x64 humanoid skin, classic Steve."""
+    """64x64 humanoid skin in the classic Steve palette (player head/body shape)."""
     img = blank(64, 64)
-    # head: top (0,0,8,8), front (8,8,8,8), right (16,8,8,8), left (0,8,8,8), back (24,8,8,8)
-    for region in [(0, 0, 8, 8), (8, 8, 16, 16), (16, 8, 24, 16), (0, 8, 8, 16), (24, 8, 32, 16)]:
-        fill(img, *region, SKIN)
-    # hair: whole head top + fringe rows 0-1 on front/sides/back + sideburns
-    fill(img, 0, 0, 8, 8, HAIR)                      # top
-    fill(img, 8, 8, 16, 10, HAIR)                    # front fringe
-    fill(img, 16, 8, 24, 12, HAIR)                   # right side
-    fill(img, 0, 8, 8, 12, HAIR)                     # left side
-    fill(img, 24, 8, 32, 12, HAIR)                   # back
-    # face on the front (8..16, 8..16): eyes rows 10-11, nose row 12-13, mouth row 13
-    fill(img, 10, 10, 12, 12, WHITE)
-    fill(img, 13, 10, 15, 12, WHITE)
-    fill(img, 11, 10, 12, 12, EYE)
-    fill(img, 13, 10, 14, 12, EYE)
-    fill(img, 11, 12, 13, 13, SKIN_SHADE)            # nose
-    fill(img, 11, 13, 13, 14, MOUTH)                 # mouth
-    # body: top (16,16,8,2), bottom (24,16,8,2), front (16,18,8,6), right (24,18,8,6),
-    #       left (32,18,8,6), back (40,18,8,6)
-    for region in [(16, 16, 24, 18), (24, 16, 32, 18), (16, 18, 24, 24),
-                   (24, 18, 32, 24), (32, 18, 40, 24), (40, 18, 48, 24)]:
-        fill(img, *region, SHIRT)
-    # arms (front/sides/back 12 tall, top 1): right arm (44,16..), left arm (36,48..)
-    for x0, y0 in [(44, 16), (36, 48)]:
-        fill(img, x0, y0, x0 + 4, y0 + 1, SKIN)                       # top
-        fill(img, x0 + 12, y0, x0 + 16, y0 + 1, SKIN)                 # bottom
-        for dx in (0, 4, 8, 12):                                      # front/right/left/back
-            fill(img, x0 + dx, y0 + 1, x0 + dx + 4, y0 + 3, SHIRT)    # sleeve
-            fill(img, x0 + dx, y0 + 3, x0 + dx + 4, y0 + 13, SKIN)    # forearm
-    # legs: right leg (4,40..), left leg (20,32..)
-    for x0, y0 in [(4, 40), (20, 32)]:
-        fill(img, x0, y0, x0 + 4, y0 + 1, PANTS)                      # top
-        fill(img, x0 + 12, y0, x0 + 16, y0 + 1, SHOES)                # bottom (sole)
-        for dx in (0, 4, 8, 12):                                      # front/right/left/back
-            fill(img, x0 + dx, y0 + 1, x0 + dx + 4, y0 + 11, PANTS)   # trousers
-            fill(img, x0 + dx, y0 + 11, x0 + dx + 4, y0 + 13, SHOES)  # shoes
+
+    # ---- head: skin everywhere, hair on top/sides/back, Steve face on the front
+    for rect in faces(HEAD).values():
+        poly(img, rect, SKIN)
+    head = faces(HEAD)
+    poly(img, head['top'], HAIR)
+    poly(img, head['bottom'], SKIN_SHADE)
+    for side in ('right', 'left', 'back'):
+        rx, ry, rw, rh = head[side]
+        fill(img, rx, ry, rx + rw, ry + 3, HAIR)              # hair on the upper rows
+    fx, fy, fw, fh = head['front']                            # 8x8 face at (8,8)
+    fill(img, fx, fy, fx + fw, fy + 2, HAIR)                  # fringe
+    fill(img, fx + 1, fy + 2, fx + 3, fy + 4, WHITE)          # left eye white
+    fill(img, fx + 5, fy + 2, fx + 7, fy + 4, WHITE)          # right eye white
+    fill(img, fx + 1, fy + 2, fx + 2, fy + 4, EYE)            # pupils
+    fill(img, fx + 5, fy + 2, fx + 6, fy + 4, EYE)
+    fill(img, fx + 1, fy + 1, fx + 3, fy + 2, BROW)
+    fill(img, fx + 5, fy + 1, fx + 7, fy + 2, BROW)
+    fill(img, fx + 3, fy + 4, fx + 5, fy + 5, SKIN_SHADE)     # nose
+    fill(img, fx + 3, fy + 6, fx + 5, fy + 7, MOUTH)          # mouth
+    fill(img, fx, fy + 7, fx + fw, fy + 8, SKIN_SHADE)        # chin shade
+
+    # ---- body: teal shirt with a slightly darker collar/hem
+    body = faces(BODY)
+    for name, rect in body.items():
+        poly(img, rect, SHIRT)
+    rx, ry, rw, rh = body['front']
+    fill(img, rx, ry, rx + rw, ry + 2, SHIRT_DARK)
+    fill(img, rx, ry + rh - 2, rx + rw, ry + rh, SHIRT_DARK)
+
+    # ---- arms: shirt sleeve on the top 4 rows, bare skin (Steve hands) below
+    for box in (RIGHT_ARM, LEFT_ARM):
+        arm = faces(box)
+        for name, rect in arm.items():
+            poly(img, rect, SKIN)
+        for side in ('front', 'back', 'left', 'right'):
+            ax, ay, aw, ah = arm[side]
+            fill(img, ax, ay, ax + aw, ay + 4, SHIRT)
+        ax, ay, aw, ah = arm['front']
+        fill(img, ax, ay + 4, ax + aw, ay + 5, SHIRT_DARK)    # cuff
+        poly(img, arm['top'], SHIRT)
+
+    # ---- legs: trousers with shoes at the bottom
+    for box in (RIGHT_LEG, LEFT_LEG):
+        leg = faces(box)
+        for name, rect in leg.items():
+            poly(img, rect, PANTS)
+        for side in ('front', 'back', 'left', 'right'):
+            lx, ly, lw, lh = leg[side]
+            fill(img, lx, ly + 9, lx + lw, ly + lh, SHOES)    # shoes
+        poly(img, leg['bottom'], SHOES)
+        lx, ly, lw, lh = leg['front']
+        fill(img, lx, ly, lx + lw, ly + 1, PANTS_DARK)
+
     return img
 
 
 # --------------------------------------------------------------------------- uniforms
-# Overlay palette per class: (tunic, sleeve_edge, trousers, boots, headgear, headgear_dark)
+# Overlay palette per class: tunic / trim / trousers / boots / headgear
 UNIFORMS = {
     'commander': dict(
         tunic=(168, 158, 112, 255), trim=(96, 88, 58, 255),
@@ -119,39 +169,56 @@ UNIFORMS = {
 
 
 def uniform(class_id: str):
+    """Transparent overlay: tunic, sleeves, trousers, boots and a helmet.  The face
+    (rows below the helmet brim) and the hands stay transparent, so the Steve skin
+    underneath provides the head and the hands."""
     c = UNIFORMS[class_id]
-    img = blank(64, 64)  # fully transparent: the Steve skin shows through
-    # tunic: body front/back/left/right + a darker trim row at the hem
-    for region in [(16, 18, 24, 24), (24, 18, 32, 24), (32, 18, 40, 24), (40, 18, 48, 24)]:
-        fill(img, *region, c['tunic'])
-    for x0 in (16, 24, 32, 40):
-        fill(img, x0, 23, x0 + 8, 24, c['trim'])
-    if class_id == 'commander':  # belt
-        for x0 in (16, 24, 32, 40):
-            fill(img, x0, 21, x0 + 8, 22, c['trim'])
-    # sleeves: top 4 rows of every arm side (hands stay as skin)
-    for x0, y0 in [(44, 16), (36, 48)]:
-        for dx in (0, 4, 8, 12):
-            fill(img, x0 + dx, y0 + 1, x0 + dx + 4, y0 + 5, c['tunic'])
-    # trousers: leg sides down to the boots
-    for x0, y0 in [(4, 40), (20, 32)]:
-        fill(img, x0, y0, x0 + 4, y0 + 1, c['pants'])                 # top
-        for dx in (0, 4, 8, 12):
-            fill(img, x0 + dx, y0 + 1, x0 + dx + 4, y0 + 12, c['pants'])
-            fill(img, x0 + dx, y0 + 12, x0 + dx + 4, y0 + 13, c['boots'])
-        fill(img, x0 + 12, y0, x0 + 16, y0 + 1, c['boots'])
-    # headgear over the hair: head top + 3 rows on front/sides/back
-    fill(img, 0, 0, 8, 8, c['hat'])
-    fill(img, 8, 8, 16, 11, c['hat'])
-    fill(img, 16, 8, 24, 11, c['hat'])
-    fill(img, 0, 8, 8, 11, c['hat'])
-    fill(img, 24, 8, 32, 11, c['hat'])
-    fill(img, 8, 10, 16, 11, c['hat_brim'])
-    if class_id == 'medic':  # red cross on the front of the helmet + left arm band
-        fill(img, 12, 8, 13, 10, (198, 46, 46, 255))   # vertical bar
-        fill(img, 11, 8, 14, 9, (198, 46, 46, 255))    # horizontal bar
-        fill(img, 38, 53, 39, 57, (198, 46, 46, 255))  # left arm: vertical
-        fill(img, 37, 54, 40, 55, (198, 46, 46, 255))  # left arm: horizontal
+    img = blank(64, 64)
+
+    # tunic over the whole torso
+    body = faces(BODY)
+    for side in ('front', 'back', 'left', 'right'):
+        poly(img, body[side], c['tunic'])
+    poly(img, body['top'], c['tunic'])
+    bx, by, bw, bh = body['front']
+    fill(img, bx, by + bh - 2, bx + bw, by + bh, c['trim'])   # hem
+    if class_id == 'commander':
+        fill(img, bx, by + 7, bx + bw, by + 9, c['trim'])     # belt
+
+    # sleeves (hands stay skin)
+    for box in (RIGHT_ARM, LEFT_ARM):
+        arm = faces(box)
+        for side in ('front', 'back', 'left', 'right'):
+            ax, ay, aw, ah = arm[side]
+            fill(img, ax, ay, ax + aw, ay + 6, c['tunic'])
+            fill(img, ax, ay + 5, ax + aw, ay + 6, c['trim'])
+        poly(img, arm['top'], c['tunic'])
+
+    # trousers + boots
+    for box in (RIGHT_LEG, LEFT_LEG):
+        leg = faces(box)
+        for side in ('front', 'back', 'left', 'right'):
+            lx, ly, lw, lh = leg[side]
+            fill(img, lx, ly, lx + lw, ly + 9, c['pants'])
+            fill(img, lx, ly + 9, lx + lw, ly + lh, c['boots'])
+        poly(img, leg['top'], c['pants'])
+        poly(img, leg['bottom'], c['boots'])
+
+    # helmet: whole top plus the upper 3 rows of every side, face rows stay clear
+    head = faces(HEAD)
+    poly(img, head['top'], c['hat'])
+    for side in ('right', 'left', 'back'):
+        rx, ry, rw, rh = head[side]
+        fill(img, rx, ry, rx + rw, ry + 3, c['hat'])
+    fx, fy, fw, fh = head['front']
+    fill(img, fx, fy, fx + fw, fy + 2, c['hat'])              # crown over the fringe
+    fill(img, fx, fy + 1, fx + fw, fy + 2, c['hat_brim'])     # brim shade
+
+    if class_id == 'medic':
+        fill(img, fx + 3, fy, fx + 5, fy + 2, (198, 46, 46, 255))    # red cross on the helmet
+        fill(img, fx + 2, fy, fx + 6, fy + 1, (198, 46, 46, 255))
+        ax, ay, aw, ah = faces(LEFT_ARM)['front']                    # armband
+        fill(img, ax, ay + 2, ax + aw, ay + 4, (198, 46, 46, 255))
     return img
 
 

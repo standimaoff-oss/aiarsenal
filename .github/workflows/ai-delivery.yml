@@ -68,7 +68,7 @@ jobs:
       - name: Publish only the captured preview images
         run: |
           mkdir -p previews/ai-units
-          for name in soldiers-on-foot soldier-in-zu23 soldier-in-truck unit-eggs-in-hand unit-eggs-tab weapon-in-hand-3p weapon-first-person explosion-smoke explosion-smoke-late; do
+          for name in soldiers-on-foot soldier-in-zu23 soldier-in-truck unit-eggs-in-hand unit-eggs-tab soldier-weapon-3p weapon-in-hand-3p weapon-first-person explosion-smoke explosion-smoke-late; do
             if [ -f "verification/shots/ai-review-${name}.png" ]; then
               cp "verification/shots/ai-review-${name}.png" "previews/ai-units/${name}.png"
             fi

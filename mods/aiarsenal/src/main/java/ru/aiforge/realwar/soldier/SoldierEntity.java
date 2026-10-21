@@ -44,6 +44,7 @@ public class SoldierEntity extends PathfinderMob {
 
     private int wantedVehicleId = -1;
     private int wantedSeat = -1;
+    private int approachTicks = 0;
 
     public SoldierEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -184,11 +185,14 @@ public class SoldierEntity extends PathfinderMob {
                     }
                 }
             }
+            if (best == null || best.getId() != this.wantedVehicleId || bestSeat != this.wantedSeat) {
+                this.approachTicks = 0;
+            }
             this.wantedVehicleId = best == null ? -1 : best.getId();
             this.wantedSeat = bestSeat;
             if (best != null) {
-                Vec3 ground = best.getDismountLocationForPassenger(this);
-                this.getNavigation().moveTo(ground.x, ground.y, ground.z, 1.2f);
+                // walk to the vehicle body itself: the seat can sit inside the hull
+                this.getNavigation().moveTo(best.getX(), best.getY(), best.getZ(), 1.2f);
             } else {
                 this.getNavigation().stop();
             }
@@ -204,10 +208,16 @@ public class SoldierEntity extends PathfinderMob {
         Vec3 w = v.seatWorld(this.wantedSeat);
         double horiz2 = Mth.square(w.x - this.getX()) + Mth.square(w.z - this.getZ());
         double dy = w.y - this.getY();
-        if (horiz2 < 2.0 && dy > -0.5 && dy < 1.6) {
+        this.approachTicks++;
+        // Board as soon as the seat is within reach (3.5 blocks); if the path is
+        // blocked by the hull itself, board from up to 5 blocks after 10 s of trying.
+        boolean reach = horiz2 < 12.25;
+        boolean stubborn = horiz2 < 25.0 && this.approachTicks > 200;
+        if ((reach || stubborn) && dy > -0.5 && dy < 1.6) {
             this.getNavigation().stop();
             v.enterSeatFor(this, this.wantedSeat);
             this.wantedVehicleId = -1;
+            this.approachTicks = 0;
         }
     }
 

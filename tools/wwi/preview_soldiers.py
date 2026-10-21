@@ -8,6 +8,7 @@ Scenes:
   soldier-in-truck   tanker boards the Ural driver seat (head visible over the cab)
   unit-eggs-in-hand  the four summon eggs in the player's hand
   unit-eggs-tab      the single creative section holding all four summon eggs
+  soldier-weapon-3p  the AI soldier holding his rifle (hand placement)
   weapon-in-hand-3p  third person, weapon gripped in the player's hand
   weapon-first-person first person with the Gewehr 98
   explosion-smoke    /realwar blast - volumetric smoke column
@@ -44,7 +45,7 @@ renderDistance:6
 simulationDistance:5
 maxFps:30
 guiScale:2
-fov:0.0
+fov:70.0
 graphicsMode:0
 renderClouds:"false"
 pauseOnLostFocus:false
@@ -85,11 +86,14 @@ overrideHeight:800
     game.key("key", "F1")  # clean view, no HUD
 
     # ------------------------------------------------------------------ 1. on foot
-    game.command("summon aiarsenal:soldier 0 -60 0 {rw_class:0b,PersistenceRequired:1b}")  # commander
-    game.command("summon aiarsenal:soldier 1.6 -60 0.6 {rw_class:2b,PersistenceRequired:1b}")  # assault
-    game.command("summon aiarsenal:soldier -1.6 -60 0.6 {rw_class:3b,PersistenceRequired:1b}")  # medic
+    # three classes standing together - close enough to see the Steve body under the
+    # class uniform, the helmet and the weapon in hand
+    game.command("summon aiarsenal:soldier 0.6 -60 0.6 {rw_class:0b,PersistenceRequired:1b}")   # commander
+    game.command("summon aiarsenal:soldier 2.2 -60 0.6 {rw_class:2b,PersistenceRequired:1b}")   # assault
+    game.command("summon aiarsenal:soldier -1.0 -60 0.6 {rw_class:3b,PersistenceRequired:1b}")  # medic
+    game.command("summon aiarsenal:soldier 3.8 -60 0.6 {rw_class:1b,PersistenceRequired:1b}")   # tanker
     time.sleep(20)  # let them take positions with the group (no equipment anywhere)
-    game.command("tp TestPlayer 10 -60 10 135 0")   # look NW at the trio
+    game.command("tp TestPlayer 1.4 -60 6.5 180 0")   # stand in front of the squad, look -Z
     time.sleep(3)
     game.screenshot("soldiers-on-foot")
 
@@ -106,10 +110,18 @@ overrideHeight:800
     # range, so the seated tanker's head reads clearly over the cab; the assault
     # soldier stays with the crew on foot - he must not take a seat.
     game.command("summon aiarsenal:ural -30 -60 0 {PersistenceRequired:1b}")
-    game.command("summon aiarsenal:soldier -26 -60 4 {rw_class:1b,PersistenceRequired:1b}")
-    game.command("summon aiarsenal:soldier -26 -60 8 {rw_class:2b,PersistenceRequired:1b}")
-    time.sleep(35)  # scan (10 ticks) + walk + board the driver seat
-    game.command("tp TestPlayer -30 -60 14 180 0")   # look -Z at the Ural
+    game.command("summon aiarsenal:soldier -27 -60 3 {rw_class:1b,PersistenceRequired:1b}")
+    game.command("summon aiarsenal:soldier -27 -60 6 {rw_class:2b,PersistenceRequired:1b}")
+    # wait for the tanker to actually take the driver seat (max 60 s), and log the result
+    seated = False
+    for _ in range(60):
+        time.sleep(1)
+        answer = game.command("data get entity @e[type=aiarsenal:ural,limit=1,sort=nearest] Passengers")
+        if "Passengers" in answer and "has no" not in answer and "none" not in answer.lower():
+            seated = True
+            break
+    print("tanker seated in the Ural:", seated, flush=True)
+    game.command("tp TestPlayer -30 -60 12 180 0")   # look -Z at the Ural cab
     time.sleep(3)
     game.screenshot("soldier-in-truck")
 
@@ -127,11 +139,18 @@ overrideHeight:800
     game.key("key", "Escape")
     time.sleep(1.5)
 
-    # ------------------------------------------------------ 5. weapon in hand
+    # --------------------------------- 5. weapon in the AI soldier's hands (3rd person)
     game.command("item replace entity TestPlayer hotbar.0 with aiarsenal:gewehr98{Ammo:5}")
-    game.key("key", "1")
+    game.command("summon aiarsenal:soldier 2.5 -60 -34.5 {rw_class:0b,PersistenceRequired:1b,Rotation:[0f,0f]}")
     game.view_action(client_log, "view_back")
-    game.command("tp TestPlayer 0 -60 -30 180 0")
+    game.command("tp TestPlayer 2.5 -60 -30.5 180 0")   # camera behind the player, soldier in front
+    time.sleep(5)
+    game.screenshot("soldier-weapon-3p")
+
+    # ------------------------------------------------------ 6. weapon in hand
+    game.key("key", "1")
+    game.view_action(client_log, "view_front")          # camera in front: the grip is visible
+    game.command("tp TestPlayer 0 -60 -30 205 0")
     time.sleep(4)
     game.screenshot("weapon-in-hand-3p")
     game.view_action(client_log, "view_first")
