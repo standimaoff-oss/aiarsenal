@@ -106,8 +106,11 @@ final class AircraftAi {
         if (!c.flag(CraftEntity.FLAG_GEAR)) c.setFlag(CraftEntity.FLAG_GEAR, true);
 
         int gy = sl.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(wp.x), Mth.floor(wp.z));
+        int gyHere = sl.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(c.getX()), Mth.floor(c.getZ()));
         boolean nearSquad = s.squadAnchor() != null && s.squadAnchor().distanceTo(c.position()) < 42.0;
-        double wantY = Math.max(gy + CRUISE_CLEARANCE, c.getY());
+        // clearance is measured from the ground UNDER the rotor, not at the waypoint:
+        // otherwise dy = 0 on the pad and the collective never comes up
+        double wantY = Math.max(gyHere + CRUISE_CLEARANCE, Math.max(gy + 12, c.getY()));
         if (nearSquad) wantY = Math.max(wantY, c.getY() + 8.0);           // rotor wash: never hover on the squad
         if (target != null) wantY = Math.max(wantY, target.getY() + 18.0);
         if (c.getY() < gy + 12 && c.vel.y < 0) wantY = Math.max(wantY, gy + 30);
