@@ -143,7 +143,7 @@ overrideHeight:800
     # The rifle transform is live-tunable through config/aiarsenal_view.json, so the run
     # captures a few candidates in one go; the best one is then baked into the resource.
     game.command("item replace entity TestPlayer hotbar.0 with aiarsenal:gewehr98{Ammo:5}")
-    game.command("summon aiarsenal:soldier 2.5 -60 -34.5 {rw_class:0b,PersistenceRequired:1b}")
+    game.command("summon aiarsenal:soldier 2.5 -60 -34.5 {rw_class:0b,PersistenceRequired:1b,Rotation:[180f,0f]}")
     game.view_action(client_log, "view_back")
     game.command("tp TestPlayer 2.5 -60 -30.5 180 0")   # camera behind the player, soldier in front
     time.sleep(4)
