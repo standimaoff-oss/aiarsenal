@@ -240,8 +240,8 @@ public final class NpcTests {
         int de = order.indexOf("soldier_germany_spawn_egg");
         int su = order.indexOf("soldier_ussr_spawn_egg");
         int nato = order.indexOf("soldier_nato_spawn_egg");
-        int ru = order.indexOf("soldier_russia_spawn_egg");
-        h.assertTrue(0 <= fr && fr < ri && ri < de && de < su && su < nato && nato < ru,
+        int rus = order.indexOf("soldier_russia_spawn_egg");
+        h.assertTrue(0 <= fr && fr < ri && ri < de && de < su && su < nato && nato < rus,
                 "army order France<RusEmpire<Wehrmacht<USSR<NATO<Russia: " + order);
         h.assertTrue(order.contains("egg_de_commander") && order.contains("egg_su_assault")
                 && order.contains("egg_nato_medic") && order.contains("egg_fr_artillery")
