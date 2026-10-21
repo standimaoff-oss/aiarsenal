@@ -81,7 +81,9 @@ public final class GunHoldLayer<T extends LivingEntity, M extends HumanoidModel<
         }
 
         float[] muzzle = GunRenderer.renderHeld(stack, ps, buf, light, aim, reloading ? reloadTime : -1f,
-                GunAnimClient.reloadEmpty(e), shot, GunAnimClient.shotSeq(e));
+                GunAnimClient.reloadEmpty(e), shot, GunAnimClient.shotSeq(e),
+                left ? net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND
+                        : net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_RIGHT_HAND);
         ps.popPose();
 
         if (shot >= 0f && muzzle != null) {

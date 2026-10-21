@@ -281,7 +281,8 @@ public final class GunRenderer {
      * @return camera-relative {muzzleX, muzzleY, muzzleZ, dirX, dirY, dirZ} while the muzzle flash burns, else null
      */
     static float[] renderHeld(ItemStack stack, PoseStack ps, MultiBufferSource buf, int light, float aim,
-                              float reloadTime, boolean reloadEmpty, float shotAge, int shotSeq) {
+                              float reloadTime, boolean reloadEmpty, float shotAge, int shotSeq,
+                              ItemDisplayContext ctx) {
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (key == null || !(stack.getItem() instanceof FirearmItem fi)) return null;
         String id = key.getPath();
@@ -293,7 +294,7 @@ public final class GunRenderer {
         boolean rel = reloadTime >= 0f;
         boolean flash = shotAge >= 0f && shotAge < (k.launcher() ? 0.09f : 0.05f);
         ps.pushPose();
-        HandheldView.apply(ps, HandheldView.get(id, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, aim > 0.5f), bounds(modelId, lm));
+        HandheldView.apply(ps, HandheldView.get(id, ctx, aim > 0.5f), bounds(modelId, lm));
         float[] grip = node(lm, id + ".arm_r");
         ps.translate(-grip[0], -grip[1], -grip[2]);
         pose.hide(id + ".arm_l", true);

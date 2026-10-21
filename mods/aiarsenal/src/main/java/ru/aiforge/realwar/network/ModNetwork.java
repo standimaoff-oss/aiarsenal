@@ -35,8 +35,9 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class ModNetwork {
-    private static final String PROTOCOL = "1";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel((ResourceLocation)new ResourceLocation("aiarsenal", "realwar"), () -> "1", "1"::equals, "1"::equals);
+    /** r27: bumped for the gun pose packet — an older client is refused at the handshake, not kicked mid-fight. */
+    private static final String PROTOCOL = "2";
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel((ResourceLocation)new ResourceLocation("aiarsenal", "realwar"), () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
     private ModNetwork() {
     }
