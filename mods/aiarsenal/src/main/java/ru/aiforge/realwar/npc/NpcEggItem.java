@@ -1,29 +1,30 @@
 package ru.aiforge.realwar.npc;
 
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
-import ru.aiforge.realwar.registry.ModEntities;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * One spawn egg per trade: a modern Russian-army soldier of the chosen profession
- * (commander, tank crew, assault, medic, artillery, AA gunner, pilot).
- * The five army eggs keep raising a plain rifleman of their nation and period.
+ * One spawn egg of one army in one period — either its rifleman ({@code profession == null})
+ * or one of its trades: the army's own commander, assault trooper, medic, artilleryman,
+ * tank crewman, AA gunner or pilot.
  */
-public final class ProfessionEggItem extends net.minecraftforge.common.ForgeSpawnEggItem {
+public final class NpcEggItem extends net.minecraftforge.common.ForgeSpawnEggItem {
+    private final Faction faction;
+    private final Era era;
+    @Nullable
     private final Profession profession;
 
-    public ProfessionEggItem(Profession profession, int bg, int hl, Properties props) {
-        super(() -> ModEntities.SOLDIER_RUSSIA.get(), bg, hl, props);
+    public NpcEggItem(Faction faction, Era era, @Nullable Profession profession, int bg, int hl,
+                      Properties props) {
+        super(() -> SoldierSpawner.typeFor(faction, era), bg, hl, props);
+        this.faction = faction;
+        this.era = era;
         this.profession = profession;
-    }
-
-    public Profession profession() {
-        return this.profession;
     }
 
     @Override
@@ -31,10 +32,11 @@ public final class ProfessionEggItem extends net.minecraftforge.common.ForgeSpaw
         if (!(ctx.getLevel() instanceof ServerLevel sl)) return InteractionResult.SUCCESS;
         BlockPos pos = ctx.getClickedPos();
         if (ctx.getClickedFace() != Direction.DOWN) pos = pos.relative(ctx.getClickedFace());
+        Rank rank = this.profession == null ? Rank.PRIVATE : this.profession.rank;
         SoldierEntity s = SoldierSpawner.spawnOne(sl, new Vec3(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5),
-                Faction.RUSSIA, Era.MODERN, this.profession.rank);
+                this.faction, this.era, rank);
         if (s == null) return InteractionResult.FAIL;
-        s.setProfession(this.profession);
+        if (this.profession != null) s.setProfession(this.profession);
         if (ctx.getPlayer() == null || !ctx.getPlayer().getAbilities().instabuild) {
             ctx.getItemInHand().shrink(1);
         }

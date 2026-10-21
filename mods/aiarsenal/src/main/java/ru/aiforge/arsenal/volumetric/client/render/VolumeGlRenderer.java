@@ -292,6 +292,22 @@ public final class VolumeGlRenderer {
         Vector3f vector3f = new Vector3f((Vector3fc)camera.getLookVector()).normalize();
         Vector3f vector3f2 = new Vector3f((Vector3fc)camera.getLeftVector()).normalize();
         Vector3f vector3f3 = new Vector3f((Vector3fc)camera.getUpVector()).normalize();
+        // Tie the raymarch basis to the model-view matrix the world was JUST drawn with this frame:
+        // camera shake (explosions, recoil) is baked into that matrix, so the smoke rolls with the
+        // shaken world instead of hanging still in screen space.
+        try {
+            Matrix4f mv = new Matrix4f(RenderSystem.getModelViewMatrix()).invert();
+            Vector3f right = new Vector3f(mv.m00(), mv.m01(), mv.m02());
+            Vector3f up = new Vector3f(mv.m10(), mv.m11(), mv.m12());
+            Vector3f fwd = new Vector3f(-mv.m20(), -mv.m21(), -mv.m22());
+            if (right.lengthSquared() > 0.5f && up.lengthSquared() > 0.5f && fwd.lengthSquared() > 0.5f) {
+                vector3f = fwd.normalize();
+                vector3f2 = right.normalize().negate();
+                vector3f3 = up.normalize();
+            }
+        } catch (Throwable ignored) {
+            // keep the camera-vector basis
+        }
         VolumeGlRenderer.uniform3f(rayProgram, "uCameraForward", vector3f.x, vector3f.y, vector3f.z);
         VolumeGlRenderer.uniform3f(rayProgram, "uCameraRight", -vector3f2.x, -vector3f2.y, -vector3f2.z);
         VolumeGlRenderer.uniform3f(rayProgram, "uCameraUp", vector3f3.x, vector3f3.y, vector3f3.z);

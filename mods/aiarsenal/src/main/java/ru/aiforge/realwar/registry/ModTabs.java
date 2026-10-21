@@ -155,11 +155,15 @@ public final class ModTabs {
         section("modern_vehicles", "t90m_vehicle");
         section("modern_clothing", "uniform_ru_private_head");
         section("modern_ammo", "mag_ak12");
-        put(Cat.TROOPS, "soldier_nato_spawn_egg", "soldier_russia_spawn_egg", "soldier_ussr_spawn_egg",
-                "soldier_germany_spawn_egg", "soldier_france_spawn_egg",
-                "egg_commander", "egg_tank_crew", "egg_assault", "egg_medic", "egg_artillery",
-                "egg_aa_gunner", "egg_pilot");
-        section("troops", "soldier_russia_spawn_egg");
+        // every egg in ONE tab, by army in historical order: France 1812, Russian Empire, Wehrmacht,
+        // USSR, NATO, modern Russia — rifleman first, then that army's commander and trades
+        for (ru.aiforge.realwar.npc.NpcEggs.Army army : ru.aiforge.realwar.npc.NpcEggs.ARMIES) {
+            put(Cat.TROOPS, army.eggId());
+            for (ru.aiforge.realwar.npc.Profession prof : ru.aiforge.realwar.npc.NpcEggs.PROFESSIONS) {
+                put(Cat.TROOPS, ru.aiforge.realwar.npc.NpcEggs.profEggId(army, prof));
+            }
+        }
+        section("troops", "soldier_france_spawn_egg");
         section("napoleonic_weapons", "musket_1777");
         section("napoleonic_vehicles", "cannon_fr6");
         section("napoleonic_ammo", "paper_cartridge");

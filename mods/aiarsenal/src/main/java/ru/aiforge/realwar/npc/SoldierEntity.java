@@ -56,6 +56,8 @@ public class SoldierEntity extends PathfinderMob {
     /** The player who recruited this soldier (villager draft), null for the AI armies. */
     private java.util.UUID ownerUuid;
     private int healCooldown;
+    /** Cached every 40 ticks: with nobody watching, far soldiers think at quarter rate. */
+    private boolean nearPlayer = true;
 
     private int leaderId = -1;
     private int squadId;
@@ -220,6 +222,11 @@ public class SoldierEntity extends PathfinderMob {
     public void tick() {
         super.tick();
         if (this.level().isClientSide || !this.isAlive()) return;
+        if ((this.tickCount & 63) == (this.getId() & 63)) {
+            this.nearPlayer = this.level().getNearestPlayer(this, 96.0) != null;
+        }
+        // a crowd nobody is watching must not eat the server: quarter-rate thinking beyond 96 blocks
+        if (!this.nearPlayer && ((this.tickCount + (this.getId() & 3)) & 3) != 0) return;
         if (this.fireCooldown > 0) this.fireCooldown--;
         if (this.meleeCooldown > 0) this.meleeCooldown--;
         if (this.cannonCooldown > 0) this.cannonCooldown--;
@@ -422,12 +429,14 @@ public class SoldierEntity extends PathfinderMob {
                     return;
                 }
                 this.getLookControl().setLookAt(target, 30f, 30f);
+                boolean assault = this.profession() == Profession.ASSAULT;
                 double preferred = this.rank() == Rank.COMMANDER ? (this.era() == Era.NAPOLEONIC ? 42.0 : 58.0)
                         : this.profession() == Profession.MEDIC ? 18.0
+                        : assault ? 11.0
                         : this.era() == Era.NAPOLEONIC ? 30.0 : this.era() == Era.WW2 ? 24.0 : 26.0;
                 if (d > preferred + 6.0) {
-                    this.moveToward(target.position(), 1.05);
-                } else if (d < preferred - 8.0 && this.era() != Era.NAPOLEONIC && this.moveCooldown <= 0) {
+                    this.moveToward(target.position(), assault ? 1.35 : 1.05);   // storm troops run at them
+                } else if (!assault && d < preferred - 8.0 && this.era() != Era.NAPOLEONIC && this.moveCooldown <= 0) {
                     Vec3 away = this.position().subtract(target.position()).normalize().scale(3.0);
                     this.getNavigation().moveTo(this.getX() + away.x, this.getY(), this.getZ() + away.z, 1.0);
                     this.moveCooldown = 12;
@@ -445,22 +454,22 @@ public class SoldierEntity extends PathfinderMob {
 
     private void refreshTarget() {
         if (this.tickCount < this.targetScan) return;
-        this.targetScan = this.tickCount + 8;
+        this.targetScan = this.tickCount + 12 + (this.getId() & 7);
         LivingEntity current = this.getTarget();
         if (current != null && current.isAlive() && this.distanceToSqr(current) < 70.0 * 70.0 && this.hasLineOfSight(current)) return;
         double range = this.era() == Era.NAPOLEONIC ? 55.0 : this.era() == Era.WW2 ? 60.0 : 62.0;
         List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class,
                 this.getBoundingBox().inflate(range), e -> e != this && e.isAlive() && isEnemy(e));
-        LivingEntity best = null;
-        double bestD = range * range;
+        // line of sight is the expensive part: only raycast the nearest few candidates
+        list.sort((a, b) -> Double.compare(this.distanceToSqr(a), this.distanceToSqr(b)));
+        int checked = 0;
         for (LivingEntity e : list) {
-            double d = this.distanceToSqr(e);
-            if (d >= bestD) continue;
-            if (!this.hasLineOfSight(e)) continue;
-            best = e;
-            bestD = d;
+            if (++checked > 5 || this.distanceToSqr(e) > range * range) break;
+            if (this.hasLineOfSight(e)) {
+                this.setTarget(e);
+                break;
+            }
         }
-        if (best != null) this.setTarget(best);
     }
 
     private boolean isEnemy(Entity e) {
@@ -489,7 +498,20 @@ public class SoldierEntity extends PathfinderMob {
 
     private void followSquad(Vec3 point) {
         if (point == null || point.equals(Vec3.ZERO)) return;
-        int slot = Math.floorMod(this.getId(), 7);
+        if (this.profession() == Profession.ASSAULT && this.getTarget() == null) {
+            // no contact: assault troops patrol their ground, weapons up, instead of standing still
+            int slot = Math.floorMod(this.getId(), 12);
+            double phase = (this.tickCount / 240 + slot) % 8;
+            double a = phase * Math.PI / 4.0 + slot;
+            Vec3 goal = point.add(Math.cos(a) * 10.0, 0, Math.sin(a) * 10.0);
+            if (NpcGear.horizontalDistance(this, goal) > 2.0 && this.moveCooldown <= 0) {
+                this.getNavigation().moveTo(goal.x, goal.y, goal.z, 1.05);
+                this.setSprinting(false);
+                this.moveCooldown = 12;
+            }
+            return;
+        }
+        int slot = Math.floorMod(this.getId(), 12);
         Vec3 goal;
         if (this.era() == Era.NAPOLEONIC && this.leaderId >= 0 && this.level() instanceof ServerLevel sl2) {
             // 1812: two dressed ranks behind the commander, shoulder to shoulder, at marching pace
@@ -515,8 +537,8 @@ public class SoldierEntity extends PathfinderMob {
                 return;
             }
         }
-        double angle = Math.toRadians(slot * 51.4);
-        double radius = slot == 0 ? 0.0 : 2.8 + (slot % 3) * 1.1;
+        double angle = Math.toRadians(slot * 30.0);
+        double radius = slot == 0 ? 0.0 : 2.6 + (slot % 4) * 1.2;
         goal = point.add(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
         double d = NpcGear.horizontalDistance(this, point);
         this.strayTicks = d > LEASH ? this.strayTicks + 1 : 0;
