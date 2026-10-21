@@ -71,8 +71,8 @@ public final class GunTests {
     /** Every gun vehicle GLB: turret chain, muzzle reachable, tracked hulls carry wheels + track clips. */
     @GameTest(template = "arena", batch = "rw_gun", timeoutTicks = 40)
     public static void gun_models_rigged(GameTestHelper h) {
-        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.TOS1A, VehicleKind.MARK_I};
-        VehicleSpec[] ss = {Specs.T90M, Specs.ABRAMS, Specs.BMP3, Specs.MSTA, Specs.D30, Specs.M777, Specs.PZ2, Specs.PZ4, Specs.TIGER, Specs.STURMTIGER, Specs.MAUS, Specs.RATTE, Specs.T34, Specs.KV2, Specs.IS2, Specs.KV5, Specs.BRADLEY, Specs.TOS1A, Specs.MARK_I};
+        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.TOS1A};
+        VehicleSpec[] ss = {Specs.T90M, Specs.ABRAMS, Specs.BMP3, Specs.MSTA, Specs.D30, Specs.M777, Specs.PZ2, Specs.PZ4, Specs.TIGER, Specs.STURMTIGER, Specs.MAUS, Specs.RATTE, Specs.T34, Specs.KV2, Specs.IS2, Specs.KV5, Specs.BRADLEY, Specs.TOS1A};
         for (int i = 0; i < ks.length; ++i) {
             VehicleKind k = ks[i];
             GunVehicle.Cfg c = GunVehicle.cfg(k);
@@ -82,10 +82,6 @@ public final class GunTests {
                 GlbModel m = GlbModel.read(in);
                 for (String n : new String[]{"launcher_yaw", "launcher_pitch", "barrel"}) {
                     h.assertTrue(m.nodeIndex(n) >= 0, ss[i].id() + ": node " + n);
-                }
-                if (k == VehicleKind.MARK_I) {
-                    for (String n : new String[]{"launcher_yaw_left", "launcher_pitch_left", "barrel_left", "MarkI_link_L_00", "MarkI_link_R_00"})
-                        h.assertTrue(m.nodeIndex(n) >= 0, "mark_i: node " + n);
                 }
                 if (c.tracked()) {
                     for (String n : new String[]{"rw_L_0", "rw_R_0", "spk_L", "spk_R", "idl_L", "idl_R"}) {
@@ -341,7 +337,7 @@ public final class GunTests {
     /** Spec geometry and kind table agree for all six gun vehicles (muzzle in front of pivot, seats present). */
     @GameTest(template = "arena", batch = "rw_gun", timeoutTicks = 40)
     public static void gun_specs_consistent(GameTestHelper h) {
-        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY, VehicleKind.MARK_I};
+        VehicleKind[] ks = {VehicleKind.T90M, VehicleKind.ABRAMS, VehicleKind.BMP3, VehicleKind.MSTA, VehicleKind.D30, VehicleKind.M777, VehicleKind.PZ2, VehicleKind.PZ4, VehicleKind.TIGER, VehicleKind.STURMTIGER, VehicleKind.MAUS, VehicleKind.RATTE, VehicleKind.T34, VehicleKind.KV2, VehicleKind.IS2, VehicleKind.KV5, VehicleKind.BRADLEY};
         for (VehicleKind k : ks) {
             VehicleSpec s = k.spec;
             h.assertTrue(k.isGun(), k + " isGun");

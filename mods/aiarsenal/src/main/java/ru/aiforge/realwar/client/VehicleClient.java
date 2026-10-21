@@ -414,15 +414,10 @@ public final class VehicleClient {
             if (fx >= 0 && gv.perTube()) {
                 // r12 TOS-1A: rocket launch flash + smoke from the tube that fired
                 TrailFx.launch(level, gv.tubeWorld(fx), gv.launchDir(), 1, gv.kind.tubeLen);
-            } else if (fx == -2 && gv.kind == VehicleKind.MARK_I) {
-                for (int tube = 0; tube < 2; ++tube) TrailFx.gunBlast(level, gv.tubeWorld(tube), gv.launchDir(), false, false);
             } else if (fx >= 0) {
                 boolean big = gv.kind != VehicleKind.BMP3 && gv.kind != VehicleKind.BRADLEY;
-                if (gv.kind == VehicleKind.MARK_I) TrailFx.gunBlast(level, gv.tubeWorld(fx), gv.launchDir(), false, false);
-                else {
-                    TrailFx.gunBlast(level, gv.tubeWorld(0), gv.launchDir(), big, gv.kind.artillery());
-                    if (gv.twinSalvo()) TrailFx.gunBlast(level, gv.tubeWorld(1), gv.launchDir(), big, gv.kind.artillery());
-                }
+                TrailFx.gunBlast(level, gv.tubeWorld(0), gv.launchDir(), big, gv.kind.artillery());
+                if (gv.twinSalvo()) TrailFx.gunBlast(level, gv.tubeWorld(1), gv.launchDir(), big, gv.kind.artillery());
             }
             if (gv.coaxFiring() && gv.tickCount % 3 == 0) {
                 TrailFx.muzzleFlash(level, gv.tubeWorld(gv.cfg.coax30() ? 1 : gv.spec.tubes().length - 1), gv.launchDir());

@@ -145,6 +145,9 @@ public abstract class CraftEntity extends Entity implements ru.aiforge.realwar.d
     public float agl, warnVrs, warnStall, gForce = 1f;
     public boolean onWater;
     protected float[] forced;
+    /** r22 AI pilot state: current target entity and think cooldown. */
+    public int aiTargetId = -1;
+    public int aiThink;
     /** Ground contact from our own last move() - NOT onGround(): on the client that flag is overwritten by the
      *  server's movement packets (stale while a pilot drives client-side), which broke hover-mode altitude hold. */
     protected boolean contact;
@@ -400,7 +403,23 @@ public abstract class CraftEntity extends Entity implements ru.aiforge.realwar.d
         if (s >= 0) {
             this.setSeatUuid(s, null);
             this.fireHeld[s] = false;
+            if (s == 0) this.forced = null;
         }
+    }
+
+    /** r22: an AI pilot boards like a player, without the message plumbing. */
+    public boolean aiEnterSeat(Entity e, int seat) {
+        if (e.isPassenger() || seat < 0 || seat >= this.kind.seats.length || this.seatUuid(seat) != null) return false;
+        this.pendingSeat = seat;
+        boolean ok = e.startRiding(this);
+        this.pendingSeat = -1;
+        return ok;
+    }
+
+    /** r22: AI trigger for the seat-0 weapons, kept alive without a client packet. */
+    public void aiFire(boolean held) {
+        this.fireHeld[0] = held;
+        if (held) this.inputTick[0] = this.tickCount;
     }
 
     public boolean enterSeat(ServerPlayer p, int seat) {
@@ -807,6 +826,18 @@ public abstract class CraftEntity extends Entity implements ru.aiforge.realwar.d
         return 0;
     }
 
+    /** Where an AI gunner points: the AI target when there is one, otherwise straight ahead. */
+    private Vec3 aiGunDir() {
+        if (this.aiTargetId >= 0 && this.level() instanceof ServerLevel sl) {
+            Entity t = sl.getEntity(this.aiTargetId);
+            if (t != null && t.isAlive()) {
+                Vec3 d = t.position().add(0, t.getBbHeight() * 0.5, 0).subtract(this.getEyePosition());
+                if (d.lengthSqr() > 0.01) return d.normalize();
+            }
+        }
+        return this.basis()[0];
+    }
+
     /** Clamp a world look direction into a turret's limits; returns {az (deg, + left), el (deg)}. */
     public float[] turretAngles(Vec3 look, CraftKind.Load l) {
         Vec3[] b = this.basis();
@@ -829,7 +860,9 @@ public abstract class CraftEntity extends Entity implements ru.aiforge.realwar.d
             if (!l.turret()) continue;
             Entity e = this.passengerIn(this.aimingSeat());
             if (e == null) return;
-            float[] a = this.turretAngles(e.getLookAngle(), l);
+            // an AI gunner has no mouse: his turret follows the nose, or the target the pilot is engaging
+            float[] a = this.turretAngles(e instanceof ru.aiforge.realwar.npc.SoldierEntity
+                    ? this.aiGunDir() : e.getLookAngle(), l);
             // turret slew rate limit: 90 deg/s
             float cy = this.gunYaw(), cp = this.gunPitch();
             float ny = cy + Mth.clamp(a[0] - cy, -4.5f, 4.5f), np = cp + Mth.clamp(a[1] - cp, -3.5f, 3.5f);

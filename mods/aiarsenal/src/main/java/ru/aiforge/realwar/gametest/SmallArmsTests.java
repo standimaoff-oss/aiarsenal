@@ -234,45 +234,6 @@ public final class SmallArmsTests {
         h.succeed();
     }
 
-    @GameTest(template = "arena", batch = "rw_small")
-    public static void gewehr98_uses_the_shared_mauser_clip(GameTestHelper h) {
-        BlockPos o = h.absolutePos(new BlockPos(2, 1, 2));
-        ItemStack gun = new ItemStack(ModItems.GEWEHR98.get());
-        FakePlayer p = shooter(h, gun, o.getX() + 0.5, o.getY(), o.getZ() + 0.5);
-        p.getInventory().add(new ItemStack(ModItems.CLIP_K98.get(), 2));
-        h.assertTrue(GunKind.GEWEHR98.boltAction() && GunKind.GEWEHR98.manual() && GunKind.GEWEHR98.clipFed(), "Gewehr 98 is a clip-fed bolt action");
-        h.assertTrue(Firearms.reloadAllowed(p, gun, GunKind.GEWEHR98), "empty Gewehr 98 should accept a shared clip");
-        Firearms.finishReload(p, gun, GunKind.GEWEHR98);
-        int clips = 0;
-        for (ItemStack stack : p.getInventory().items) if (stack.is(ModItems.CLIP_K98.get())) clips += stack.getCount();
-        h.assertTrue(FirearmItem.ammo(gun) == 5 && clips == 1, "one 5-round Mauser clip loaded; spare clip remains");
-        FirearmItem.setAmmo(gun, 2);
-        h.assertTrue(!Firearms.reloadAllowed(p, gun, GunKind.GEWEHR98), "stripper clip must not top up a partial magazine");
-        h.succeed();
-    }
-
-    @GameTest(template = "arena", batch = "rw_small", timeoutTicks = 120)
-    public static void gewehr98_round_hits_hard(GameTestHelper h) {
-        ServerLevel level = h.getLevel();
-        BlockPos o = h.absolutePos(new BlockPos(2, 1, 2));
-        for (int dz = 0; dz < 14; dz++) for (int dy = 0; dy < 4; dy++) level.setBlock(o.offset(0, dy, dz), Blocks.AIR.defaultBlockState(), 2);
-        ItemStack gun = new ItemStack(ModItems.GEWEHR98.get());
-        FirearmItem.setAmmo(gun, 5);
-        FakePlayer p = shooter(h, gun, o.getX() + 0.5, o.getY(), o.getZ() + 0.5);
-        Husk target = EntityType.HUSK.create(level);
-        target.moveTo(o.getX() + 0.5, o.getY(), o.getZ() + 12.5, 180f, 0f);
-        target.setNoAi(true);
-        level.addFreshEntity(target);
-        float hp0 = target.getHealth();
-        Firearms.fire(p, gun, GunKind.GEWEHR98, true);
-        h.assertTrue(FirearmItem.ammo(gun) == 4 && Firearms.bullets(level) >= 1, "Gewehr 98 fires one real 7.92x57 projectile");
-        h.runAfterDelay(6, () -> {
-            h.assertTrue(!target.isAlive() || target.getHealth() <= hp0 - 12f, "7.92x57 at 12 m must hit hard: hp " + target.getHealth());
-            target.discard();
-            h.succeed();
-        });
-    }
-
     @GameTest(template = "arena", batch = "rw_small", timeoutTicks = 120)
     public static void k98k_rifle_round_hits_hard(GameTestHelper h) {
         ServerLevel level = h.getLevel();
@@ -368,7 +329,7 @@ public final class SmallArmsTests {
         var level = h.getLevel();
         var manager = level.getRecipeManager();
         var player = shooter(h, ItemStack.EMPTY, 0, 0, 0);
-        for (String name : new String[]{"mosin_pu", "k98k_zf39", "c96", "tt33", "gewehr98",
+        for (String name : new String[]{"mosin_pu", "k98k_zf39", "c96", "tt33",
                 "round_762x54r", "round_792x57", "clip_c96", "clip_k98", "mag_tt33"}) {
             var id = new net.minecraft.resources.ResourceLocation("aiarsenal", name);
             var recipe = manager.byKey(id).orElseThrow();

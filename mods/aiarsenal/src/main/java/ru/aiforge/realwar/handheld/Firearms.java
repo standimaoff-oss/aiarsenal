@@ -373,6 +373,39 @@ public final class Firearms {
         fx(p, GunFxPacket.SHOT, FirearmItem.ammo(stack));
     }
 
+    /**
+     * r22: one round fired by an AI soldier. Same ballistics, hit boxes, penetration and damage scaling as a player's
+     * shot (the soldier is the damage-source owner), so an AI rifle hurts exactly like the rifle in your hands.
+     */
+    public static void npcShot(ServerLevel sl, net.minecraft.world.entity.Entity owner, Vec3 from, Vec3 dir, GunKind k) {
+        if (k.launcher() || k.pellets() <= 0) return;
+        int n = k.pellets();
+        List<Bullet> l = BULLETS.computeIfAbsent(sl, x -> new ArrayList<>());
+        for (int i = 0; i < n; i++) {
+            Bullet b = new Bullet();
+            b.pos = from;
+            b.origin = from;
+            b.vel = (n > 1 ? jitter(dir, k.choke(), sl) : dir).scale(k.speed / 20.0);
+            b.owner = owner.getId();
+            b.dmg = k.damage;
+            b.pen = k.pen;
+            if (n > 1) {
+                b.ref = k.speed;
+                b.drag = PELLET_DRAG;
+                b.life = 14;
+            }
+            if (l.size() < 4000) l.add(b);
+        }
+        SoundEvent ev = net.minecraftforge.registries.ForgeRegistries.SOUND_EVENTS.getValue(
+                new net.minecraft.resources.ResourceLocation("aiarsenal", k.sound));
+        if (ev != null) {
+            sl.playSound(null, from.x, from.y, from.z, ev, SoundSource.HOSTILE, 3.0f, 0.95f + sl.random.nextFloat() * 0.1f);
+        }
+        sl.sendParticles(k.flintlock() ? ru.aiforge.arsenal.volumetric.VolumetricParticles.POWDER.get()
+                        : ru.aiforge.arsenal.volumetric.VolumetricParticles.MUZZLE.get(),
+                from.x + dir.x, from.y + dir.y, from.z + dir.z, 0, dir.x, dir.y, dir.z, 1);
+    }
+
     private static Vec3 jitter(Vec3 d, double cone, ServerLevel sl) {
         if (cone <= 0) return d;
         double a = sl.random.nextDouble() * Math.PI * 2, r = Math.sqrt(sl.random.nextDouble()) * cone;

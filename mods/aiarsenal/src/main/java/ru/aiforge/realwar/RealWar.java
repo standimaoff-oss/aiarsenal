@@ -57,6 +57,7 @@ public class RealWar {
         ru.aiforge.realwar.worldgen.ModFeatures.FEATURES.register(bus);
         context.registerConfig(ModConfig.Type.COMMON, (IConfigSpec)RWConfig.COMMON_SPEC, "aiarsenal-realwar-common.toml");
         context.registerConfig(ModConfig.Type.CLIENT, (IConfigSpec)RWConfig.CLIENT_SPEC, "aiarsenal-realwar-client.toml");
+        bus.addListener(ModEntities::attributes);
         bus.addListener(RealWar::commonSetup);
     }
 

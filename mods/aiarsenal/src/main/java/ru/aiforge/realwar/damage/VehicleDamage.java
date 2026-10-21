@@ -32,9 +32,6 @@ import static ru.aiforge.realwar.damage.DamageState.*;
  */
 public final class VehicleDamage {
     public static final int CAROUSEL = 0, BUSTLE = 1, SPONSON = 2, PACK = 3;
-    private static final double[][] MARK_I_TRACK_PATH = {{0.13, -2.45}, {0.82, -3.28}, {2.28, -3.28},
-            {2.28, 3.28}, {0.82, 3.28}, {0.13, 2.45}}; // (height, forward) from tools/wwi/build_mark_i.py
-    private static final double MARK_I_TRACK_X = 1.50;
 
     private VehicleDamage() {
     }
@@ -60,7 +57,6 @@ public final class VehicleDamage {
             case RATTE -> new float[]{0, 40, 0, SPONSON};
             case STURMTIGER -> new float[]{0, 60, 0, SPONSON};
             case TOS1A -> new float[]{12, 30, 0, PACK};
-            case MARK_I -> new float[]{0, 2.72f, 0, SPONSON};
             default -> new float[]{0, 5, 0, CAROUSEL};
         };
     }
@@ -70,7 +66,7 @@ public final class VehicleDamage {
 
     public static Geo geo(VehicleEntity v) {
         boolean tracked = v instanceof GunVehicle gv && gv.cfg.tracked();
-        boolean turret = v instanceof LauncherVehicle && v.spec.yawPivot() != null && v.kind != VehicleKind.MARK_I;
+        boolean turret = v instanceof LauncherVehicle && v.spec.yawPivot() != null;
         return geo(v.kind, tracked, turret);
     }
 
@@ -86,7 +82,7 @@ public final class VehicleDamage {
         }
         float tw = Mth.clamp(hx * 0.32f, 0.35f, 1.2f);
         if (k == VehicleKind.RATTE) tw = hx * 0.4f;
-        turret = turret && k.spec.yawPivot() != null && k != VehicleKind.MARK_I;
+        turret = turret && k.spec.yawPivot() != null;
         boolean front = k == VehicleKind.BRADLEY || !tracked;
         return new Geo(cx, cy, cz, hx, hy, hz, tw, tracked, turret, k.spec.yawPivot(), k.spec.pitchPivot(), k.tubeLen,
                 (int) params(k)[3], front);
@@ -110,7 +106,6 @@ public final class VehicleDamage {
     /** Hull-frame turret angles (stabilised gun drawn on a tilted hull). */
     public static float[] turretAngles(VehicleEntity v) {
         if (!(v instanceof LauncherVehicle lv)) return new float[]{0, 0};
-        if (v.kind == VehicleKind.MARK_I) return new float[]{lv.az(), lv.el()}; // hand-laid sponson guns; no stabiliser
         return v.stabilised(lv.az(), lv.el(), v.bodyPitch, v.bodyRoll);
     }
 
@@ -121,25 +116,6 @@ public final class VehicleDamage {
 
     /** r20: entity-free form (armour model, client hit camera). */
     public static int zone(Geo g, VehicleKind kind, boolean turretGone, double x, double y, double z, float[] ang) {
-        if (kind == VehicleKind.MARK_I) {
-            // The 6-pdrs sit in two sponsons at x=+/-1.41 m and share the current hand-laid aim line.
-            if (!turretGone && g.tube > 0.5f) {
-                double az = Math.toRadians(ang[0]), el = Math.toRadians(ang[1]);
-                double sa = Math.sin(az), ca = Math.cos(az);
-                double fz = kind.fireAxisZ();
-                double dx = sa * Math.cos(el) * fz, dy = Math.sin(el) * fz, dz = ca * Math.cos(el) * fz;
-                for (double side : new double[]{-1.0, 1.0}) {
-                    double ax = side * 1.41, ay = 1.22, azz = 0.0;
-                    double t = (x - ax) * dx + (y - ay) * dy + (z - azz) * dz;
-                    if (t > 0.65 && t < g.tube) {
-                        double px = ax + dx * t - x, py = ay + dy * t - y, pz = azz + dz * t - z;
-                        if (px * px + py * py + pz * pz < 0.18 * 0.18) return BARREL;
-                    }
-                }
-            }
-            if (Math.abs(Math.abs(x) - MARK_I_TRACK_X) < 0.17 && nearMarkITrack(y, z)) return x > 0 ? TRACK_L : TRACK_R;
-            if (Math.abs(Math.abs(x) - 1.41) < 0.42 && y > 0.80 && y < 1.66 && Math.abs(z) < 0.87) return AMMO;
-        }
         if (g.turret && g.tube > 0.5f && !turretGone) {
             double az = Math.toRadians(ang[0]), el = Math.toRadians(ang[1]);
             double sa = Math.sin(az), ca = Math.cos(az);
@@ -178,20 +154,6 @@ public final class VehicleDamage {
         boolean eng = g.engineFront ? z > g.cz + g.hz * 0.35 : z < g.cz - g.hz * 0.36;
         if (kind.drivable() && eng && Math.abs(x - g.cx) < g.hx - (g.tracked ? g.trackW : 0.1f) && y > g.cy - g.hy) return ENGINE;
         return -1;
-    }
-
-    private static boolean nearMarkITrack(double y, double z) {
-        double best = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < MARK_I_TRACK_PATH.length; ++i) {
-            double[] a = MARK_I_TRACK_PATH[i], b = MARK_I_TRACK_PATH[(i + 1) % MARK_I_TRACK_PATH.length];
-            double dy = b[0] - a[0], dz = b[1] - a[1];
-            double den = dy * dy + dz * dz;
-            double t = den < 1e-9 ? 0.0 : ((y - a[0]) * dy + (z - a[1]) * dz) / den;
-            t = Mth.clamp(t, 0.0, 1.0);
-            double ey = y - (a[0] + dy * t), ez = z - (a[1] + dz * t);
-            best = Math.min(best, ey * ey + ez * ez);
-        }
-        return best < 0.17 * 0.17;
     }
 
     // ------------------------------------------------------------------------------------------ hits

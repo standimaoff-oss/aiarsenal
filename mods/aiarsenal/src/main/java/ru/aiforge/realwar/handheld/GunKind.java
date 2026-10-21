@@ -41,8 +41,7 @@ public enum GunKind {
     MUSKET_1808("musket_1808", "paper_cartridge", 1, 3, 400, 18f, 2.0f, .085f, .013f, 4.0f, 1.1f, 160, 160, .82f, "musket_fire", false),
     PISTOL_AN13("pistol_an13", "pistol_cartridge", 1, 4, 240, 11f, 1f, .10f, .025f, 3.0f, 1.0f, 120, 120, .88f, "flintlock_fire", false),
     PISTOL_1809("pistol_1809", "pistol_cartridge", 1, 4, 230, 11f, 1f, .10f, .025f, 3.0f, 1.0f, 120, 120, .88f, "flintlock_fire", false),
-    // Append-only WWI rifle: same 5-round stripper clip and 7.92x57 mm cartridge as the later Kar98k.
-    GEWEHR98("gewehr98", "clip_k98", 5, 30, 760, 16f, 11f, 0.055f, 0.0006f, 3.4f, 0.8f, 46, 46, 0.75f, "rifle_k98", false);
+    ;
 
     public final String id, ammo, sound;
     public final int cap, rpm, reload, reloadEmpty;
@@ -85,12 +84,12 @@ public enum GunKind {
 
     /** manual bolt: one aimed shot, then the bolt is cycled (~1.3 s) */
     public boolean boltAction() {
-        return this == T5000 || this == MOSIN || this == K98K || this == GEWEHR98 || this.singleLoad();
+        return this == T5000 || this == MOSIN || this == K98K || this.singleLoad();
     }
 
     /** r26: WW2 bolt rifles charged with a 5-round stripper clip through the open action (only when empty) */
     public boolean clipFed() {
-        return this == MOSIN || this == K98K || this == GEWEHR98 || this == C96;
+        return this == MOSIN || this == K98K || this == C96;
     }
 
     /** rounds one ammo item adds (a stripper clip holds 5) */

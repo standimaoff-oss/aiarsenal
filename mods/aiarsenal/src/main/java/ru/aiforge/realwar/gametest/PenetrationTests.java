@@ -86,29 +86,6 @@ public final class PenetrationTests {
         h.succeed();
     }
 
-    /** WWI: verify the QF 6-pdr armour faces and that an exposed lower-run hit cannot invent a hull penetration. */
-    @GameTest(template = "arena", batch = "rw_pen", timeoutTicks = 40)
-    public static void mark_i_armour_and_track_layers(GameTestHelper h) {
-        VehicleDamage.Geo g = VehicleDamage.geo(VehicleKind.MARK_I, true, true);
-        h.assertTrue(!g.turret(), "Mark I side sponsons are not a rotating turret");
-        Armour.Result r = front(VehicleKind.MARK_I, Ballistics.Profile.QF6_AP,
-                v0(Ballistics.Profile.QF6_AP), true);
-        h.assertTrue(r.zone() == Armour.HULL_UF && r.result() == Armour.PEN && r.nominal() == 12f,
-                "57 mm QF 6-pdr AP through the 12 mm front plate: " + s(r));
-        Vector3d side = new Vector3d(1.82, 1.23, 0.0); // outer face of the right sponson, clear of the track loop
-        r = Armour.solve(g, VehicleKind.MARK_I, false, ZERO, side, new Vector3d(-1, 0, 0),
-                Armour.Ammo.of(Ballistics.Profile.QF6_AP), v0(Ballistics.Profile.QF6_AP), 0.99);
-        h.assertTrue(r.zone() == Armour.HULL_S && r.result() == Armour.PEN && r.nominal() == 8f,
-                "57 mm QF 6-pdr AP through the 8 mm sponson: " + s(r));
-        Vector3d track = new Vector3d(1.50, 0.13, -2.45);
-        r = Armour.solve(g, VehicleKind.MARK_I, false, ZERO, track, new Vector3d(-1, 0, 0),
-                Armour.Ammo.of(Ballistics.Profile.QF6_AP), v0(Ballistics.Profile.QF6_AP), 0.99);
-        h.assertTrue(r.zone() == Armour.TRACK && r.result() == Armour.MODULE && r.module() == DamageState.TRACK_L
-                        && !r.viaTrack(),
-                "the exposed lower run damages the left track only; it is below and behind no hull plate: " + s(r));
-        h.succeed();
-    }
-
     @SuppressWarnings("unchecked")
     private static <T extends VehicleEntity> T vehicle(ServerLevel level, EntityType<?> type, double x, double y, double z) {
         VehicleEntity e = (VehicleEntity) type.create((Level) level);

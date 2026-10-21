@@ -105,6 +105,11 @@ public final class ClientModEvents {
 
     @SubscribeEvent
     public static void renderers(EntityRenderersEvent.RegisterRenderers e) {
+        e.registerEntityRenderer(ModEntities.SOLDIER_NATO.get(), ru.aiforge.realwar.client.render.SoldierRenderer::new);
+        e.registerEntityRenderer(ModEntities.SOLDIER_RUSSIA.get(), ru.aiforge.realwar.client.render.SoldierRenderer::new);
+        e.registerEntityRenderer(ModEntities.SOLDIER_USSR.get(), ru.aiforge.realwar.client.render.SoldierRenderer::new);
+        e.registerEntityRenderer(ModEntities.SOLDIER_GERMANY.get(), ru.aiforge.realwar.client.render.SoldierRenderer::new);
+        e.registerEntityRenderer(ModEntities.SOLDIER_FRANCE.get(), ru.aiforge.realwar.client.render.SoldierRenderer::new);
         e.registerEntityRenderer(ModEntities.CANNON_FR6.get(), ru.aiforge.realwar.client.render.PowderCannonRenderer::new);
         e.registerEntityRenderer(ModEntities.CANNON_RI12.get(), ru.aiforge.realwar.client.render.PowderCannonRenderer::new);
         e.registerEntityRenderer(ModEntities.CANNONBALL.get(), ru.aiforge.realwar.client.render.CannonballRenderer::new);
@@ -138,8 +143,6 @@ public final class ClientModEvents {
         e.registerEntityRenderer((EntityType)ModEntities.BRADLEY.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.TOS1A.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.URAL.get(), VehicleRenderer::new);
-        e.registerEntityRenderer((EntityType)ModEntities.MARK_I.get(), VehicleRenderer::new);
-        e.registerEntityRenderer(ModEntities.WWI_GRENADE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         e.registerEntityRenderer(ru.aiforge.realwar.craft.CraftRegistry.KA52.get(), ru.aiforge.realwar.client.craft.CraftRenderer::new);
         e.registerEntityRenderer(ru.aiforge.realwar.craft.CraftRegistry.AH64.get(), ru.aiforge.realwar.client.craft.CraftRenderer::new);
         e.registerEntityRenderer(ru.aiforge.realwar.craft.CraftRegistry.RAPTOR.get(), ru.aiforge.realwar.client.craft.CraftRenderer::new);

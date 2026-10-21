@@ -11,6 +11,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
@@ -47,9 +48,47 @@ public final class PowderCannonEntity extends Entity {
         entityData.set(LOAD,160);return true;
     }
     public Vec3 muzzle() { return position().add(0,1.05,0).add(Vec3.directionFromRotation(-elevation(),getYRot()).scale(french()?1.45:1.7)); }
-    public boolean fire(Player owner) {
+    /** r22 AI crew: sponging the piece without a player's item stack. */
+    public boolean aiLoad() {
+        if(loading()!=-1 || level().isClientSide) return false;
+        entityData.set(LOAD,160);return true;
+    }
+
+    /** r22 AI crew: lays the gun on a world point with a rank-scaled error and tops the elevation within the arc. */
+    public void aiAim(Vec3 target, double skill, RandomSource rnd) {
+        if(level().isClientSide) return;
+        double dx=target.x-getX(), dz=target.z-getZ();
+        double yaw=Math.toDegrees(Math.atan2(-dx,dz));
+        double errDeg=(1.0-skill)*4.0;
+        yaw+=rnd.nextGaussian()*errDeg;
+        setYRot((float)yaw);yRotO=getYRot();
+        double v=french()?3.0:2.8;
+        double g=0.045;
+        double d=Math.sqrt(dx*dx+dz*dz);
+        double dy=target.y-muzzle().y+0.6;
+        double v2=v*v;
+        double disc=v2*v2-g*(g*d*d+2*dy*v2);
+        if(disc<0) { entityData.set(ELEVATION,elevation()); return; }
+        double angle=Math.toDegrees(Math.atan((v2-Math.sqrt(disc))/(g*d)));
+        int step=(int)Math.round(Math.max(0,Math.min(35,angle))/5.0)*5;
+        entityData.set(ELEVATION,step);
+    }
+
+    public boolean fire(Player owner) { return this.fire((Entity)owner); }
+
+    public boolean aiFire(Entity owner) { return this.fire(owner); }
+
+    public boolean fire(Entity owner) {
         if(!(level() instanceof ServerLevel level) || loading()!=0) return false;
-        var dir=Vec3.directionFromRotation(-elevation(),getYRot());var at=muzzle();
+        double spread = owner instanceof ru.aiforge.realwar.npc.SoldierEntity s
+                ? (1.0 - s.rank().skill) * 0.06 : 0.0;
+        var dir=Vec3.directionFromRotation(-elevation(),getYRot());
+        if (spread > 0) {
+            java.util.Random rnd = new java.util.Random(level.random.nextLong());
+            dir = new Vec3(dir.x + rnd.nextGaussian() * spread, dir.y + rnd.nextGaussian() * spread * 0.5,
+                    dir.z + rnd.nextGaussian() * spread).normalize();
+        }
+        var at=muzzle();
         var ball=new CannonballEntity(ModEntities.CANNONBALL.get(),level);
         ball.setOwner(owner);ball.setPos(at);ball.setDeltaMovement(dir.scale(french()?3.0:2.8));
         ball.damage=french()?28:36;level.addFreshEntity(ball);

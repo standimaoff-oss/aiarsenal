@@ -25,6 +25,14 @@
 
 The charge includes a solid projectile. It follows a ballistic path and deals direct impact damage; it is not an explosive shell.
 
+## AI soldiers
+
+- Spawn: `/realwar npc squad <faction> <era> [count] [vehicle]` (see `docs/npc-soldiers.md`), or use the spawn eggs
+  in the **Troops** creative tabs.
+- AI soldiers need no keys: they pick targets, hold their squad, crew their own nation's vehicles and fly their own
+  aircraft. Only the player-driven seats use the controls below.
+- Killed soldiers drop a partly loaded weapon and a damaged uniform; search the body with the normal item pickup.
+
 ## Vehicles and aircraft
 
 Mount the vehicle and press **J** (default) to open its contextual control panel. It displays the controls available for that vehicle; rebind keys in **Options → Controls → AI Arsenal** if needed.

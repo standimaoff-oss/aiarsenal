@@ -144,6 +144,10 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
     public float temp = 0.25f;
     protected double vy;
     protected float[] forced;
+    /** r22 AI crew state: current target entity, think cooldown and reverse-out timer. */
+    public int aiTargetId = -1;
+    public int aiThink;
+    public int aiReverse;
     protected int stationaryTicks;
     protected int pendingSeat = -1;
     private int lerpSteps;
@@ -299,6 +303,7 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
         if (s == 0) {
             this.entityData.set(THROTTLE, Float.valueOf(0.0f));
             this.entityData.set(STEER, Float.valueOf(0.0f));
+            this.forced = null;
         }
     }
 
@@ -314,6 +319,44 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
         boolean ok = p.startRiding((Entity)this);
         this.pendingSeat = -1;
         return ok;
+    }
+
+    /**
+     * AI crew: a soldier takes a seat exactly like a player does, without the client message plumbing of
+     * {@link #enterSeat(ServerPlayer, int)}.
+     */
+    public boolean aiEnterSeat(Entity e, int seat) {
+        if (e.isPassenger() || seat < 0 || seat >= this.spec.seatCount() || this.seatUuid(seat) != null) {
+            return false;
+        }
+        this.pendingSeat = seat;
+        boolean ok = e.startRiding(this);
+        this.pendingSeat = -1;
+        return ok;
+    }
+
+    /** AI driver: the engine is started by the crew, never left as a player-only action. */
+    public void aiStartEngine() {
+        if (!this.engineOn() && !this.dmg.dead() && this.fuel() > 0.002f) {
+            this.entityData.set(ENGINE, true);
+            this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.ENGINE_START.get(),
+                    SoundSource.NEUTRAL, 2.2f, 1.0f);
+        }
+    }
+
+    /** AI driver input (throttle, steer, handbrake); read by {@link #tick()} while no player is driving. */
+    public void setAiInput(float throttle, float steer, boolean handbrake) {
+        this.forced = new float[]{Mth.clamp(throttle, -1f, 1f), Mth.clamp(steer, -1f, 1f), handbrake ? 1f : 0f};
+    }
+
+    public void clearAiInput() {
+        this.forced = null;
+        this.entityData.set(THROTTLE, 0f);
+        this.entityData.set(STEER, 0f);
+    }
+
+    public boolean isAiDriven() {
+        return !this.level().isClientSide && this.passengerIn(0) instanceof ru.aiforge.realwar.npc.SoldierEntity;
     }
 
     public boolean switchSeat(Entity p) {
@@ -787,7 +830,10 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
             this.tickLerp();
         }
         boolean local = this.level().isClientSide && this.isLocalDriver();
-        boolean bl = authority = this.kind.drivable() && (local || !this.level().isClientSide && this.getControllingPassenger() == null);
+        // r22 NPC crews: a soldier in the driver's seat is simulated on the server from the AI input array, exactly
+        // like an empty vehicle with forced input - otherwise every AI tank would freeze the moment it is boarded.
+        boolean aiDriver = !this.level().isClientSide && this.isAiDriven();
+        boolean bl = authority = this.kind.drivable() && (local || !this.level().isClientSide && (this.getControllingPassenger() == null || aiDriver));
         if (authority) {
             float[] fArray;
             if (local) {

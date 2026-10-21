@@ -92,8 +92,6 @@ public final class ModItems {
     public static final RegistryObject<Item> CLIP_MOSIN = ITEMS.register("clip_mosin", () -> new ru.aiforge.realwar.handheld.ShellItem(new Item.Properties(), "tooltip.aiarsenal.clip_mosin"));
     public static final RegistryObject<Item> K98K = ITEMS.register("k98k", () -> new ru.aiforge.realwar.handheld.FirearmItem(ru.aiforge.realwar.handheld.GunKind.K98K, new Item.Properties()));
     public static final RegistryObject<Item> CLIP_K98 = ITEMS.register("clip_k98", () -> new ru.aiforge.realwar.handheld.ShellItem(new Item.Properties(), "tooltip.aiarsenal.clip_k98"));
-    // WWI: Gewehr 98 uses the same five-round 7.92x57 Mauser stripper clip as the later Kar98k.
-    public static final RegistryObject<Item> GEWEHR98 = ITEMS.register("gewehr98", () -> new ru.aiforge.realwar.handheld.FirearmItem(ru.aiforge.realwar.handheld.GunKind.GEWEHR98, new Item.Properties()));
     public static final RegistryObject<Item> JAVELIN_MISSILE = ITEMS.register("javelin_missile", () -> new ru.aiforge.realwar.handheld.HandheldAmmoItem(ru.aiforge.realwar.handheld.HandheldKind.JAVELIN, new Item.Properties()));
     public static final RegistryObject<Item> GEIGER_COUNTER = ITEMS.register("geiger_counter", () -> new GeigerCounterItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> POTASSIUM_IODIDE = ITEMS.register("potassium_iodide", () -> new PotassiumIodideItem(new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(0).saturationMod(0.0f).alwaysEat().build())));
@@ -262,10 +260,7 @@ public final class ModItems {
     public static final RegistryObject<Item> BRADLEY_VEHICLE = ITEMS.register("bradley_vehicle", () -> new VehicleItem(VehicleKind.BRADLEY, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> TOS1A_VEHICLE = ITEMS.register("tos1a_vehicle", () -> new VehicleItem(VehicleKind.TOS1A, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> URAL_VEHICLE = ITEMS.register("ural_vehicle", () -> new VehicleItem(VehicleKind.URAL, new Item.Properties().stacksTo(1)));
-    // WWI Mark I item is appended with the model and double-sponson simulation.
-    public static final RegistryObject<Item> MARK_I_VEHICLE = ITEMS.register("mark_i_vehicle", () -> new VehicleItem(VehicleKind.MARK_I, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SHELLS_20 = ModItems.item("shells_20", 0.0, 16);
-    public static final RegistryObject<Item> SHELLS_57 = ModItems.item("shells_57", 0.0, 8);
     public static final RegistryObject<Item> SHELLS_75 = ModItems.item("shells_75", 0.0, 16);
     public static final RegistryObject<Item> SHELLS_88 = ModItems.item("shells_88", 0.0, 16);
     public static final RegistryObject<Item> SHELLS_85 = ModItems.item("shells_85", 0.0, 16);
@@ -313,10 +308,6 @@ public final class ModItems {
     public static final RegistryObject<Item> TU95_VEHICLE = ITEMS.register("tu95_vehicle", () -> new AircraftItem(new Item.Properties()));
     private static final Map<AirBombType, RegistryObject<Item>> AIR_BOMBS = new EnumMap<AirBombType, RegistryObject<Item>>(AirBombType.class);
 
-    public static final RegistryObject<Item> MILLS_BOMB = ITEMS.register("mills_bomb", () -> new ru.aiforge.realwar.wwi.GrenadeItem(new Item.Properties().stacksTo(8)));
-    public static final RegistryObject<Item> STIELHANDGRANATE = ITEMS.register("stielhandgranate", () -> new ru.aiforge.realwar.wwi.GrenadeItem(new Item.Properties().stacksTo(8)));
-    public static final RegistryObject<Item> WEX = ITEMS.register("wex", () -> new ru.aiforge.realwar.wwi.FlamethrowerItem(new Item.Properties().durability(401)));
-    public static final RegistryObject<Item> WWI_FUEL = ITEMS.register("wwi_fuel", () -> new Item(new Item.Properties().stacksTo(16)));
 
     private ModItems() {
     }
@@ -367,7 +358,6 @@ public final class ModItems {
             case BRADLEY -> BRADLEY_VEHICLE;
             case TOS1A -> TOS1A_VEHICLE;
             case URAL -> URAL_VEHICLE;
-            case MARK_I -> MARK_I_VEHICLE;
         };
     }
 
@@ -375,6 +365,18 @@ public final class ModItems {
         for (AirBombType t : AirBombType.values()) {
             AIR_BOMBS.put(t, ITEMS.<Item>register(t.id, () -> new AirBombItem(t, new Item.Properties())));
         }
+    }
+
+    // r22: AI soldiers - one spawn egg per army/period (right-click on the ground to deploy)
+    public static final RegistryObject<Item> SOLDIER_NATO_EGG = egg("soldier_nato_spawn_egg", ModEntities.SOLDIER_NATO, 0x4C7BB5, 0xD9D2C3);
+    public static final RegistryObject<Item> SOLDIER_RUSSIA_EGG = egg("soldier_russia_spawn_egg", ModEntities.SOLDIER_RUSSIA, 0xB5433B, 0xE3D8C4);
+    public static final RegistryObject<Item> SOLDIER_USSR_EGG = egg("soldier_ussr_spawn_egg", ModEntities.SOLDIER_USSR, 0x6E7A57, 0xC8B99A);
+    public static final RegistryObject<Item> SOLDIER_GERMANY_EGG = egg("soldier_germany_spawn_egg", ModEntities.SOLDIER_GERMANY, 0x5A5F50, 0xB8B29C);
+    public static final RegistryObject<Item> SOLDIER_FRANCE_EGG = egg("soldier_france_spawn_egg", ModEntities.SOLDIER_FRANCE, 0x3E5C9A, 0xEDE6D6);
+
+    private static RegistryObject<Item> egg(String id, RegistryObject<net.minecraft.world.entity.EntityType<ru.aiforge.realwar.npc.SoldierEntity>> type,
+                                            int bg, int hl) {
+        return ITEMS.register(id, () -> new net.minecraftforge.common.ForgeSpawnEggItem(() -> type.get(), bg, hl, new Item.Properties()));
     }
 
     /** r15: 10 uniform sets x 4 pieces, ids uniform_<set>_<head|chest|legs|feet>. */

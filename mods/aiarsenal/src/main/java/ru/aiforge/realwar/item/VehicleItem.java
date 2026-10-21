@@ -74,7 +74,6 @@ extends TooltipItem {
             case BRADLEY -> (EntityType)ModEntities.BRADLEY.get();
             case TOS1A -> (EntityType)ModEntities.TOS1A.get();
             case URAL -> (EntityType)ModEntities.URAL.get();
-            case MARK_I -> (EntityType)ModEntities.MARK_I.get();
         };
     }
 

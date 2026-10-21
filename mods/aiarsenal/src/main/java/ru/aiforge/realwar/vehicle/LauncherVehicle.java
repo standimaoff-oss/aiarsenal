@@ -305,6 +305,24 @@ extends VehicleEntity {
         }
     }
 
+    // ------------------------------------------------------------------ r22 AI crew
+    /** World point the AI gunner is laying the pack on. */
+    @Nullable
+    public Vec3 aiAim;
+    public boolean aiTrigger;
+    /** Wider salvo pattern for AI crews (imperfect gunnery). */
+    public float aiSpread = 2.6f;
+
+    public boolean aiGunner() {
+        return this.passengerIn(this.operatorSeat()) instanceof ru.aiforge.realwar.npc.SoldierEntity;
+    }
+
+    /** Ballistic lay on {@link #aiAim}; launchers without a rocket profile keep the pack at rest. */
+    @Nullable
+    protected float[] aiSolution() {
+        return null;
+    }
+
     protected abstract float[] aimTarget();
 
     protected void updateAim() {
@@ -415,6 +433,10 @@ extends VehicleEntity {
     }
 
     protected void updateReload() {
+        if (this.aiGunner()) {
+            this.aiReload();
+            return;
+        }
         ServerPlayer ep;
         ServerLevel sl;
         Player player;
@@ -463,6 +485,48 @@ extends VehicleEntity {
             if (t == this.kind.reloadTicks / 2) {
                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)ModSounds.HYDRAULIC.get(), SoundSource.NEUTRAL, 0.6f, 1.1f);
             }
+        }
+    }
+
+    // ------------------------------------------------------------------ r22 AI crew
+    /** Rounds the AI crew still has in the racks (-1 = not initialised yet). */
+    public int aiAmmo = -1;
+
+    @Override
+    protected void removePassenger(Entity p) {
+        int seat = this.seatOf(p);
+        super.removePassenger(p);
+        if (seat == 0) {                       // the gunner left: no stale AI lay, no stale trigger
+            this.aiAim = null;
+            this.aiTrigger = false;
+        }
+    }
+
+    /**
+     * AI loader: reloads from the vehicle's own racks, without a player's inventory. The reserve is finite
+     * (two magazines), so an AI crew can be worn down instead of firing forever.
+     */
+    private void aiReload() {
+        if (this.aiAmmo < 0) this.aiAmmo = Math.max(2, this.kind.magazine * 2);
+        int rt = this.reloadTube();
+        if (rt < 0) {
+            if (this.mayReload() && this.loadedCount() < this.kind.magazine && this.aiAmmo > 0) {
+                this.entityData.set(RELOAD_TUBE, this.firstEmpty());
+                this.entityData.set(RELOAD_T, 0);
+            }
+            return;
+        }
+        if (!this.mayReload()) return;
+        if (ru.aiforge.realwar.damage.VehicleDamage.slowReload(this) && this.tickCount % 2 == 0) return;
+        int t = this.reloadTicks() + 1;
+        if (t >= this.kind.reloadTicks) {
+            this.setLoadedMask(this.loadedMask() | 1L << rt);
+            this.aiAmmo--;
+            this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.RELOAD_CLANK.get(), SoundSource.NEUTRAL, 1.2f, 1.15f);
+            this.entityData.set(RELOAD_TUBE, -1);
+            this.entityData.set(RELOAD_T, 0);
+        } else {
+            this.entityData.set(RELOAD_T, t);
         }
     }
 
@@ -546,26 +610,17 @@ extends VehicleEntity {
         this.applyCommonPose(pose, pt);
         float az = Mth.lerp((float)pt, (float)this.azVisO, (float)this.azVis);
         float el = Mth.lerp((float)pt, (float)this.elVisO, (float)this.elVis);
-        if (this.spec.yawPivot() != null && this.kind.fireAxisZ() > 0 && this.kind != VehicleKind.MARK_I) {
+        if (this.spec.yawPivot() != null && this.kind.fireAxisZ() > 0) {
             // r11: stabilised turret on a tilted hull - draw the barrel along the true line of fire
             float[] st = this.stabilised(az, el, this.pitchLerp(pt), this.rollLerp(pt));
             az = st[0];
             el = st[1];
         }
         float pitchDeg = -this.kind.fireAxisZ() * (el - this.kick * 0.8f);
-        if (this.kind == VehicleKind.MARK_I) {
-            // Sponson bases are fixed outward by 90 degrees in the GLB; counter-rotate each so both 6-pdrs follow
-            // the shared direct-aim line. This is not a turret and receives no stabilisation.
-            pose.rotate("launcher_yaw", (float)Math.toRadians(az + 90.0f), 0.0f, 1.0f, 0.0f);
-            pose.rotate("launcher_yaw_left", (float)Math.toRadians(az - 90.0f), 0.0f, 1.0f, 0.0f);
-            pose.rotate("launcher_pitch", (float)Math.toRadians(pitchDeg), 1.0f, 0.0f, 0.0f);
-            pose.rotate("launcher_pitch_left", (float)Math.toRadians(pitchDeg), 1.0f, 0.0f, 0.0f);
-        } else {
-            if (this.spec.yawPivot() != null) {
-                pose.rotate("launcher_yaw", (float)Math.toRadians(az), 0.0f, 1.0f, 0.0f);
-            }
-            pose.rotate("launcher_pitch", (float)Math.toRadians(pitchDeg), 1.0f, 0.0f, 0.0f);
+        if (this.spec.yawPivot() != null) {
+            pose.rotate("launcher_yaw", (float)Math.toRadians(az), 0.0f, 1.0f, 0.0f);
         }
+        pose.rotate("launcher_pitch", (float)Math.toRadians(pitchDeg), 1.0f, 0.0f, 0.0f);
         float jk = this.jack();
         for (int i = 0; i < this.spec.jacks().length; ++i) {
             pose.translate("jack_" + i, 0.0f, -this.spec.jacks()[i][2] * jk, 0.0f);
@@ -579,6 +634,7 @@ extends VehicleEntity {
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setLoadedMask(tag.contains("loaded") ? tag.getLong("loaded") : 0L);
+        this.aiAmmo = tag.contains("aiAmmo") ? tag.getInt("aiAmmo") : -1;
         this.entityData.set(AZ, Float.valueOf(tag.getFloat("az")));
         this.entityData.set(EL, Float.valueOf(tag.contains("el") ? tag.getFloat("el") : this.kind.elMin));
         this.entityData.set(JACK, Float.valueOf(0.0f));
@@ -590,6 +646,7 @@ extends VehicleEntity {
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putLong("loaded", this.loadedMask());
+        tag.putInt("aiAmmo", this.aiAmmo);
         tag.putFloat("az", this.az());
         tag.putFloat("el", this.el());
     }

@@ -76,7 +76,25 @@ extends LauncherVehicle {
     }
 
     @Override
+    protected float[] aiSolution() {
+        Vec3 tg = this.aiAim;
+        if (tg == null) return null;
+        Vec3 from = this.position().add(0, this.spec.height() * 0.6, 0);
+        double dx = tg.x - from.x, dz = tg.z - from.z;
+        double k = Ballistics.scaleK();
+        double el = Ballistics.solveElevation(this.profile(), Math.sqrt(dx * dx + dz * dz) * k, (tg.y - from.y) * k,
+                Math.max(this.kind.elMin, 0.0f), this.kind.elMax);
+        if (Double.isNaN(el)) el = Math.max(this.kind.elMin, 0.0f);
+        return new float[]{this.azRelFromWorldYaw((float) Math.toDegrees(Math.atan2(-dx, dz))), (float) el};
+    }
+
+    @Override
     protected float[] aimTarget() {
+        if (this.aiGunner()) {
+            float[] ai = this.aiSolution();
+            if (ai != null) this.outOfSector = Math.abs(ai[0]) > this.kind.traverse + 0.5f;
+            return ai;
+        }
         float[] t;
         ServerPlayer op = this.operator();
         if (op == null) {
@@ -133,12 +151,16 @@ extends LauncherVehicle {
 
     @Override
     protected void serverLaunch() {
-        Level level;
+        boolean ai = this.aiGunner();
         ServerPlayer op = this.operator();
-        if (op == null || !this.fireHeld(this.operatorSeat()) || !((level = this.level()) instanceof ServerLevel)) {
+        if (!(this.level() instanceof ServerLevel level)) {
             return;
         }
-        ServerLevel sl = (ServerLevel)level;
+        if (ai ? !this.aiTrigger : (op == null || !this.fireHeld(this.operatorSeat()))) {
+            return;
+        }
+        ServerLevel sl = (ServerLevel) level;
+        double spreadMul = ai ? this.aiSpread : 1.0;
         if (this.fireCd > 0) {
             return;
         }
@@ -158,13 +180,13 @@ extends LauncherVehicle {
             this.notifyOp("hud.aiarsenal.rw.out_of_sector");
             return;
         }
-        if (!this.aimSettled(this.aimTarget())) {
+        if (!this.aimSettled(ai ? this.aiSolution() : this.aimTarget())) {
             return;
         }
         int k = this.firstLoaded();
         Vec3 muzzle = this.muzzleWorld(k);
         Vec3 dir = this.launchDir();
-        double sig = this.kind == VehicleKind.GRAD ? 0.0055 : (this.kind == VehicleKind.BM13 ? 0.009 : 0.0035);   // M-13 rail launch: wide salvo pattern
+        double sig = (this.kind == VehicleKind.GRAD ? 0.0055 : (this.kind == VehicleKind.BM13 ? 0.009 : 0.0035)) * spreadMul;   // M-13 rail launch: wide salvo pattern
         Vec3 d = dir.add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
         RocketEntity.launch(sl, this.profile(), muzzle.add(d.scale(0.6)), d, this.getId());
         this.markFired(k);

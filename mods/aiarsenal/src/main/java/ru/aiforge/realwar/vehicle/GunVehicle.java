@@ -14,7 +14,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -170,10 +169,6 @@ public class GunVehicle extends LauncherVehicle {
             // TOS-1A: T-72A running gear (same as the T-90M), 24 x 220 mm thermobaric rockets
             case TOS1A -> new Cfg(Ballistics.Profile.TOS220, null, false, 0.0f,
                     1.395f, 0.375f, 0.33f, 0.28f, 0.115f, 6, 3, TOS_PITCH, 30.0f, 0.6f, 0.5f, () -> ModItems.ROCKET_220.get(), null, false, false);
-            // WWI Mark I Male: two independently loaded QF 6-pdr sponsons; a single trigger fires every loaded mount.
-            case MARK_I -> new Cfg(Ballistics.Profile.QF6_HE, Ballistics.Profile.QF6_AP, false, 0.14f,
-                    1.50f, 0.305f, 0.385f, 0.385f, 0.115f, 6, 3, 0.29533399f, 45.0f, 0.45f, 0.35f,
-                    () -> ModItems.SHELLS_57.get(), null, false, false);
             default -> throw new IllegalArgumentException("not a gun vehicle: " + k);
         };
     }
@@ -339,7 +334,6 @@ public class GunVehicle extends LauncherVehicle {
     // all main-gun rounds leave the same barrel (the magazine bits are just ready rounds)
     @Override
     public float[] muzzleLocal(int k) {
-        if (this.kind == VehicleKind.MARK_I) return new float[]{k == 0 ? -1.41f : 1.41f, 1.22f, 0.0f};
         if (this.perTube()) return this.spec.tubes()[Mth.clamp(k, 0, this.spec.tubes().length - 1)];
         return this.spec.tubes()[this.cfg.alternate ? Math.floorMod(k, 2) : 0];   // Ratte: twin 28 cm (r11: fired together as a salvo)
     }
@@ -350,14 +344,6 @@ public class GunVehicle extends LauncherVehicle {
     }
 
     public Vec3 tubeWorld(int tube) {
-        if (this.kind == VehicleKind.MARK_I) {
-            // Each cannon pivots about its own sponson trunnion; only its muzzle follows the shared aim line.
-            Matrix4d localAim = new Matrix4d().rotateY(Math.toRadians(this.az())).rotateX(-Math.toRadians(this.el()));
-            Vector3d muzzle = localAim.transformPosition(new Vector3d(0.0, 0.0, this.kind.tubeLen));
-            muzzle.add(tube == 0 ? -1.41 : 1.41, 1.22, 0.0);
-            Vector3d world = this.bodyFrame().transformPosition(muzzle);
-            return new Vec3(world.x, world.y, world.z);
-        }
         float[] q = this.spec.tubes()[Mth.clamp(tube, 0, this.spec.tubes().length - 1)];
         Vector3d v = this.pitchFrame(this.az(), this.el()).transformPosition(new Vector3d(q[0], q[1], q[2]));
         return new Vec3(v.x, v.y, v.z);
@@ -485,8 +471,37 @@ public class GunVehicle extends LauncherVehicle {
     }
 
     // ------------------------------------------------------------------ fire control
+
+    // r22: the AI lay / trigger / dispersion state lives in LauncherVehicle (shared by guns and launchers)
+
+    /** Ballistic lay on an AI aim point: the same solver the player uses, fed from the squad's target instead of the mouse. */
+    @Override
+    protected float[] aiSolution() {
+        Vec3 tg = this.aiAim;
+        if (tg == null) return null;
+        Vec3 piv = this.pivotWorld();
+        double dx = tg.x - piv.x, dz = tg.z - piv.z;
+        double k = Ballistics.scaleK();
+        double rangeM = Math.sqrt(dx * dx + dz * dz) * k;
+        double dyM = (tg.y - piv.y) * k;
+        double el = Ballistics.solveElevation(this.coaxSelected() ? Ballistics.Profile.T125_AP : this.profile(),
+                rangeM, dyM, Math.max(this.kind.elMin, 0.0f), this.kind.elMax);
+        this.outOfRange = Double.isNaN(el);
+        if (Double.isNaN(el)) el = Math.max(this.kind.elMin, 0.0f);
+        this.aimPoint = tg;
+        this.entityData.set(LASE, (float) Math.sqrt(dx * dx + dz * dz));
+        return new float[]{this.azRelFromWorldYaw((float) Math.toDegrees(Math.atan2(-dx, dz))), (float) el};
+    }
+
     @Override
     protected float[] aimTarget() {
+        if (this.aiGunner()) {
+            float[] t = this.aiSolution();
+            if (t != null) {
+                this.outOfSector = this.kind.traverse < 179.9f && Math.abs(Mth.wrapDegrees(t[0])) > this.kind.traverse + 0.5f;
+            }
+            return t;
+        }
         ServerPlayer op = this.operator();
         if (op == null) {
             return null;
@@ -744,7 +759,11 @@ public class GunVehicle extends LauncherVehicle {
         if (this.thirdCd > 0) --this.thirdCd;
         boolean coaxNow = false;
         ServerPlayer op = this.operator();
-        if (op != null && !this.dmg.dead() && this.coaxSelected() && this.fireHeld(this.operatorSeat()) && this.level() instanceof ServerLevel sl) {
+        boolean aiGun = op == null && this.aiGunner();
+        boolean trigger = op != null ? this.fireHeld(this.operatorSeat()) : aiGun && this.aiTrigger;
+        // a player has to switch to the coax; an AI gunner sprays with it while the main gun is between rounds
+        boolean coaxWanted = op != null ? this.coaxSelected() : aiGun && this.loadedCount() == 0;
+        if (!this.dmg.dead() && coaxWanted && trigger && this.level() instanceof ServerLevel sl) {
             coaxNow = this.fireCoax(sl);
         }
         if (coaxNow != this.coaxFiring()) {
@@ -787,10 +806,16 @@ public class GunVehicle extends LauncherVehicle {
 
     @Override
     protected void serverLaunch() {
+        boolean ai = this.aiGunner();
         ServerPlayer op = this.operator();
-        if (op == null || this.coaxSelected() || !this.fireHeld(this.operatorSeat()) || !(this.level() instanceof ServerLevel sl)) {
+        if (!(this.level() instanceof ServerLevel sl) || this.coaxSelected()) {
             return;
         }
+        if (ai ? !this.aiTrigger : (op == null || !this.fireHeld(this.operatorSeat()))) {
+            return;
+        }
+        // AI gunners are deliberately sloppy: the same shell with a wider angular spread and a shorter engagement cycle
+        float spreadMul = ai ? this.aiSpread : 1.0f;
         if (this.dmg.dead()) return;
         if (this.thirdSelected()) {
             this.fireThird(sl);
@@ -815,8 +840,8 @@ public class GunVehicle extends LauncherVehicle {
             this.notifyOp("hud.aiarsenal.rw.out_of_sector");
             return;
         }
-        if (this.autoAim() && !this.aimSettled(this.aimTarget())) {
-            return;
+        if ((this.autoAim() || ai) && !this.aimSettled(this.aimTarget())) {
+            return;                                  // an AI gunner waits for the turret like a player does
         }
         Ballistics.Profile prof = this.profile();
         int k = this.firstLoaded();
@@ -825,7 +850,7 @@ public class GunVehicle extends LauncherVehicle {
         if (this.perTube()) {
             muzzle = this.tubeWorld(k);
             // r12 TOS-1A: unguided 220 mm rocket (motor + smoke trail), salvo pattern of the real launcher
-            double rs = 0.006;
+            double rs = 0.006 * spreadMul;
             Vec3 rd = dir.add(sl.random.nextGaussian() * rs, sl.random.nextGaussian() * rs * 0.6, sl.random.nextGaussian() * rs).normalize();
             ru.aiforge.realwar.ordnance.RocketEntity.launch(sl, prof, muzzle.add(rd.scale(0.6)), rd, this.getId());
             this.markFired(k);
@@ -834,39 +859,20 @@ public class GunVehicle extends LauncherVehicle {
             this.rocketBackblast(sl, muzzle, rd);
             return;
         }
-        double sig = this.kind.artillery() ? 0.0016 : (this.kind.ww2() ? 0.0007 : 0.0004);
+        double sig = (this.kind.artillery() ? 0.0016 : (this.kind.ww2() ? 0.0007 : 0.0004)) * spreadMul;
         Vec3 d = dir.add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
-        if (this.kind == VehicleKind.MARK_I) {
-            int second = -1;
-            for (int slot = 0; slot < this.kind.magazine; ++slot) {
-                if (slot != k && this.isLoaded(slot)) { second = slot; break; }
-            }
-            Vec3 m0 = this.tubeWorld(k);
-            ShellEntity.fire(sl, prof, m0.add(d.scale(0.2)), d, this.getId());
-            if (second >= 0) {
+        muzzle = this.tubeWorld(0);
+        ShellEntity.fire(sl, prof, muzzle.add(d.scale(0.2)), d, this.getId());
+        this.markFired(k);
+        if (this.cfg.alternate) {
+            // r11: twin mount (Ratte 2 x 28 cm SK C/34) - both barrels fire as one salvo, then both reload
+            int k2 = this.firstLoaded();
+            if (k2 >= 0) {
+                Vec3 m2 = this.tubeWorld(1);
                 Vec3 d2 = dir.add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
-                Vec3 m1 = this.tubeWorld(second);
-                ShellEntity.fire(sl, prof, m1.add(d2.scale(0.2)), d2, this.getId());
-                this.markFiredPair(k, second);
-                muzzle = m0.add(m1).scale(0.5);
-            } else {
-                this.markFired(k);
-                muzzle = m0;
-            }
-        } else {
-            muzzle = this.tubeWorld(0);
-            ShellEntity.fire(sl, prof, muzzle.add(d.scale(0.2)), d, this.getId());
-            this.markFired(k);
-            if (this.cfg.alternate) {
-                // r11: twin mount (Ratte 2 x 28 cm SK C/34) - both barrels fire as one salvo, then both reload
-                int k2 = this.firstLoaded();
-                if (k2 >= 0) {
-                    Vec3 m2 = this.tubeWorld(1);
-                    Vec3 d2 = dir.add(sl.random.nextGaussian() * sig, sl.random.nextGaussian() * sig * 0.6, sl.random.nextGaussian() * sig).normalize();
-                    ShellEntity.fire(sl, prof, m2.add(d2.scale(0.2)), d2, this.getId());
-                    this.markFired(k2);
-                    muzzle = muzzle.add(m2).scale(0.5);
-                }
+                ShellEntity.fire(sl, prof, m2.add(d2.scale(0.2)), d2, this.getId());
+                this.markFired(k2);
+                muzzle = muzzle.add(m2).scale(0.5);
             }
         }
         this.fireCd = this.kind.fireInterval;
@@ -883,10 +889,7 @@ public class GunVehicle extends LauncherVehicle {
         }
         sl.playSound(null, muzzle.x, muzzle.y, muzzle.z, (this.kind.artillery() ? ModSounds.CANNON_HOWITZER : ModSounds.CANNON_TANK).get(),
                 SoundSource.NEUTRAL, big ? 20.0f : 10.0f, (this.kind == VehicleKind.BMP3 ? 1.25f : 0.95f) + sl.random.nextFloat() * 0.1f);
-        if (this.kind == VehicleKind.MARK_I && this.firedTube() == -2) {
-            this.muzzleBlast(sl, this.tubeWorld(0), dir);
-            this.muzzleBlast(sl, this.tubeWorld(1), dir);
-        } else this.muzzleBlast(sl, muzzle, d);
+        this.muzzleBlast(sl, muzzle, d);
     }
 
     /** Maus: the coaxial 7.5 cm KwK 44 L/36.5 - own ready rounds (refilled with [R] from the racks) and own loader cycle. */
@@ -1065,7 +1068,6 @@ public class GunVehicle extends LauncherVehicle {
     @Override
     protected void launcherPose(Pose pose, float pt) {
         pose.translate("barrel", 0.0f, 0.0f, -this.cfg.recoil * Math.min(1.0f, this.kick * 1.15f));
-        if (this.kind == VehicleKind.MARK_I) pose.translate("barrel_left", 0.0f, 0.0f, -this.cfg.recoil * Math.min(1.0f, this.kick * 1.15f));
         if (this.perTube()) {
             for (int k = 0; k < this.kind.magazine; k++) pose.hide("rkt_" + k, !this.isLoaded(k) && k != this.reloadTube());
         }
