@@ -196,15 +196,20 @@ public final class NpcTests {
                 Faction.RUSSIA, Era.MODERN, Rank.PILOT);
         h.assertTrue(pilot != null, "pilot did not spawn");
         pilot.setAssignedCraft(heli.getId());
+        // the Ka-52 rotor needs ~9 s to spool: judge the whole climb, not one instant
         h.onEachTick(() -> {
-            if (heli.tickCount > 560) {   // the Ka-52 rotor needs ~9 s to spool before it can lift
+            if (heli.isRemoved()) {
+                h.assertTrue(false, "the helicopter was removed before taking off");
+            }
+            if (heli.getY() > y0 + 4.0 && heli.getPassengers().contains(pilot)) {
+                h.succeed();
+            } else if (heli.tickCount > 650) {
                 h.assertTrue(heli.getPassengers().contains(pilot), "the pilot never boarded the helicopter");
-                h.assertTrue(heli.getY() > y0 + 4.0,
+                h.assertTrue(false,
                         "the AI pilot did not lift off (gained " + String.format("%.2f", heli.getY() - y0)
                                 + " blocks) engine=" + heli.engineOn() + " fuel=" + heli.fuel()
                                 + " seat=" + heli.seatOf(pilot) + " stab=" + heli.flag(CraftEntity.FLAG_STAB)
                                 + " forced=" + java.util.Arrays.toString(heli.forcedInput()));
-                h.succeed();
             }
         });
     }
