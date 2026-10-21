@@ -228,4 +228,35 @@ public final class NpcTests {
         h.assertTrue(NpcGear.canUseCraft(Faction.GERMANY, Era.WW2, CraftKind.BF109), "Bf 109 belongs to the Wehrmacht");
         h.succeed();
     }
+
+    @GameTest(template = "arena", batch = "rw_npc", timeoutTicks = 120)
+    public static void eggs_come_per_country_period_and_trade(GameTestHelper h) {
+        var content = ru.aiforge.realwar.registry.ModTabs.content("troops");
+        h.assertTrue(content.size() >= 48, "troops tab holds every egg, got " + content.size());
+        java.util.List<String> order = new java.util.ArrayList<>();
+        for (var item : content) order.add(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).getPath());
+        int fr = order.indexOf("soldier_france_spawn_egg");
+        int ri = order.indexOf("soldier_rus_empire_spawn_egg");
+        int de = order.indexOf("soldier_germany_spawn_egg");
+        int su = order.indexOf("soldier_ussr_spawn_egg");
+        int nato = order.indexOf("soldier_nato_spawn_egg");
+        int ru = order.indexOf("soldier_russia_spawn_egg");
+        h.assertTrue(0 <= fr && fr < ri && ri < de && de < su && su < nato && nato < ru,
+                "army order France<RusEmpire<Wehrmacht<USSR<NATO<Russia: " + order);
+        h.assertTrue(order.contains("egg_de_commander") && order.contains("egg_su_assault")
+                && order.contains("egg_nato_medic") && order.contains("egg_fr_artillery")
+                && order.contains("egg_ri_tank_crew") && order.contains("egg_ru_aa_gunner")
+                && order.contains("egg_su_pilot"), "every army has its own trades");
+
+        int top = pad(h, 15, 15, 12);
+        Vec3 at = new Vec3(h.absolutePos(new BlockPos(15, 0, 15)).getX() + 0.5, top,
+                h.absolutePos(new BlockPos(15, 0, 15)).getZ() + 0.5);
+        SoldierEntity storm = SoldierSpawner.spawnOne(h.getLevel(), at, Faction.GERMANY, Era.WW2, Rank.PRIVATE);
+        h.assertTrue(storm != null, "assault egg soldier did not spawn");
+        storm.setProfession(Profession.ASSAULT);
+        h.assertTrue(storm.profession() == Profession.ASSAULT && storm.faction() == Faction.GERMANY
+                && storm.era() == Era.WW2, "the Wehrmacht assault trooper keeps his army and period");
+        storm.discard();
+        h.succeed();
+    }
 }
