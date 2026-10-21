@@ -64,7 +64,9 @@ public final class ModTabs {
             "wwi_weapons", "wwi_vehicles", "wwi_ammo",
             "ww2_weapons", "ww2_vehicles", "ww2_clothing", "ww2_ammo",
             "modern_weapons", "modern_vehicles", "modern_clothing", "modern_ammo",
-            "napoleonic_weapons", "napoleonic_vehicles", "napoleonic_clothing", "napoleonic_ammo", "common_parts", "common_equipment", "common_building");
+            "napoleonic_weapons", "napoleonic_vehicles", "napoleonic_clothing", "napoleonic_ammo",
+            "common_parts", "common_equipment", "common_building",
+            "ai_units");
     private static final Set<String> WW2 = Set.of(
             "ppsh41", "mp40", "mosin", "k98k", "mosin_pu", "k98k_zf39", "c96", "tt33",
             "mag_ppsh", "mag_mp40", "clip_mosin", "clip_k98", "round_762x54r", "round_792x57", "clip_c96", "mag_tt33",
@@ -83,6 +85,7 @@ public final class ModTabs {
     public static String sectionOf(String name) {
         Cat c = MAP.get(name);
         if (c == null) return null;
+        if (c == Cat.UNITS) return "ai_units";   // r27: all summon eggs live in one section
         if (NUCLEAR_PARTS.contains(name) || c == Cat.PARTS || c == Cat.INDUSTRY) return "common_parts";
         if (c == Cat.BUILDING || c == Cat.FORTIFICATION) return "common_building";
         if (name.equals("craft_service_kit")) return "common_equipment";
@@ -175,6 +178,9 @@ public final class ModTabs {
         section("common_parts", "steel_plate");
         section("common_equipment", "first_aid_kit");
         section("common_building", "sandbags");
+        // r27: every summon egg in a single section.
+        put(Cat.UNITS, "soldier_egg_commander", "soldier_egg_tanker", "soldier_egg_assault", "soldier_egg_medic");
+        section("ai_units", "soldier_egg_commander");
 
     }
 
@@ -190,7 +196,8 @@ public final class ModTabs {
         FORTIFICATION,
         WEAPONS,
         BUILDING,
-        UNIFORMS;
+        UNIFORMS,
+        UNITS;
 
     }
 }

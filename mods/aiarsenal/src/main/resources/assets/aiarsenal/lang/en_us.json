@@ -2079,5 +2079,16 @@
   "item.aiarsenal.mills_bomb": "Mills bomb",
   "item.aiarsenal.stielhandgranate": "Stick grenade (1915)",
   "item.aiarsenal.wex": "Wex flame projector",
-  "item.aiarsenal.wwi_fuel": "Flamethrower fuel"
+  "item.aiarsenal.wwi_fuel": "Flamethrower fuel",
+  "itemGroup.aiarsenal.ai_units": "AI Units (Summon Eggs)",
+  "item.aiarsenal.soldier_egg_commander": "Summon egg: Commander",
+  "item.aiarsenal.soldier_egg_tanker": "Summon egg: Tanker",
+  "item.aiarsenal.soldier_egg_assault": "Summon egg: Assault",
+  "item.aiarsenal.soldier_egg_medic": "Summon egg: Medic",
+  "entity.aiarsenal.soldier": "Soldier",
+  "entity.aiarsenal.soldier.commander": "Commander",
+  "entity.aiarsenal.soldier.tanker": "Tanker",
+  "entity.aiarsenal.soldier.assault": "Assault Soldier",
+  "entity.aiarsenal.soldier.medic": "Medic",
+  "tooltip.aiarsenal.soldier_egg": "Right-click the ground to summon. Crews board nearby equipment on their own."
 }

@@ -109,26 +109,27 @@ public final class ConvFx {
             };
             this.add(p2);
         }
-        int nSmoke = (int)(Math.max(14.0, Math.min(80.0, 20.0 * r / 2.0)) * (double)q);
+        // r27: much denser, bigger and longer-lived smoke - the fallback had to read as a real column.
+        int nSmoke = (int)(Math.max(30.0, Math.min(180.0, 44.0 * r / 2.0)) * (double)q);
         for (int i = 0; i < nSmoke; ++i) {
             double a3 = this.rnd.nextDouble() * Math.PI * 2.0;
             double rad = this.rnd.nextDouble() * r * 0.6;
             double vx = Math.cos(a3) * 0.03 * r / 3.0;
             double vz = Math.sin(a3) * 0.03 * r / 3.0;
-            double vy = (0.1 + 0.3 * this.rnd.nextDouble()) * Math.max(0.7, r / 5.0);
-            int life = 50 + this.rnd.nextInt(90);
-            float base = (float)(r * (0.55 + 0.6 * this.rnd.nextDouble()));
-            float shade = 0.15f + 0.25f * this.rnd.nextFloat();
+            double vy = (0.12 + 0.35 * this.rnd.nextDouble()) * Math.max(0.7, r / 5.0);
+            int life = 70 + this.rnd.nextInt(120);
+            float base = (float)(r * (0.7 + 0.9 * this.rnd.nextDouble()));
+            float shade = 0.13f + 0.25f * this.rnd.nextFloat();
             FxParticle p3 = new FxParticle(level, x + Math.cos(a3) * rad, y, z + Math.sin(a3) * rad, Sprites.smoke(i), life, false, base);
             p3.velocity(vx, vy, vz);
             p3.motion = (pp, age) -> {
                 float f = (float)age / (float)life;
                 pp.translate(pp.getDeltaX(), pp.getDeltaY(), pp.getDeltaZ());
-                pp.scaleVelocity(0.955);
+                pp.scaleVelocity(0.96);
                 float warm = Math.max(0.0f, 1.0f - f * 4.0f);
                 pp.color(shade + 0.55f * warm, shade + 0.25f * warm, shade);
-                pp.alpha(0.6f * (f < 0.1f ? f / 0.1f : 1.0f) * (1.0f - f * f));
-                pp.size = base * (0.5f + 0.9f * (float)Math.sqrt(f));
+                pp.alpha(0.75f * (f < 0.1f ? f / 0.1f : 1.0f) * (1.0f - f * f));
+                pp.size = base * (0.6f + 1.5f * (float)Math.sqrt(f));
                 pp.fullBright = warm > 0.3f;
             };
             this.add(p3);
@@ -165,6 +166,28 @@ public final class ConvFx {
                 };
                 this.add(p4);
             }
+        }
+        // r27: a lingering smoke wall - slowly spreading low cloud that stays for several seconds.
+        int nWall = (int)(Math.min(48.0, 10.0 + 4.0 * r) * (double)q);
+        for (int i = 0; i < nWall; ++i) {
+            double aw = (double)i * (Math.PI * 2 / (double)nWall) + this.rnd.nextDouble() * 0.4;
+            double rw = r * (0.3 + 0.5 * this.rnd.nextDouble());
+            double sw = 0.012 + 0.02 * this.rnd.nextDouble();
+            int life = 160 + this.rnd.nextInt(110);
+            float base = (float)(r * (0.8 + 0.7 * this.rnd.nextDouble()));
+            FxParticle p5 = new FxParticle(level, x + Math.cos(aw) * rw, y + 0.2, z + Math.sin(aw) * rw, Sprites.smoke(i), life, false, base);
+            p5.velocity(Math.cos(aw) * sw, 0.006 + 0.008 * this.rnd.nextDouble(), Math.sin(aw) * sw);
+            p5.motion = (pp, age) -> {
+                float f = (float)age / (float)life;
+                pp.translate(pp.getDeltaX(), pp.getDeltaY(), pp.getDeltaZ());
+                pp.scaleVelocity(0.985);
+                float in = f < 0.08f ? f / 0.08f : 1.0f;
+                float out = (float) (1.0 - net.minecraft.util.Mth.smoothStep(0.6, 1.0, f));
+                pp.color(0.3f, 0.3f, 0.31f);
+                pp.alpha(0.55f * in * out);
+                pp.size = base * (0.7f + 1.3f * (float)Math.sqrt(f));
+            };
+            this.add(p5);
         }
     }
 

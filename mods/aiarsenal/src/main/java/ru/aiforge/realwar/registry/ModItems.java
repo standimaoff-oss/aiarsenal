@@ -232,6 +232,11 @@ public final class ModItems {
     public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage", () -> new ru.aiforge.realwar.field.MedicalItem(false, new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> FIRST_AID_KIT = ITEMS.register("first_aid_kit", () -> new ru.aiforge.realwar.field.MedicalItem(true, new Item.Properties().stacksTo(8)));
     // <<< r17
+    // r27: AI soldier summon eggs - one egg per class, all in the single "ai_units" section.
+    public static final RegistryObject<Item> SOLDIER_EGG_COMMANDER = ITEMS.register("soldier_egg_commander", () -> new ru.aiforge.realwar.soldier.SoldierEggItem(ru.aiforge.realwar.soldier.SoldierClass.COMMANDER));
+    public static final RegistryObject<Item> SOLDIER_EGG_TANKER = ITEMS.register("soldier_egg_tanker", () -> new ru.aiforge.realwar.soldier.SoldierEggItem(ru.aiforge.realwar.soldier.SoldierClass.TANKER));
+    public static final RegistryObject<Item> SOLDIER_EGG_ASSAULT = ITEMS.register("soldier_egg_assault", () -> new ru.aiforge.realwar.soldier.SoldierEggItem(ru.aiforge.realwar.soldier.SoldierClass.ASSAULT));
+    public static final RegistryObject<Item> SOLDIER_EGG_MEDIC = ITEMS.register("soldier_egg_medic", () -> new ru.aiforge.realwar.soldier.SoldierEggItem(ru.aiforge.realwar.soldier.SoldierClass.MEDIC));
     public static final RegistryObject<Item> STEEL_BLOCK = ModItems.blockItem("steel_block", ModBlocks.STEEL_BLOCK);
     public static final RegistryObject<Item> REINFORCED_CONCRETE = ModItems.blockItem("reinforced_concrete", ModBlocks.REINFORCED_CONCRETE);
     public static final RegistryObject<Item> SCORCHED_EARTH = ModItems.blockItem("scorched_earth", ModBlocks.SCORCHED_EARTH);

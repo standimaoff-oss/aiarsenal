@@ -2079,5 +2079,16 @@
   "item.aiarsenal.mills_bomb": "Граната Миллса",
   "item.aiarsenal.stielhandgranate": "Ручная граната обр. 1915 г.",
   "item.aiarsenal.wex": "Огнемёт Wex",
-  "item.aiarsenal.wwi_fuel": "Топливо для огнемёта"
+  "item.aiarsenal.wwi_fuel": "Топливо для огнемёта",
+  "itemGroup.aiarsenal.ai_units": "Бойцы (яйца призыва)",
+  "item.aiarsenal.soldier_egg_commander": "Яйцо призыва: Командир",
+  "item.aiarsenal.soldier_egg_tanker": "Яйцо призыва: Танкист",
+  "item.aiarsenal.soldier_egg_assault": "Яйцо призыва: Штурмовик",
+  "item.aiarsenal.soldier_egg_medic": "Яйцо призыва: Медик",
+  "entity.aiarsenal.soldier": "Боец",
+  "entity.aiarsenal.soldier.commander": "Командир",
+  "entity.aiarsenal.soldier.tanker": "Танкист",
+  "entity.aiarsenal.soldier.assault": "Штурмовик",
+  "entity.aiarsenal.soldier.medic": "Медик",
+  "tooltip.aiarsenal.soldier_egg": "ПКМ по земле — призвать. Расчёт сам садится на ближайшую подходящую технику."
 }

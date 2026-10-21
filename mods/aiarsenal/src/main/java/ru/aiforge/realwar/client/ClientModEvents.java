@@ -115,6 +115,7 @@ public final class ClientModEvents {
         e.registerEntityRenderer((EntityType)ModEntities.SMERCH.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.S400.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.ZU23.get(), VehicleRenderer::new);
+        e.registerEntityRenderer((EntityType)ModEntities.SOLDIER.get(), ru.aiforge.realwar.soldier.client.SoldierRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.RADAR_MOBILE.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.RADAR_POST.get(), VehicleRenderer::new);
         e.registerEntityRenderer((EntityType)ModEntities.YARS.get(), VehicleRenderer::new);

@@ -80,6 +80,9 @@ public final class ModEntities {
 
     public static final RegistryObject<EntityType<ru.aiforge.realwar.wwi.GrenadeEntity>> WWI_GRENADE = ENTITIES.register("wwi_grenade", () -> EntityType.Builder.<ru.aiforge.realwar.wwi.GrenadeEntity>of(ru.aiforge.realwar.wwi.GrenadeEntity::new, MobCategory.MISC).sized(.2f,.2f).clientTrackingRange(32).updateInterval(1).build("wwi_grenade"));
 
+    /** r27: summonable AI soldier (Steve-based body, class uniform overlay). */
+    public static final RegistryObject<EntityType<ru.aiforge.realwar.soldier.SoldierEntity>> SOLDIER = ENTITIES.register("soldier", () -> EntityType.Builder.<ru.aiforge.realwar.soldier.SoldierEntity>of(ru.aiforge.realwar.soldier.SoldierEntity::new, MobCategory.CREATURE).sized(0.6f, 1.9f).clientTrackingRange(10).updateInterval(3).build("soldier"));
+
     private ModEntities() {
     }
 

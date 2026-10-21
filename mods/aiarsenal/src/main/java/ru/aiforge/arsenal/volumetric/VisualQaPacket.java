@@ -13,7 +13,7 @@ import net.minecraftforge.network.NetworkEvent;
 public record VisualQaPacket(String effect) {
     public static final Set<String> EFFECTS = Set.of("smoke", "blast", "nuke", "trail",
             "clear", "status", "budget", "unpack", "off", "on", "view_fov90", "view_fov70", "view_fov45",
-            "view_shaderfail", "view_scale3", "view_scale2", "view_reload", "view_tabs", "view_modern", "view_ww2wear", "view_napwear", "view_naparms", "view_napguns", "view_napammo", "view_first", "view_front", "view_back", "view_left", "view_right", "view_ready", "view_index", "view_perf_old", "view_perf_new", "view_perf_end", "view_motion",
+            "view_shaderfail", "view_scale3", "view_scale2", "view_reload", "view_tabs", "view_modern", "view_ww2wear", "view_napwear", "view_naparms", "view_napguns", "view_napammo", "view_units", "view_first", "view_front", "view_back", "view_left", "view_right", "view_ready", "view_index", "view_perf_old", "view_perf_new", "view_perf_end", "view_motion",
             "view_move_idle", "view_move_walk", "view_move_slow", "view_move_run", "view_move_crouch");
 
     public void encode(FriendlyByteBuf buf) { buf.writeUtf(effect, 16); }

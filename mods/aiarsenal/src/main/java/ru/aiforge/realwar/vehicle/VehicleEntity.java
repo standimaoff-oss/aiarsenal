@@ -316,6 +316,25 @@ extends Entity implements ru.aiforge.realwar.damage.Damageable {
         return ok;
     }
 
+    /** r27: the AI soldiers (and any other non-player passenger) board through the same seat logic. */
+    public boolean enterSeatFor(Entity p, int seat) {
+        if (p == null || p.isPassenger() || seat < 0 || seat >= this.spec.seatCount()) {
+            return false;
+        }
+        if (this.seatUuid(seat) != null) {
+            return false;
+        }
+        this.pendingSeat = seat;
+        boolean ok = p.startRiding((Entity)this);
+        this.pendingSeat = -1;
+        return ok;
+    }
+
+    @Override
+    public boolean checkPassenger(Entity p) {
+        return !p.isPassenger() && this.canAddPassenger(p) && !this.dmg.dead();
+    }
+
     public boolean switchSeat(Entity p) {
         int cur = this.seatOf(p);
         if (cur < 0 || this.spec.seatCount() < 2) {

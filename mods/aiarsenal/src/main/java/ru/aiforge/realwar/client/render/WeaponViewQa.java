@@ -53,7 +53,7 @@ public final class WeaponViewQa {
                 if (error == null) AiArsenal.LOGGER.info("VIEW RELOAD PASS");
                 else AiArsenal.LOGGER.error("VIEW RELOAD FAILED", error);
             }));
-            case "view_tabs", "view_modern", "view_ww2wear", "view_napwear", "view_naparms", "view_napguns", "view_napammo" -> {
+            case "view_tabs", "view_modern", "view_ww2wear", "view_napwear", "view_naparms", "view_napguns", "view_napammo", "view_units" -> {
                 var screen = new CreativeModeInventoryScreen(mc.player, mc.player.connection.enabledFeatures(),
                         mc.options.operatorItemsTab().get());
                 mc.setScreen(screen);
@@ -64,6 +64,7 @@ public final class WeaponViewQa {
                     case "view_naparms" -> "napoleonic_weapons";
                     case "view_napguns" -> "napoleonic_vehicles";
                     case "view_napammo" -> "napoleonic_ammo";
+                    case "view_units" -> "ai_units";
                     default -> "modern_vehicles";
                 };
                 CreativeModeTab tab = BuiltInRegistries.CREATIVE_MODE_TAB.get(new ResourceLocation("aiarsenal", section));

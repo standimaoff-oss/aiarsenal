@@ -126,6 +126,7 @@ public final class GunRenderer {
             pose.rotate(k.id + ".flash", (GunClient.shotCount() * 1.9f) % 6.283f, 0, 0, 1);
             float fs = 0.8f + (GunClient.shotCount() * 37 % 10) * 0.05f;
             pose.scale(k.id + ".flash", fs, fs, fs);
+            muzzleSmoke(lm, pose, ps, k.id);   // r27: volumetric muzzle smoke per shot
         }
         if (!k.launcher() && !k.manual() && !k.flintlock() && since < 0.06f) pose.translate(k.id + ".bolt", 0, 0, -(k.pistol() ? 0.032f : 0.075f) * (1f - since / 0.06f));
         // spent tube: no grenade (RPG-7) / open muzzle without the seeker dome or covers (MANPADS) until the fresh tube is on
@@ -230,6 +231,43 @@ public final class GunRenderer {
         armP.xScale = asx; armP.yScale = asy; armP.zScale = asz;
         sleeve.xScale = ssx; sleeve.yScale = ssy; sleeve.zScale = ssz;
         ps.popPose();
+    }
+
+    // ------------------------------------------------------------------ muzzle smoke (r27)
+
+    private static int lastMuzzleShot = -1;
+
+    /** One small smoke puff burst at the muzzle per shot (r27: the mod had no firing smoke). */
+    private static void muzzleSmoke(GlbAssets.Loaded lm, Pose pose, PoseStack ps, String id) {
+        int shot = GunClient.shotCount();
+        if (shot == lastMuzzleShot) return;
+        lastMuzzleShot = shot;
+        Minecraft mc = Minecraft.getInstance();
+        int i = lm.model.nodeIndex(id + ".flash");
+        if (i < 0 || mc.level == null || mc.player == null) return;
+        // the flash node is at the muzzle: model space -> world (camera pose is already in ps)
+        Vector4f q = new Vector4f(0, 0, 0, 1);
+        pose.world[i].transform(q);
+        ps.last().pose().transform(q);
+        net.minecraft.world.phys.Vec3 at = new net.minecraft.world.phys.Vec3(q.x, q.y, q.z);
+        mc.execute(() -> {
+            for (int n = 0; n < 3; ++n) {
+                int life = 14 + 4 * n;
+                float size = 0.05f + 0.02f * n;
+                var sp = new ru.aiforge.realwar.client.particle.FxParticle(mc.level, at.x, at.y, at.z,
+                        ru.aiforge.realwar.client.particle.Sprites.smoke(n), life, false, size);
+                sp.color(0.42f, 0.42f, 0.42f);
+                sp.velocity(0.002 * (n - 1), 0.01, 0.002 * (1 - n));
+                sp.motion = (pp, age) -> {
+                    float f = (float) age / (float) life;
+                    pp.translate(pp.getDeltaX(), pp.getDeltaY(), pp.getDeltaZ());
+                    pp.scaleVelocity(0.92);
+                    pp.alpha(0.4f * (f < 0.15f ? f / 0.15f : 1f) * (1f - f));
+                    pp.size = size * (0.7f + 1.7f * f);
+                };
+                ru.aiforge.realwar.client.particle.FxSystem.add(sp);
+            }
+        });
     }
 
     /** rest position of a node origin in model space */

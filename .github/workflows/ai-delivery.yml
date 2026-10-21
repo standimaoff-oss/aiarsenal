@@ -1,0 +1,102 @@
+name: AI units build, tests and game previews
+on:
+  push:
+    branches:
+      - arena/267ca919-aiarsenal
+permissions:
+  contents: read
+concurrency:
+  group: ai-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: true
+jobs:
+  build-test-capture:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    env:
+      DISPLAY: ':99'
+      LIBGL_ALWAYS_SOFTWARE: '1'
+      GALLIUM_DRIVER: llvmpipe
+      QA_PREFIX: ai-review
+      QA_VOLUMETRIC: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            mods/aiarsenal/**/*.gradle*
+            mods/aiarsenal/gradle/wrapper/gradle-wrapper.properties
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install software display and image validation
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb xdotool x11-utils pulseaudio libegl1 libgl1 libgl1-mesa-dri libopenal1 libxi6 libxrender1 libxxf86vm1 libxfixes3 libxkbcommon0 libsm6 libflite1
+          python -m pip install pillow
+          Xvfb :99 -screen 0 1400x1000x24 -nolisten tcp > "$RUNNER_TEMP/xvfb.log" 2>&1 &
+          python - <<'PY'
+          import subprocess,time
+          end=time.monotonic()+30
+          while subprocess.run(['xdpyinfo','-display',':99'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+              if time.monotonic()>end: raise RuntimeError('Xvfb did not become ready')
+              time.sleep(.2)
+          PY
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=qa rate=48000
+          pactl set-default-sink qa
+          pactl set-default-source qa.monitor
+      - name: Restore compressed baseline models
+        run: python tools/restore_models.py
+      - name: Regenerate soldier textures (reproducible)
+        run: python tools/make_soldier_assets.py
+      - name: Build distributable
+        working-directory: mods/aiarsenal
+        run: ./gradlew build --no-daemon
+      - name: Run regression tests (full gametest suite + soldier tests)
+        id: regression
+        continue-on-error: true
+        env:
+          MC_RUNS: ${{ runner.temp }}/mc-tests
+        run: python tools/verify_game.py gametest
+      - name: Capture real Minecraft F2 images of the AI soldiers
+        env:
+          MC_RUNS: ${{ runner.temp }}/mc-runs
+        run: python tools/wwi/preview_soldiers.py
+      - name: Publish only the captured preview images
+        run: |
+          mkdir -p previews/ai-units
+          for name in soldiers-on-foot soldier-in-zu23 soldier-in-truck unit-eggs-in-hand unit-eggs-tab weapon-in-hand-3p weapon-first-person explosion-smoke explosion-smoke-late; do
+            if [ -f "verification/shots/ai-review-${name}.png" ]; then
+              cp "verification/shots/ai-review-${name}.png" "previews/ai-units/${name}.png"
+            fi
+          done
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          files = sorted(Path('previews/ai-units').glob('*.png'))
+          assert len(files) >= 7, f'expected at least 7 previews, got {len(files)}'
+          for path in files:
+              with Image.open(path) as image:
+                  image.verify()
+              print(f'{path}: {path.stat().st_size} bytes')
+          PY
+      - name: Record the verification result
+        env:
+          TEST_RESULT: ${{ steps.regression.outcome }}
+        run: |
+          printf 'Regression tests: %s\nSource: %s\nRun: %s/%s/actions/runs/%s\n' "$TEST_RESULT" "$GITHUB_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > previews/verification.txt
+      - name: Upload JAR, screenshots and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-units-build-${{ github.run_number }}
+          path: |
+            verification/shots/ai-review-*.png
+            previews/ai-units/*.png
+            verification/logs/*.log
+            mods/aiarsenal/build/libs/*.jar
+          if-no-files-found: warn
+          retention-days: 30
