@@ -1,5 +1,13 @@
 {
   "_comment": "[tx, ty, tz, yaw, pitch, roll, scale, centre]; keys <item>.<context>, <item>.aim.<context>, default.<context>. F3+T reloads.",
+  "tp": [
+    0.055,
+    0.075,
+    5.0,
+    26.0,
+    16.0,
+    0.035
+  ],
   "default.gui": [
     0,
     0,
