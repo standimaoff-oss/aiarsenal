@@ -105,24 +105,24 @@ overrideHeight:800
     time.sleep(3)
     game.screenshot("soldier-in-zu23")
 
-    # ------------------------------------------- 3. tanker boards the Ural
-    # The Ural cab is open and the driver seat (dy 1.48) is within AI boarding
-    # range, so the seated tanker's head reads clearly over the cab; the assault
-    # soldier stays with the crew on foot - he must not take a seat.
+    # ------------------------------------------- 3. crew boards the Ural
+    # A tanker walks to the driver seat (a closed cab, he ends up inside) and two
+    # commanders take the open cargo-bed seats, where they stay visible - this is the
+    # "AI never boards anything except the PVO" bug fixed for a second vehicle.
     game.command("summon aiarsenal:ural -30 -60 0 {PersistenceRequired:1b}")
     game.command("summon aiarsenal:soldier -27 -60 3 {rw_class:1b,PersistenceRequired:1b}")
-    game.command("summon aiarsenal:soldier -27 -60 6 {rw_class:2b,PersistenceRequired:1b}")
-    # wait for the tanker to actually take the driver seat (max 60 s), and log the result
-    seated = False
+    game.command("summon aiarsenal:soldier -34 -60 7 {rw_class:0b,PersistenceRequired:1b}")
+    game.command("summon aiarsenal:soldier -30 -60 8 {rw_class:0b,PersistenceRequired:1b}")
+    # wait until at least one soldier is actually riding the truck (max 60 s)
+    truck_crew = 0
     for _ in range(60):
         time.sleep(1)
         answer = game.command("data get entity @e[type=aiarsenal:ural,limit=1,sort=nearest] Passengers")
-        # the RCON reply is the vehicle's Passengers array; a seated soldier shows his id in it
-        if 'id: \"aiarsenal:soldier\"' in answer:
-            seated = True
+        truck_crew = answer.count('id: "aiarsenal:soldier"')
+        if truck_crew >= 2:
             break
-    print("tanker seated in the Ural:", seated, flush=True)
-    game.command("tp TestPlayer -22 -59 2 90 0")    # side view: the driver is visible through the open cab
+    print("soldiers riding in the Ural:", truck_crew, flush=True)
+    game.command("tp TestPlayer -22 -59 10 141 10")  # rear 3/4 view of the cab and the bed
     time.sleep(3)
     game.screenshot("soldier-in-truck")
 
