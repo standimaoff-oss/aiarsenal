@@ -1,34 +1,32 @@
 # Gradle build failure
 
-328:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/NpcTests.java:256: error: cannot find symbol
-329-        storm.setProfession(Profession.ASSAULT);
-330-                            ^
-331-  symbol:   variable Profession
+328:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/NpcTests.java:256: error: int cannot be dereferenced
+329-        storm.setProfession(ru.aiforge.realwar.npc.Profession.ASSAULT);
+330-                              ^
+331:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/NpcTests.java:257: error: int cannot be dereferenced
+332-        h.assertTrue(storm.profession() == ru.aiforge.realwar.npc.Profession.ASSAULT && storm.faction() == Faction.GERMANY
+333-                                             ^
+334-Note: Some input files use or override a deprecated API.
 --
-333:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/NpcTests.java:257: error: cannot find symbol
-334-        h.assertTrue(storm.profession() == Profession.ASSAULT && storm.faction() == Faction.GERMANY
-335-                                           ^
-336-  symbol:   variable Profession
---
-346:> Task :compileJava FAILED
-347-
-348:FAILURE: Build failed with an exception.
+342:> Task :compileJava FAILED
+343-
+344:FAILURE: Build failed with an exception.
+345-
+346-* What went wrong:
+347:Execution failed for task ':compileJava'.
+348-> Compilation failed; see the compiler error output for details.
 349-
-350-* What went wrong:
-351:Execution failed for task ':compileJava'.
-352-> Compilation failed; see the compiler error output for details.
-353-
-354-* Try:
+350-* Try:
 --
-359:org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':compileJava'.
-360-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
-361-	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:282)
-362-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+355:org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':compileJava'.
+356-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+357-	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:282)
+358-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
 --
-391:Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler error output for details.
-392-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:61)
-393-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:41)
-394-	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.delegateAndHandleErrors(NormalizingJavaCompiler.java:98)
+387:Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler error output for details.
+388-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:61)
+389-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:41)
+390-	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.delegateAndHandleErrors(NormalizingJavaCompiler.java:98)
 
 ## Tail
 	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
@@ -149,5 +147,5 @@
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
 
 
-BUILD FAILED in 1m 7s
+BUILD FAILED in 55s
 1 actionable task: 1 executed
