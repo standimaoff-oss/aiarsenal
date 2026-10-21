@@ -51,11 +51,9 @@ public final class NpcTargeting {
     public static Entity find(ServerLevel sl, Vec3 from, Faction f, double infantryRange, double hardRange) {
         AABB box = new AABB(from, from).inflate(Math.max(infantryRange, hardRange));
         // a passenger is not a target of his own: the crewed hull is the target, not the man inside it
-        List<LivingEntity> soft = sl.getEntitiesOfClass(LivingEntity.class, box, e -> {
-            if (e instanceof VehicleEntity || e instanceof CraftEntity) return false;
-            if (e.getVehicle() != null) return false;    // passengers are hit through their hull
-            return hostile(f, e);
-        });
+        // hulls are not LivingEntity, so this list only ever holds infantry: a passenger is hit through his hull
+        List<LivingEntity> soft = sl.getEntitiesOfClass(LivingEntity.class, box,
+                e -> e.getVehicle() == null && hostile(f, e));
         Entity best = null;
         double bd = infantryRange * infantryRange;
         for (LivingEntity e : soft) {
