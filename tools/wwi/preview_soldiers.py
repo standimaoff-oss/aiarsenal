@@ -117,11 +117,12 @@ overrideHeight:800
     for _ in range(60):
         time.sleep(1)
         answer = game.command("data get entity @e[type=aiarsenal:ural,limit=1,sort=nearest] Passengers")
-        if "Passengers" in answer and "has no" not in answer and "none" not in answer.lower():
+        # the RCON reply is the vehicle's Passengers array; a seated soldier shows his id in it
+        if 'id: \"aiarsenal:soldier\"' in answer:
             seated = True
             break
     print("tanker seated in the Ural:", seated, flush=True)
-    game.command("tp TestPlayer -30 -60 12 180 0")   # look -Z at the Ural cab
+    game.command("tp TestPlayer -22 -59 2 90 0")    # side view: the driver is visible through the open cab
     time.sleep(3)
     game.screenshot("soldier-in-truck")
 

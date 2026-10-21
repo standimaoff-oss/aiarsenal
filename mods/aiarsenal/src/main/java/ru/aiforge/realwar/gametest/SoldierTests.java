@@ -50,23 +50,33 @@ public final class SoldierTests {
         return top;
     }
 
-    private static VehicleEntity spawnVehicle(ServerLevel level, EntityType<? extends VehicleEntity> type, double x, double y, double z, float yaw) {
+    /**
+     * Game tests share one world, so every entity is placed relative to this test's own
+     * structure origin - otherwise neighbouring tests see each other's vehicles (the
+     * reason the first version boarded "someone else's" ZU-23).
+     */
+    private static Vec3 rel(GameTestHelper h, double x, double y, double z) {
+        BlockPos p = h.absolutePos(new BlockPos((int) Math.round(x), 0, (int) Math.round(z)));
+        return new Vec3(p.getX() + 0.5, y, p.getZ() + 0.5);
+    }
+
+    private static VehicleEntity spawnVehicle(ServerLevel level, EntityType<? extends VehicleEntity> type, Vec3 at, float yaw) {
         VehicleEntity e = (VehicleEntity) type.create(level);
-        e.moveTo(x, y, z, yaw, 0.0f);
+        e.moveTo(at.x, at.y, at.z, yaw, 0.0f);
         level.addFreshEntity((Entity) e);
         return e;
     }
 
-    private static SoldierEntity spawnSoldier(ServerLevel level, SoldierClass c, double x, double y, double z) {
-        return SoldierEntity.create(level, c, new Vec3(x, y, z), 0f, null);
+    private static SoldierEntity spawnSoldier(ServerLevel level, SoldierClass c, Vec3 at) {
+        return SoldierEntity.create(level, c, at, 0f, null);
     }
 
     @GameTest(template = "arena", batch = "rw_soldier", timeoutTicks = 600)
     public static void soldier_tanker_boards_nearby_tank(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
-        VehicleEntity tank = spawnVehicle(l, ModEntities.T34.get(), 4.0, top, 0.0, 90f);
-        SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, 9.0, top, 0.0);
+        VehicleEntity tank = spawnVehicle(l, ModEntities.T34.get(), rel(h, 3, top, 0), 90f);
+        SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, rel(h, 8, top, 0));
         h.assertFalse(s.isPassenger(), "танкист сидел до старта");
         h.succeedWhen(() -> {
             h.assertTrue(s.isPassenger(), "танкист не сел в стоящий рядом Т-34");
@@ -78,8 +88,8 @@ public final class SoldierTests {
     public static void soldier_tanker_boards_zu23_gunner_seat(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
-        VehicleEntity zu = spawnVehicle(l, ModEntities.ZU23.get(), 0.0, top, 0.0, 0f);
-        SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, 3.0, top, 0.0);
+        VehicleEntity zu = spawnVehicle(l, ModEntities.ZU23.get(), rel(h, 0, top, 0), 0f);
+        SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, rel(h, 3, top, 0));
         h.succeedWhen(() -> {
             h.assertTrue(s.isPassenger(), "танкист не сел за ЗУ-23-2");
             h.assertTrue(s.getVehicle() == zu, "танкист сел не в ЗУ-23");
@@ -93,7 +103,7 @@ public final class SoldierTests {
     public static void soldier_without_vehicle_stays_on_ground(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
-        SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, 0.0, top, 0.0);
+        SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, rel(h, 0, top, 0));
         h.runAtTickTime(160, () -> {
             h.assertFalse(s.isRemoved(), "танкист без техники исчез");
             h.assertFalse(s.isPassenger(), "танкист без техники рядом сел в никуда");
@@ -106,8 +116,8 @@ public final class SoldierTests {
     public static void soldier_assault_does_not_board(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
-        spawnVehicle(l, ModEntities.ZU23.get(), 0.0, top, 0.0, 0f);
-        SoldierEntity s = spawnSoldier(l, SoldierClass.ASSAULT, 3.0, top, 0.0);
+        spawnVehicle(l, ModEntities.ZU23.get(), rel(h, 0, top, 0), 0f);
+        SoldierEntity s = spawnSoldier(l, SoldierClass.ASSAULT, rel(h, 3, top, 0));
         h.runAtTickTime(160, () -> {
             h.assertFalse(s.isPassenger(), "штурмовик (пехота) не должен садиться в технику");
             h.succeed();
@@ -118,8 +128,8 @@ public final class SoldierTests {
     public static void soldier_medic_heals_wounded(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
-        SoldierEntity wounded = spawnSoldier(l, SoldierClass.ASSAULT, 0.0, top, 0.0);
-        SoldierEntity medic = spawnSoldier(l, SoldierClass.MEDIC, 2.0, top, 0.0);
+        SoldierEntity wounded = spawnSoldier(l, SoldierClass.ASSAULT, rel(h, 0, top, 0));
+        SoldierEntity medic = spawnSoldier(l, SoldierClass.MEDIC, rel(h, 2, top, 0));
         wounded.setHealth(4.0f);
         float before = wounded.getHealth();
         h.succeedWhen(() -> h.assertTrue(wounded.getHealth() > before + 0.5f, "медик не вылечил раненого бойца"));
@@ -149,5 +159,6 @@ public final class SoldierTests {
             h.assertTrue(rest.stream().noneMatch(i -> i.getDescriptionId().startsWith("item.aiarsenal.soldier_egg")),
                     "яйца призыва дублируются в разделе " + sec);
         }
+        h.succeed();   // nothing to wait for: the check is a single frame
     }
 }
