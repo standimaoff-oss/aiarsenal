@@ -252,8 +252,10 @@ public class SoldierEntity extends PathfinderMob {
         for (SoldierEntity s : this.level().getEntitiesOfClass(SoldierEntity.class,
                 this.getBoundingBox().inflate(4.0), e -> !e.isDeadOrDying() && e.getHealth() < e.getMaxHealth() - 0.5f)) {
             s.heal(4.0f);
-            this.level().sendParticles(net.minecraft.core.particles.ParticleTypes.HEART,
-                    s.getX(), s.getY() + s.getBbHeight() + 0.2, s.getZ(), 3, 0.1, 0.2, 0.1, 0.01);
+            if (this.level() instanceof ServerLevel sl) {
+                sl.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART,
+                        s.getX(), s.getY() + s.getBbHeight() + 0.2, s.getZ(), 3, 0.1, 0.2, 0.1, 0.01);
+            }
             break;
         }
     }

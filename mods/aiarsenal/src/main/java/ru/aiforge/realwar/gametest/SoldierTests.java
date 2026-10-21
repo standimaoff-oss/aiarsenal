@@ -61,12 +61,6 @@ public final class SoldierTests {
         return SoldierEntity.create(level, c, new Vec3(x, y, z), 0f, null);
     }
 
-    private static void untilBoarded(GameTestHelper h, SoldierEntity s, int steps) {
-        for (int i = 0; i < steps && !s.isPassenger() && !s.isRemoved(); ++i) {
-            h.advance(20);
-        }
-    }
-
     @GameTest(template = "arena", batch = "rw_soldier", timeoutTicks = 600)
     public static void soldier_tanker_boards_nearby_tank(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
@@ -74,9 +68,10 @@ public final class SoldierTests {
         VehicleEntity tank = spawnVehicle(l, ModEntities.T34.get(), 4.0, top, 0.0, 90f);
         SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, 9.0, top, 0.0);
         h.assertFalse(s.isPassenger(), "танкист сидел до старта");
-        untilBoarded(h, s, 150);
-        h.assertTrue(s.isPassenger(), "танкист не сел в стоящий рядом Т-34 за 3000 тиков");
-        h.assertSame(s.getVehicle(), tank, "танкист сел не в свой танк");
+        h.succeedWhen(() -> {
+            h.assertTrue(s.isPassenger(), "танкист не сел в стоящий рядом Т-34");
+            h.assertTrue(s.getVehicle() == tank, "танкист сел не в свой танк");
+        });
     }
 
     @GameTest(template = "arena", batch = "rw_soldier", timeoutTicks = 600)
@@ -85,12 +80,13 @@ public final class SoldierTests {
         ServerLevel l = h.getLevel();
         VehicleEntity zu = spawnVehicle(l, ModEntities.ZU23.get(), 0.0, top, 0.0, 0f);
         SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, 3.0, top, 0.0);
-        untilBoarded(h, s, 150);
-        h.assertTrue(s.isPassenger(), "танкист не сел за ЗУ-23-2");
-        h.assertSame(s.getVehicle(), zu, "танкист сел не в ЗУ-23");
-        int seat = zu.seatOf(s);
-        h.assertTrue(seat >= 0, "место танкиста в ЗУ-23 не записано");
-        h.assertTrue(zu.seatRole(seat).equals("gunner"), "танкист сел не за наводчика: " + zu.seatRole(seat));
+        h.succeedWhen(() -> {
+            h.assertTrue(s.isPassenger(), "танкист не сел за ЗУ-23-2");
+            h.assertTrue(s.getVehicle() == zu, "танкист сел не в ЗУ-23");
+            int seat = zu.seatOf(s);
+            h.assertTrue(seat >= 0, "место танкиста в ЗУ-23 не записано");
+            h.assertTrue(zu.seatRole(seat).equals("gunner"), "танкист сел не за наводчика: " + zu.seatRole(seat));
+        });
     }
 
     @GameTest(template = "arena", batch = "rw_soldier", timeoutTicks = 400)
@@ -98,25 +94,24 @@ public final class SoldierTests {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
         SoldierEntity s = spawnSoldier(l, SoldierClass.TANKER, 0.0, top, 0.0);
-        for (int i = 0; i < 10; ++i) {
-            h.advance(20);
-            if (s.isRemoved()) break;
-        }
-        h.assertFalse(s.isPassenger(), "танкист без техники рядом сел в никуда");
-        h.assertTrue(s.isAlive(), "бойцов погиб без причины");
+        h.runAtTickTime(160, () -> {
+            h.assertFalse(s.isRemoved(), "танкист без техники исчез");
+            h.assertFalse(s.isPassenger(), "танкист без техники рядом сел в никуда");
+            h.assertTrue(s.isAlive(), "боец погиб без причины");
+            h.succeed();
+        });
     }
 
-    @GameTest(template = "arena", batch = "rw_soldier")
+    @GameTest(template = "arena", batch = "rw_soldier", timeoutTicks = 400)
     public static void soldier_assault_does_not_board(GameTestHelper h) {
         int top = pad(h, 0, 0, 12);
         ServerLevel l = h.getLevel();
         spawnVehicle(l, ModEntities.ZU23.get(), 0.0, top, 0.0, 0f);
         SoldierEntity s = spawnSoldier(l, SoldierClass.ASSAULT, 3.0, top, 0.0);
-        for (int i = 0; i < 10; ++i) {
-            h.advance(20);
-            if (s.isRemoved()) break;
-        }
-        h.assertFalse(s.isPassenger(), "штурмовик (пехота) не должен садиться в технику");
+        h.runAtTickTime(160, () -> {
+            h.assertFalse(s.isPassenger(), "штурмовик (пехота) не должен садиться в технику");
+            h.succeed();
+        });
     }
 
     @GameTest(template = "arena", batch = "rw_soldier", timeoutTicks = 400)
@@ -127,11 +122,7 @@ public final class SoldierTests {
         SoldierEntity medic = spawnSoldier(l, SoldierClass.MEDIC, 2.0, top, 0.0);
         wounded.setHealth(4.0f);
         float before = wounded.getHealth();
-        for (int i = 0; i < 15 && wounded.getHealth() <= before + 0.5f; ++i) {
-            h.advance(20);
-            if (wounded.isRemoved()) break;
-        }
-        h.assertTrue(wounded.getHealth() > before + 0.5f, "медик не вылечил раненого бойца");
+        h.succeedWhen(() -> h.assertTrue(wounded.getHealth() > before + 0.5f, "медик не вылечил раненого бойца"));
     }
 
     @GameTest(template = "arena", batch = "rw_soldier")
@@ -139,8 +130,10 @@ public final class SoldierTests {
         CreativeModeTab tab = BuiltInRegistries.CREATIVE_MODE_TAB.get(new ResourceLocation("aiarsenal", "ai_units"));
         h.assertTrue(tab != null, "нет креативной вкладки ai_units");
         if (tab == null) return;
+        tab.buildContents(new CreativeModeTab.ItemDisplayParameters(
+                net.minecraft.world.flag.FeatureFlagSet.of(), true, h.getLevel().registryAccess()));
         List<Item> items = new ArrayList<>();
-        tab.displayItems(new CreativeModeTab.ItemTabContext(h.getLevel().registryAccess(), false), st -> items.add(st.getItem()));
+        for (ItemStack st : tab.getDisplayItems()) items.add(st.getItem());
         for (String id : List.of("soldier_egg_commander", "soldier_egg_tanker", "soldier_egg_assault", "soldier_egg_medic")) {
             Item egg = BuiltInRegistries.ITEM.get(new ResourceLocation("aiarsenal", id));
             h.assertTrue(items.contains(egg), "вкладка ai_units не содержит " + id);
@@ -149,8 +142,10 @@ public final class SoldierTests {
             if (sec.equals("ai_units")) continue;
             CreativeModeTab other = BuiltInRegistries.CREATIVE_MODE_TAB.get(new ResourceLocation("aiarsenal", sec));
             if (other == null) continue;
+            other.buildContents(new CreativeModeTab.ItemDisplayParameters(
+                    net.minecraft.world.flag.FeatureFlagSet.of(), true, h.getLevel().registryAccess()));
             List<Item> rest = new ArrayList<>();
-            other.displayItems(new CreativeModeTab.ItemTabContext(h.getLevel().registryAccess(), false), rest::add);
+            for (ItemStack st : other.getDisplayItems()) rest.add(st.getItem());
             h.assertTrue(rest.stream().noneMatch(i -> i.getDescriptionId().startsWith("item.aiarsenal.soldier_egg")),
                     "яйца призыва дублируются в разделе " + sec);
         }
