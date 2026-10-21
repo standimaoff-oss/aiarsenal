@@ -1,133 +1,63 @@
 # Gradle build failure
 
-23: > Running 'downloadManifest'
-24: > Running 'downloadJson'
-25: > Running 'downloadClient'
-26: > Running 'downloadServer'
-27: > Running 'extractServer'
-28: > Running 'downloadClientMappings'
-29: > Running 'mergeMappings'
-30: > Running 'stripClient'
-31: > Running 'stripServer'
-32: > Running 'merge'
-33: > Running 'listLibraries'
-34: > Running 'rename'
-46:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcGear.java:105: error: cannot find symbol
-51:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcGear.java:126: error: cannot find symbol
-56:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcGear.java:130: error: cannot find symbol
-61:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcGear.java:135: error: cannot find symbol
-66:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/arsenal/qa/ToolContextQa.java:30: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-69:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/arsenal/qa/ContextQa.java:54: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
-72:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/missile/MissileType.java:50: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-75:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/arsenal/qa/DroneContextQa.java:43: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
-78:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/arsenal/qa/DroneContextQa.java:54: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-81:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/arsenal/client/NukeFx.java:53: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-84:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/arsenal/volumetric/client/render/VolumeGlRenderer.java:479: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-87:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/vehicle/VehicleSpec.java:14: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-90:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/vehicle/VehicleSpec.java:16: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-93:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcTargeting.java:54: error: incompatible types: LivingEntity cannot be converted to VehicleEntity
-96:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcTargeting.java:55: error: incompatible types: LivingEntity cannot be converted to CraftEntity
-99:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcGear.java:31: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-102:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/aircraft/AirBombType.java:38: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-105:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/registry/BombType.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-108:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/fx/MuzzleFx.java:32: error: expression type ClientLevel is a subtype of pattern type ClientLevel
-111:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/fx/MuzzleFx.java:96: error: roll has protected access in Particle
-114:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/fx/TrackMarks.java:37: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-117:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/fx/TrackMarks.java:38: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-120:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/ActionBar.java:45: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-123:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/craft/CraftOrdnanceRenderer.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-126:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/craft/CraftOrdnanceRenderer.java:19: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-129:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/craft/AradoRenderer.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-132:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/craft/AradoRenderer.java:19: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-135:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/craft/CraftRenderer.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-138:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/craft/CraftRenderer.java:33: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-141:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/HitCam.java:47: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-144:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/GunClient.java:252: error: expression type ClientLevel is a subtype of pattern type ClientLevel
-147:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/particle/Sprites.java:31: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-150:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/particle/Sprites.java:33: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-153:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/strike/StrikePlaneEntity.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-156:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/strike/StrikePlaneRenderer.java:58: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-159:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/strike/StrikePlaneRenderer.java:114: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-162:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/WtHud.java:597: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-165:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/HandheldView.java:63: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-168:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbAssets.java:73: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-171:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbAssets.java:92: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-174:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/RocketRenderer.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-177:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/RocketRenderer.java:33: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-180:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/RocketRenderer.java:33: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-183:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/RocketRenderer.java:33: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-186:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/RocketRenderer.java:35: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-189:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/RocketRenderer.java:36: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-192:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/PowderCannonRenderer.java:11: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-195:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/PowderCannonRenderer.java:13: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-198:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/DamageRender.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-201:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/SoldierRenderer.java:30: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-204:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbItemRenderer.java:77: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-207:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbItemRenderer.java:86: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-210:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbItemRenderer.java:115: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-213:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/HazmatLayer.java:39: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-216:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/UniformLayer.java:37: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-219:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/UniformLayer.java:38: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-222:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AirBombRenderer.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-225:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GunRenderer.java:54: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-228:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/WeaponViewQa.java:69: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-231:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/CannonballRenderer.java:13: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-234:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/FallingBombRenderer.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-237:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AircraftRenderer.java:37: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-240:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AircraftRenderer.java:38: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-243:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/MachineGlbRenderers.java:40: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-246:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/MachineGlbRenderers.java:41: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-249:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/MissileRenderer.java:34: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-252:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/MissileRenderer.java:35: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-255:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbRenderer.java:37: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-258:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/GlbRenderer.java:367: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-261:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/VehicleRenderer.java:31: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-264:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AtMissileRenderer.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-267:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AtMissileRenderer.java:17: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-270:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AtMissileRenderer.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-273:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AtMissileRenderer.java:19: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-276:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AtMissileRenderer.java:20: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-279:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/AtMissileRenderer.java:21: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-282:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/FirstPersonArms.java:44: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-285:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/DebrisRenderer.java:27: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-288:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/DebrisRenderer.java:80: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
-291:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/LaunchPadRenderer.java:49: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-294:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/LaunchPadRenderer.java:49: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-297:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/LaunchPadRenderer.java:49: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-300:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/render/ModuleProps.java:27: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-303:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/deco/CrateKind.java:31: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-306:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/deco/FlagRenderer.java:31: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-309:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/deco/DecoModels.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-312:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/deco/DecoModels.java:16: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-315:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/deco/DecoModels.java:17: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-318:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/deco/DecoModels.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-321:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/deco/DecoModels.java:39: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-324:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/sight/Optics.java:38: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-327:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/client/sight/Optics.java:108: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-330:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/blast/ModDamage.java:36: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-333:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/strike/StrikeManager.java:90: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-336:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/ordnance/AirTargets.java:28: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-339:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/registry/ModSounds.java:97: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-342:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/registry/ModTabs.java:101: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-345:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/registry/ModTabs.java:111: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-348:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/registry/ModTabs.java:115: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-351:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/handheld/Firearms.java:141: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-354:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/handheld/Firearms.java:416: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-357:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/handheld/Firearms.java:607: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-360:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/handheld/LauncherWeaponItem.java:48: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-363:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/deco/FlagBlock.java:27: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-366:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/DecoTests.java:146: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-369:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/VehicleTests.java:217: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-372:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/GunTests.java:139: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-375:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/RealWarTests.java:138: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-378:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/gametest/NapoleonicTests.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
-389:> Task :compileJava FAILED
-391:FAILURE: Build failed with an exception.
-394:Execution failed for task ':compileJava'.
-402:org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':compileJava'.
-463:Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler error output for details.
+73:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcTargeting.java:55: error: incompatible types: LivingEntity cannot be converted to VehicleEntity
+74-            if (e instanceof VehicleEntity || e instanceof CraftEntity) return false;
+75-                ^
+76:/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcTargeting.java:55: error: incompatible types: LivingEntity cannot be converted to CraftEntity
+77-            if (e instanceof VehicleEntity || e instanceof CraftEntity) return false;
+78-                                              ^
+79-/home/runner/work/aiarsenal/aiarsenal/mods/aiarsenal/src/main/java/ru/aiforge/realwar/npc/NpcGear.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+--
+360:> Task :compileJava FAILED
+361-
+362:FAILURE: Build failed with an exception.
+363-
+364-* What went wrong:
+365:Execution failed for task ':compileJava'.
+366-> Compilation failed; see the compiler error output for details.
+367-
+368-* Try:
+--
+373:org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':compileJava'.
+374-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+375-	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:282)
+376-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+--
+405:Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler error output for details.
+406-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:61)
+407-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:41)
+408-	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.delegateAndHandleErrors(NormalizingJavaCompiler.java:98)
 
 ## Tail
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.execute(IncrementalTaskAction.java:26)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:244)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
 	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
 	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
@@ -213,38 +143,9 @@
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
-	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:116)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
-	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
-	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:313)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
-	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:304)
-	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:220)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
-	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:181)
-	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:50)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.lambda$run$0(DefaultBuildController.java:198)
-	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:198)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
 
 
-BUILD FAILED in 1m 45s
+BUILD FAILED in 2m 21s
 1 actionable task: 1 executed
