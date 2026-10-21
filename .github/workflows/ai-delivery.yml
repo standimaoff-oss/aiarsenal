@@ -4,7 +4,7 @@ on:
     branches:
       - arena/267ca919-aiarsenal
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: ai-${{ github.ref }}-${{ github.run_id }}
   cancel-in-progress: true
@@ -100,3 +100,50 @@ jobs:
             mods/aiarsenal/build/libs/*.jar
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Publish the JAR and screenshots as a GitHub release
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          tag="ai-units-${GITHUB_RUN_NUMBER}"
+          rm -rf release-bundle && mkdir -p release-bundle
+          jar=$(ls mods/aiarsenal/build/libs/*.jar 2>/dev/null | grep -v sources | head -1 || true)
+          if [ -n "$jar" ]; then cp "$jar" release-bundle/; fi
+          if [ -d previews/ai-units ]; then cp previews/ai-units/*.png release-bundle/ 2>/dev/null || true; fi
+          if [ -f previews/verification.txt ]; then cp previews/verification.txt release-bundle/; fi
+          ( cd release-bundle && sha256sum ./* > SHA256SUMS )
+          ls -l release-bundle
+          gh release create "$tag" --prerelease --target "$GITHUB_SHA" \
+            --title "AI units build ${GITHUB_RUN_NUMBER} (${GITHUB_SHA:0:7})" \
+            --notes "AI soldiers: Steve body + class uniform, one summon egg per class in the ai_units tab, boarding AI, weapon hand placement, volumetric smoke. Sources: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}" \
+            release-bundle/* || gh release upload "$tag" release-bundle/* --clobber
+
+      - name: Publish light previews on the ai-delivery branch
+        if: always()
+        run: |
+          set -e
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          src = Path('previews/ai-units')
+          out = Path('delivery/ai-units')
+          out.mkdir(parents=True, exist_ok=True)
+          for path in sorted(src.glob('*.png')):
+              with Image.open(path) as image:
+                  light = image.convert('RGB')
+              light.thumbnail((1100, 1100))
+              target = out / (path.stem + '.jpg')
+              light.save(target, quality=82, optimize=True)
+              print(f'{target}: {target.stat().st_size} bytes')
+          Path('delivery/README.txt').write_text(
+              'Auto-generated previews of the AI soldiers in Minecraft, see the GitHub releases.\n',
+              encoding='utf-8')
+          PY
+          git config user.name "ai-arsenal-ci"
+          git config user.email "ci@users.noreply.github.com"
+          git checkout -q -B ai-delivery
+          git add -f delivery
+          git commit -q -m "previews for run ${GITHUB_RUN_NUMBER} [skip ci]" || echo "nothing to publish"
+          git push -q -f origin ai-delivery

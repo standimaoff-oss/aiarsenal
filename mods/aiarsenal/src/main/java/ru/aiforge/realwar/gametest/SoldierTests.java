@@ -131,7 +131,7 @@ public final class SoldierTests {
         h.assertTrue(tab != null, "нет креативной вкладки ai_units");
         if (tab == null) return;
         tab.buildContents(new CreativeModeTab.ItemDisplayParameters(
-                net.minecraft.world.flag.FeatureFlagSet.of(), true, h.getLevel().registryAccess()));
+                net.minecraft.world.flag.FeatureFlags.VANILLA_SET, true, h.getLevel().registryAccess()));
         List<Item> items = new ArrayList<>();
         for (ItemStack st : tab.getDisplayItems()) items.add(st.getItem());
         for (String id : List.of("soldier_egg_commander", "soldier_egg_tanker", "soldier_egg_assault", "soldier_egg_medic")) {
@@ -143,7 +143,7 @@ public final class SoldierTests {
             CreativeModeTab other = BuiltInRegistries.CREATIVE_MODE_TAB.get(new ResourceLocation("aiarsenal", sec));
             if (other == null) continue;
             other.buildContents(new CreativeModeTab.ItemDisplayParameters(
-                    net.minecraft.world.flag.FeatureFlagSet.of(), true, h.getLevel().registryAccess()));
+                    net.minecraft.world.flag.FeatureFlags.VANILLA_SET, true, h.getLevel().registryAccess()));
             List<Item> rest = new ArrayList<>();
             for (ItemStack st : other.getDisplayItems()) rest.add(st.getItem());
             h.assertTrue(rest.stream().noneMatch(i -> i.getDescriptionId().startsWith("item.aiarsenal.soldier_egg")),
