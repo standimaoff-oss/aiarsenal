@@ -209,10 +209,12 @@ public class SoldierEntity extends PathfinderMob {
         double horiz2 = Mth.square(w.x - this.getX()) + Mth.square(w.z - this.getZ());
         double dy = w.y - this.getY();
         this.approachTicks++;
-        // Board as soon as the seat is within reach (3.5 blocks); if the path is
-        // blocked by the hull itself, board from up to 5 blocks after 10 s of trying.
-        boolean reach = horiz2 < 12.25;
-        boolean stubborn = horiz2 < 25.0 && this.approachTicks > 200;
+        // Board as soon as we are next to the hull: the seat of a big vehicle can sit
+        // several blocks inside it (T-34 driver: 2.36 m forward), so the distance to the
+        // seat alone is not a usable test.
+        double body2 = this.distanceToSqr(v.getX(), v.getY(), v.getZ());
+        boolean reach = horiz2 < 12.25 || body2 < 30.0;
+        boolean stubborn = (horiz2 < 36.0 || body2 < 60.0) && this.approachTicks > 200;
         if ((reach || stubborn) && dy > -0.5 && dy < 1.6) {
             this.getNavigation().stop();
             v.enterSeatFor(this, this.wantedSeat);
