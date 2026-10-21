@@ -379,6 +379,26 @@ public final class ModItems {
         return ITEMS.register(id, () -> new net.minecraftforge.common.ForgeSpawnEggItem(() -> type.get(), bg, hl, new Item.Properties()));
     }
 
+    // one egg per trade (modern Russian army): commander, tank crew, assault, medic, artillery, AA, pilot
+    public static final RegistryObject<Item> EGG_COMMANDER = profEgg("egg_commander", ru.aiforge.realwar.npc.Profession.COMMANDER);
+    public static final RegistryObject<Item> EGG_TANK_CREW = profEgg("egg_tank_crew", ru.aiforge.realwar.npc.Profession.TANK_CREW);
+    public static final RegistryObject<Item> EGG_ASSAULT = profEgg("egg_assault", ru.aiforge.realwar.npc.Profession.ASSAULT);
+    public static final RegistryObject<Item> EGG_MEDIC = profEgg("egg_medic", ru.aiforge.realwar.npc.Profession.MEDIC);
+    public static final RegistryObject<Item> EGG_ARTILLERY = profEgg("egg_artillery", ru.aiforge.realwar.npc.Profession.ARTILLERY);
+    public static final RegistryObject<Item> EGG_AA_GUNNER = profEgg("egg_aa_gunner", ru.aiforge.realwar.npc.Profession.AA_GUNNER);
+    public static final RegistryObject<Item> EGG_PILOT = profEgg("egg_pilot", ru.aiforge.realwar.npc.Profession.PILOT);
+
+    private static RegistryObject<Item> profEgg(String id, ru.aiforge.realwar.npc.Profession prof) {
+        int bg = switch (prof) {
+            case COMMANDER -> 0x8A6D1F;
+            case MEDIC -> 0xE8E4DA;
+            case PILOT -> 0x3E6B8A;
+            case AA_GUNNER -> 0x5A7A8A;
+            default -> 0x6E7A57;
+        };
+        return ITEMS.register(id, () -> new ru.aiforge.realwar.npc.ProfessionEggItem(prof, bg, 0xC8B99A, new Item.Properties()));
+    }
+
     /** r15: 10 uniform sets x 4 pieces, ids uniform_<set>_<head|chest|legs|feet>. */
     public static final java.util.Map<String, RegistryObject<Item>> UNIFORMS = new java.util.LinkedHashMap<>();
 

@@ -55,9 +55,10 @@ public final class ModTabs {
     }
 
     public static final java.util.List<String> SECTIONS = java.util.List.of(
-            "ww2_weapons", "ww2_vehicles", "ww2_clothing", "ww2_troops", "ww2_ammo",
-            "modern_weapons", "modern_vehicles", "modern_clothing", "modern_troops", "modern_ammo",
-            "napoleonic_weapons", "napoleonic_vehicles", "napoleonic_clothing", "napoleonic_troops", "napoleonic_ammo",
+            "ww2_weapons", "ww2_vehicles", "ww2_clothing", "ww2_ammo",
+            "modern_weapons", "modern_vehicles", "modern_clothing", "modern_ammo",
+            "napoleonic_weapons", "napoleonic_vehicles", "napoleonic_clothing", "napoleonic_ammo",
+            "troops",
             "common_parts", "common_equipment", "common_building");
     private static final Set<String> WW2 = Set.of(
             "ppsh41", "mp40", "mosin", "k98k", "mosin_pu", "k98k_zf39", "c96", "tt33",
@@ -81,7 +82,7 @@ public final class ModTabs {
         if (c == Cat.BUILDING || c == Cat.FORTIFICATION) return "common_building";
         if (name.equals("craft_service_kit")) return "common_equipment";
         if (c == Cat.PROTECTION) return name.startsWith("hazmat_") ? "modern_clothing" : "common_equipment";
-        if (c == Cat.TROOPS) return (NAPOLEONIC.contains(name) ? "napoleonic_" : WW2.contains(name) ? "ww2_" : "modern_") + "troops";
+        if (c == Cat.TROOPS) return "troops";   // every spawn egg lives in ONE section
         if (c == Cat.UNIFORMS && name.startsWith("uniform_nap_")) return "napoleonic_clothing";
         if (c == Cat.UNIFORMS && name.startsWith("uniform_ww2_")) return "ww2_clothing";
         String era = NAPOLEONIC.contains(name) ? "napoleonic_" : WW2.contains(name) ? "ww2_" : "modern_";
@@ -155,10 +156,10 @@ public final class ModTabs {
         section("modern_clothing", "uniform_ru_private_head");
         section("modern_ammo", "mag_ak12");
         put(Cat.TROOPS, "soldier_nato_spawn_egg", "soldier_russia_spawn_egg", "soldier_ussr_spawn_egg",
-                "soldier_germany_spawn_egg", "soldier_france_spawn_egg");
-        section("ww2_troops", "soldier_ussr_spawn_egg");
-        section("modern_troops", "soldier_russia_spawn_egg");
-        section("napoleonic_troops", "soldier_france_spawn_egg");
+                "soldier_germany_spawn_egg", "soldier_france_spawn_egg",
+                "egg_commander", "egg_tank_crew", "egg_assault", "egg_medic", "egg_artillery",
+                "egg_aa_gunner", "egg_pilot");
+        section("troops", "soldier_russia_spawn_egg");
         section("napoleonic_weapons", "musket_1777");
         section("napoleonic_vehicles", "cannon_fr6");
         section("napoleonic_ammo", "paper_cartridge");

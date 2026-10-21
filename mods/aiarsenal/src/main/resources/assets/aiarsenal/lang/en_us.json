@@ -2107,5 +2107,13 @@
   "npc.aiarsenal.profession.commander": "commander",
   "msg.aiarsenal.recruit.profession": "Recruit as: %s (sneak + emerald right-click to change)",
   "msg.aiarsenal.recruit.price": "A recruit costs %s emeralds",
-  "msg.aiarsenal.recruit.done": "Recruited as %s. He follows you and fights your enemies."
+  "msg.aiarsenal.recruit.done": "Recruited as %s. He follows you and fights your enemies.",
+  "itemGroup.aiarsenal.troops": "Troops & spawn eggs",
+  "item.aiarsenal.egg_commander": "Commander spawn egg",
+  "item.aiarsenal.egg_tank_crew": "Tank crew spawn egg",
+  "item.aiarsenal.egg_assault": "Assault spawn egg",
+  "item.aiarsenal.egg_medic": "Medic spawn egg",
+  "item.aiarsenal.egg_artillery": "Artillery spawn egg",
+  "item.aiarsenal.egg_aa_gunner": "AA gunner spawn egg",
+  "item.aiarsenal.egg_pilot": "Pilot spawn egg"
 }

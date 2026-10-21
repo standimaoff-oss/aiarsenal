@@ -1,0 +1,113 @@
+name: In-game QA (gametests + client screenshots)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: game-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gametest:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            mods/aiarsenal/**/*.gradle*
+            mods/aiarsenal/gradle/wrapper/gradle-wrapper.properties
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore compressed baseline models
+        run: python3 tools/restore_models.py
+      - name: Run all GameTests headless (incl. rw_npc)
+        env:
+          MC_RUNS: ${{ runner.temp }}/mc-gametest
+        run: python3 tools/verify_game.py gametest
+      - name: Upload gametest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gametest-log
+          path: verification/logs/
+          if-no-files-found: warn
+          retention-days: 30
+
+  client:
+    if: contains(github.event.head_commit.message, '[qa]') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    env:
+      DISPLAY: ':99'
+      LIBGL_ALWAYS_SOFTWARE: '1'
+      GALLIUM_DRIVER: llvmpipe
+      QA_VOLUMETRIC: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            mods/aiarsenal/**/*.gradle*
+            mods/aiarsenal/gradle/wrapper/gradle-wrapper.properties
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install software display and input tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb xdotool x11-utils pulseaudio libegl1 libgl1 libgl1-mesa-dri libopenal1 libxi6 libxrender1 libxxf86vm1 libxfixes3 libxkbcommon0 libsm6 libflite1
+          python -m pip install pillow
+          Xvfb :99 -screen 0 1400x1000x24 -nolisten tcp > "$RUNNER_TEMP/xvfb.log" 2>&1 &
+          python - <<'PY'
+          import subprocess, time
+          end = time.monotonic() + 30
+          while subprocess.run(['xdpyinfo', '-display', ':99'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
+              if time.monotonic() > end: raise RuntimeError('Xvfb did not become ready')
+              time.sleep(.2)
+          PY
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=qa rate=48000
+          pactl set-default-sink qa
+          pactl set-default-source qa.monitor
+      - name: Restore compressed baseline models
+        run: python3 tools/restore_models.py
+      - name: Real client + server, F2 screenshots, volumetric smoke check
+        env:
+          MC_RUNS: ${{ runner.temp }}/mc-client
+        run: python3 tools/verify_game.py client
+      - name: Publish screenshots into previews/qa
+        if: always()
+        run: |
+          mkdir -p previews/qa
+          cp verification/shots/*.png previews/qa/ 2>/dev/null || true
+          ls -l previews/qa || true
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add previews/qa
+          git commit -m "qa: in-game screenshots [skip ci]" || exit 0
+          git push origin "HEAD:${GITHUB_REF_NAME}" || true
+      - name: Upload screenshots and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-screenshots
+          path: |
+            verification/shots/*.png
+            verification/logs/*.log
+          if-no-files-found: warn
+          retention-days: 30

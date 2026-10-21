@@ -80,6 +80,7 @@ public final class GunHoldLayer<T extends LivingEntity, M extends HumanoidModel<
             ps.translate(0f, -t[5] * 1.4f * swing, 0f);
         }
 
+        ps.translate(-0.5f, -0.5f, -0.5f);   // the same centring ItemRenderer applies before a BEWLR item draws
         float[] muzzle = GunRenderer.renderHeld(stack, ps, buf, light, aim, reloading ? reloadTime : -1f,
                 GunAnimClient.reloadEmpty(e), shot, GunAnimClient.shotSeq(e),
                 left ? net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND

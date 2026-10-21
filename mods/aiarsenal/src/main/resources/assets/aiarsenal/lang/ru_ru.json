@@ -2107,5 +2107,13 @@
   "npc.aiarsenal.profession.commander": "командир",
   "msg.aiarsenal.recruit.profession": "Профессия рекрута: %s (Shift + ПКМ изумрудом — сменить)",
   "msg.aiarsenal.recruit.price": "Рекрут стоит %s изумруда(ов)",
-  "msg.aiarsenal.recruit.done": "Завербован: %s. Идёт за вами и воюет с вашими врагами."
+  "msg.aiarsenal.recruit.done": "Завербован: %s. Идёт за вами и воюет с вашими врагами.",
+  "itemGroup.aiarsenal.troops": "Личный состав и яйца призыва",
+  "item.aiarsenal.egg_commander": "Яйцо призыва: командир",
+  "item.aiarsenal.egg_tank_crew": "Яйцо призыва: танкист",
+  "item.aiarsenal.egg_assault": "Яйцо призыва: штурмовик",
+  "item.aiarsenal.egg_medic": "Яйцо призыва: медик",
+  "item.aiarsenal.egg_artillery": "Яйцо призыва: артиллерист",
+  "item.aiarsenal.egg_aa_gunner": "Яйцо призыва: зенитчик",
+  "item.aiarsenal.egg_pilot": "Яйцо призыва: лётчик"
 }
