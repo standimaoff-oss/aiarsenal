@@ -64,7 +64,9 @@ jobs:
       - name: Capture real Minecraft F2 images of the AI soldiers
         env:
           MC_RUNS: ${{ runner.temp }}/mc-runs
-        run: python tools/wwi/preview_soldiers.py
+        run: |
+          mkdir -p previews
+          python tools/wwi/preview_soldiers.py 2>&1 | tee previews/preview-run.log
       - name: Publish only the captured preview images
         run: |
           mkdir -p previews/ai-units
@@ -73,6 +75,11 @@ jobs:
               cp "verification/shots/ai-review-${name}.png" "previews/ai-units/${name}.png"
             fi
           done
+          for f in verification/shots/ai-review-weapon-variant-*.png; do
+            [ -f "$f" ] || continue
+            cp "$f" "previews/ai-units/$(basename "$f" | sed 's/^ai-review-//')"
+          done
+          ls -l previews/ai-units
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
@@ -140,6 +147,9 @@ jobs:
           logs = Path('delivery/logs')
           logs.mkdir(parents=True, exist_ok=True)
           rcon = Path('verification/logs/rcon.log')
+          preview = Path('previews/preview-run.log')
+          if preview.exists():
+              (logs / 'preview-run.txt').write_text(preview.read_text(encoding='utf-8', errors='replace')[-20000:])
           if rcon.exists():
               lines = rcon.read_text(encoding='utf-8', errors='replace').splitlines()
               (logs / 'rcon-tail.txt').write_text('\n'.join(lines[-400:]), encoding='utf-8')
