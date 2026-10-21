@@ -54,7 +54,7 @@ jobs:
           {
             echo "# Gradle build failure"
             echo
-            grep -nE "error:|warning: \[|FAILURE:|Execution failed|Caused by:|> Task .* FAILED|^\s+> " mods/aiarsenal/build.log | head -300
+            grep -nE -A3 "error:|FAILURE:|Execution failed|Caused by:|> Task .* FAILED" mods/aiarsenal/build.log | head -400
             echo
             echo "## Tail"
             tail -120 mods/aiarsenal/build.log

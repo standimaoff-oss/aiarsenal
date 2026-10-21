@@ -130,6 +130,10 @@ extends TextureSheetParticle {
         return this.z;
     }
 
+    public void roll(float radians) {
+        this.oRoll = this.roll = radians;
+    }
+
     public void color(float r, float g, float b) {
         this.rCol = r;
         this.gCol = g;

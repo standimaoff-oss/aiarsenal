@@ -29,7 +29,8 @@ public final class MuzzleFx {
     /** Muzzle blast for a remote shooter; coordinates are camera relative. */
     public static void remote(Entity shooter, float mx, float my, float mz, Vector3f dir, GunKind k, int seq) {
         Minecraft mc = Minecraft.getInstance();
-        if (!(mc.level instanceof ClientLevel level)) return;
+        ClientLevel level = mc.level;
+        if (level == null) return;
         if (shooter == mc.player) return;                       // own flash is part of the first-person view model
         Vec3 cam = mc.gameRenderer.getMainCamera().getPosition();
         blast(level, new Vec3(cam.x + mx, cam.y + my, cam.z + mz), new Vec3(dir.x, dir.y, dir.z), k, seq);
@@ -93,7 +94,7 @@ public final class MuzzleFx {
                     false, puffSize * (0.8f + r.nextFloat() * 0.5f));
             c.velocity(d.x * 0.16 + jitter(r, 0.05).x, d.y * 0.16 + 0.012 + jitter(r, 0.04).y,
                     d.z * 0.16 + jitter(r, 0.05).z);
-            c.roll = r.nextFloat() * 6.28f;
+            c.roll(r.nextFloat() * 6.28f);
             c.spin = (r.nextFloat() - 0.5f) * 0.05f;
             float base = c.size;
             int life = puffLife;

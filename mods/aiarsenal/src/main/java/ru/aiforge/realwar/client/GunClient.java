@@ -249,7 +249,8 @@ public final class GunClient {
     /** The shooter's own muzzle blast: sparks and the cordite cloud that drifts into his view. */
     private static void localMuzzleBlast(GunKind k) {
         Minecraft mc = Minecraft.getInstance();
-        if (!(mc.level instanceof net.minecraft.client.multiplayer.ClientLevel level) || mc.player == null) return;
+        net.minecraft.client.multiplayer.ClientLevel level = mc.level;
+        if (level == null || mc.player == null) return;
         var look = mc.player.getViewVector(1f);
         var eye = mc.player.getEyePosition();
         float reach = k == null ? 0.95f : k.flintlock() && !k.pistol() ? 1.35f : k.pistol() ? 0.6f : 0.95f;
