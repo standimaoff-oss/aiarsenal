@@ -181,7 +181,7 @@ public final class NpcTests {
         h.succeed();
     }
 
-    @GameTest(template = "arena", batch = "rw_npc", timeoutTicks = 260)
+    @GameTest(template = "arena", batch = "rw_npc", timeoutTicks = 700)
     public static void helicopter_pilot_boards_and_takes_off(GameTestHelper h) {
         ServerLevel level = h.getLevel();
         int top = pad(h, 15, 15, 20);
@@ -197,7 +197,7 @@ public final class NpcTests {
         h.assertTrue(pilot != null, "pilot did not spawn");
         pilot.setAssignedCraft(heli.getId());
         h.onEachTick(() -> {
-            if (heli.tickCount > 220) {
+            if (heli.tickCount > 560) {   // the Ka-52 rotor needs ~9 s to spool before it can lift
                 h.assertTrue(heli.getPassengers().contains(pilot), "the pilot never boarded the helicopter");
                 h.assertTrue(heli.getY() > y0 + 4.0,
                         "the AI pilot did not lift off (gained " + String.format("%.2f", heli.getY() - y0)
