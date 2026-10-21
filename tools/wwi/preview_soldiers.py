@@ -101,7 +101,7 @@ overrideHeight:800
     game.command("summon aiarsenal:zu23 30 -60 0 {PersistenceRequired:1b}")
     game.command("summon aiarsenal:soldier 33 -60 1.5 {rw_class:1b,PersistenceRequired:1b}")
     time.sleep(30)  # scan (10 ticks) + walk + board
-    game.command("tp TestPlayer 30 -60 -14 0 0")     # look +Z at the ZU-23 and its seated gunner
+    game.command("tp TestPlayer 30 -60 -7 0 0")      # look +Z at the ZU-23 and its seated gunner
     time.sleep(3)
     game.screenshot("soldier-in-zu23")
 
@@ -140,22 +140,43 @@ overrideHeight:800
     time.sleep(1.5)
 
     # --------------------------------- 5. weapon in the AI soldier's hands (3rd person)
+    # The rifle transform is live-tunable through config/aiarsenal_view.json, so the run
+    # captures a few candidates in one go; the best one is then baked into the resource.
     game.command("item replace entity TestPlayer hotbar.0 with aiarsenal:gewehr98{Ammo:5}")
-    game.command("summon aiarsenal:soldier 2.5 -60 -34.5 {rw_class:0b,PersistenceRequired:1b,Rotation:[0f,0f]}")
+    game.command("summon aiarsenal:soldier 2.5 -60 -34.5 {rw_class:0b,PersistenceRequired:1b}")
     game.view_action(client_log, "view_back")
     game.command("tp TestPlayer 2.5 -60 -30.5 180 0")   # camera behind the player, soldier in front
-    time.sleep(5)
+    time.sleep(4)
     game.screenshot("soldier-weapon-3p")
 
+    config = game.RUNS / "client" / "config" / "aiarsenal_view.json"
+    config.parent.mkdir(parents=True, exist_ok=True)
+    variants = {
+        "a": [0, 0, 0, 0, 0, 0, 1.0, 0],
+        "b": [0, 0, 0, 180, 0, 0, 1.0, 0],
+        "c": [0, 0, 0, 0, -90, 0, 1.0, 0],
+        "d": [0, 0, 0, 90, 0, 0, 1.0, 0],
+        "e": [0, -0.06, 0.05, 0, -18, 0, 1.0, 0],
+        "f": [0, 0, 0, 180, 0, 0, 1.0, 1],
+    }
+    for name, v in variants.items():
+        config.write_text(
+            '{"gewehr98.thirdperson_righthand": %s, "gewehr98.thirdperson_lefthand": %s}'
+            % (v, v), encoding="utf-8")
+        time.sleep(2)   # HandheldView re-reads the file once a second
+        game.screenshot("weapon-variant-" + name)
+    config.unlink(missing_ok=True)
+    time.sleep(2)
+
     # ------------------------------------------------------ 6. weapon in hand
+    game.view_action(client_log, "view_first")
     game.key("key", "1")
-    game.view_action(client_log, "view_front")          # camera in front: the grip is visible
     game.command("tp TestPlayer 0 -60 -30 205 0")
     time.sleep(4)
-    game.screenshot("weapon-in-hand-3p")
-    game.view_action(client_log, "view_first")
-    time.sleep(3)
     game.screenshot("weapon-first-person")
+    game.view_action(client_log, "view_front")          # camera in front: the grip is visible
+    time.sleep(3)
+    game.screenshot("weapon-in-hand-3p")
 
     # ------------------------------------------------- 6. explosion smoke
     game.command("tp TestPlayer 60 -60 0 0 0")       # look +Z at the blast point

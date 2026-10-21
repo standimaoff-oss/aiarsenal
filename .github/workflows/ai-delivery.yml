@@ -137,6 +137,12 @@ jobs:
               target = out / (path.stem + '.jpg')
               light.save(target, quality=82, optimize=True)
               print(f'{target}: {target.stat().st_size} bytes')
+          logs = Path('delivery/logs')
+          logs.mkdir(parents=True, exist_ok=True)
+          rcon = Path('verification/logs/rcon.log')
+          if rcon.exists():
+              lines = rcon.read_text(encoding='utf-8', errors='replace').splitlines()
+              (logs / 'rcon-tail.txt').write_text('\n'.join(lines[-400:]), encoding='utf-8')
           Path('delivery/README.txt').write_text(
               'Auto-generated previews of the AI soldiers in Minecraft, see the GitHub releases.\n',
               encoding='utf-8')
