@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ru" data-theme="dark" data-accent="gold" data-fontsize="m">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Оракул — локальный ИИ</title>
+  <meta name="description" content="Оракул — локальный ИИ для ПК и телефона. Работает офлайн, показывает ход работы: поиск, чтение сайтов, расчёты. Уровни размышления от мгновенного до ультра." />
+  <meta name="theme-color" content="#111113" />
+  <link rel="icon" type="image/png" href="./src/assets/favicon-64.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+</head>
+<body>
+<div id="app">
+  <!-- ═══════════ САЙДБАР ═══════════ -->
+  <aside id="sidebar" aria-label="Список чатов">
+    <div class="brand-row">
+      <a class="brand" href="#" id="brandHome" aria-label="На главную Оракула">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="27" r="12" fill="none" stroke="var(--accent)" stroke-width="2.6"/>
+          <circle cx="24" cy="27" r="2.7" fill="var(--accent)"/>
+          <path d="M14.5 10.2q4.6-3.2 9.1-1.2M24.1 8.4q4.6-2 9.4 1.2" fill="none" stroke="var(--accent)" stroke-width="2.3" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-word">Оракул</span>
+      </a>
+      <button id="collapseBtn" class="icon-btn" title="Свернуть сайдбар (Ctrl+B)" aria-label="Свернуть сайдбар">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9.5" y1="4" x2="9.5" y2="20"/><path d="M14 10l-2 2 2 2"/></svg>
+      </button>
+    </div>
+
+    <button id="newChatBtn" class="new-chat-btn">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Новый чат
+    </button>
+
+    <label class="search-box" for="chatSearch">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.3" y2="16.3"/></svg>
+      <input id="chatSearch" type="text" placeholder="Поиск по чатам" autocomplete="off" spellcheck="false" />
+    </label>
+
+    <nav id="chatList" class="chat-list" aria-label="Чаты"></nav>
+
+    <div class="sidebar-foot">
+      <button id="profileBtn" class="foot-btn">
+        <span class="avatar" id="avatarInitial">Я</span>
+        <span class="foot-btn-text">
+          <span class="foot-btn-title" id="profileName">Локальный пользователь</span>
+          <span class="foot-btn-sub">Профиль на этом устройстве</span>
+        </span>
+      </button>
+      <button id="settingsBtn" class="foot-btn">
+        <span class="foot-icon">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </span>
+        <span class="foot-btn-text">
+          <span class="foot-btn-title">Настройки</span>
+          <span class="foot-btn-sub">Интерфейс, модель, обновления</span>
+        </span>
+      </button>
+      <div class="foot-version">Оракул <span id="footVersion">v0.1.0</span> · локально</div>
+    </div>
+  </aside>
+  <div id="backdrop" aria-hidden="true"></div>
+
+  <!-- ═══════════ ОСНОВНАЯ ОБЛАСТЬ ═══════════ -->
+  <main id="main">
+    <header id="topbar">
+      <button id="burger" class="icon-btn" aria-label="Открыть меню">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div id="threadTitle" class="thread-title">Новый чат</div>
+      <div class="topbar-right">
+        <button id="updatePill" class="update-pill hidden" title="Открыть страницу релизов">Доступно обновление <b id="updatePillVersion"></b></button>
+        <span class="local-chip" title="Модель работает на этом устройстве, интернет не нужен">
+          <span class="local-dot"></span>Локально
+        </span>
+      </div>
+    </header>
+
+    <!-- Приветственный экран -->
+    <section id="welcome" class="welcome">
+      <svg class="welcome-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="27" r="13" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <circle cx="24" cy="27" r="2.6" fill="var(--accent)"/>
+        <path d="M13.4 9.6q5-3.4 9.8-1.3M24 7.6q5-2.1 10.2 1.3" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h1>Оракул</h1>
+      <p class="tagline">Локальный ИИ. Отвечает без интернета, показывает ход работы —<br class="br-d" /> какой поиск сделал и что прочитал.</p>
+      <div class="suggestions" id="suggestions"></div>
+      <p class="shortcuts"><kbd>/</kbd> ввод &nbsp;·&nbsp; <kbd>Ctrl</kbd>+<kbd>K</kbd> новый чат &nbsp;·&nbsp; <kbd>Ctrl</kbd>+<kbd>B</kbd> сайдбар</p>
+    </section>
+
+    <!-- Лента сообщений -->
+    <section id="thread" class="thread hidden" aria-label="Переписка">
+      <div class="messages-inner" id="messages"></div>
+      <button id="scrollPill" class="scroll-pill hidden">↓ Новые сообщения</button>
+    </section>
+
+    <!-- Композер -->
+    <div class="composer-zone">
+      <div class="composer-inner">
+        <form id="composer" class="composer" autocomplete="off">
+          <textarea id="prompt" rows="1" placeholder="Спросите Оракула…" aria-label="Сообщение для Оракула"></textarea>
+          <div class="composer-row">
+            <button type="button" id="effortBtn" class="effort-btn" aria-haspopup="listbox" aria-expanded="false" title="Уровень размышления">
+              <span class="effort-dots" id="effortDots" aria-hidden="true"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></span>
+              <span id="effortLabel">Стандарт</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="composer-actions">
+              <button type="button" id="stopBtn" class="stop-btn hidden" aria-label="Остановить ответ">
+                <svg viewBox="0 0 24 24" width="15" height="15"><rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor"/></svg>
+              </button>
+              <button type="submit" id="sendBtn" class="send-btn" aria-label="Отправить">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>
+              </button>
+            </div>
+          </div>
+          <!-- Выбор уровня -->
+          <div id="effortPop" class="effort-pop hidden" role="listbox" aria-label="Уровень размышления"></div>
+        </form>
+        <p class="composer-foot">Оракул может ошибаться. Проверяйте важное. Офлайн: модель отвечает на этом устройстве.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════ НАСТРОЙКИ / ПРОФИЛЬ / ОБНОВЛЕНИЯ ═══════════ -->
+<div id="overlaySettings" class="overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Настройки">
+  <div class="overlay-backdrop" data-close-settings></div>
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2>Настройки</h2>
+      <button class="icon-btn" id="closeSettings" aria-label="Закрыть настройки">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <section class="set-section" id="sec-profile">
+      <h3>Профиль</h3>
+      <div class="profile-row">
+        <span class="avatar big" id="settingsAvatar">Я</span>
+        <div class="profile-meta">
+          <label class="field-label" for="profileNameInput">Имя</label>
+          <input id="profileNameInput" class="text-input" type="text" maxlength="48" placeholder="Как к вам обращаться" autocomplete="off" />
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><b id="statChats">0</b><span>чатов</span></div>
+        <div class="stat"><b id="statMessages">0</b><span>сообщений</span></div>
+        <div class="stat"><b id="statBytes">0 КБ</b><span>данных</span></div>
+      </div>
+      <p class="hint">Профиль и чаты хранятся только на этом устройстве. Ничего не отправляется в облако.</p>
+    </section>
+
+    <section class="set-section">
+      <h3>Интерфейс</h3>
+      <label class="field-label">Тема</label>
+      <div class="segmented" id="themeSeg" role="group" aria-label="Тема">
+        <button data-theme-value="dark">Тёмная</button>
+        <button data-theme-value="light">Светлая</button>
+        <button data-theme-value="system">Системная</button>
+      </div>
+
+      <label class="field-label">Акцент</label>
+      <div class="swatches" id="accentSwatches" role="group" aria-label="Акцентный цвет"></div>
+
+      <label class="field-label">Размер текста</label>
+      <div class="segmented" id="fontSeg" role="group" aria-label="Размер текста">
+        <button data-font-value="s">Мелкий</button>
+        <button data-font-value="m">Стандарт</button>
+        <button data-font-value="l">Крупный</button>
+      </div>
+
+      <label class="switch-row" for="traceToggle">
+        <span>
+          <b>Всегда раскрывать ход работы</b>
+          <small>Иначе шаги агента сворачиваются в одну строку после ответа</small>
+        </span>
+        <span class="switch"><input type="checkbox" id="traceToggle" role="switch" /><i></i></span>
+      </label>
+    </section>
+
+    <section class="set-section">
+      <h3>ИИ и модель</h3>
+      <div class="kv-row"><span>Ядро</span><b>Оракул-Core 0.5B · Q4_K_M</b></div>
+      <div class="kv-row"><span>Версия модели</span><b id="modelVersionText">v0.1.0 · демо-режим</b></div>
+      <div class="kv-row"><span>Параметры</span><b>≈ 0.5 млрд · русский и английский</b></div>
+      <button class="btn ghost-btn" id="modelUpdateBtn">Проверить обновление модели</button>
+      <p class="hint" id="modelUpdateStatus">Модель скачивается из релизов GitHub (теги model-v*) и обновляется отдельно от приложения. Лёгкое дообучение — да; претрейн с нуля — только когда будет бюджет на GPU.</p>
+    </section>
+
+    <section class="set-section">
+      <h3>Обновления приложения</h3>
+      <div class="kv-row"><span>Текущая версия</span><b id="currentVersionText">0.1.0</b></div>
+      <button class="btn ghost-btn" id="appUpdateBtn">Проверить обновления</button>
+      <p class="hint" id="appUpdateStatus">Источник: GitHub Releases, standimaoff-oss/aiarsenal · теги app-v*</p>
+      <a class="text-link" id="releasesLink" href="https://github.com/standimaoff-oss/aiarsenal/releases" target="_blank" rel="noopener">Страница релизов ↗</a>
+    </section>
+
+    <section class="set-section">
+      <h3>Данные</h3>
+      <div class="btn-col">
+        <button class="btn ghost-btn" id="exportBtn">Экспортировать чаты (.json)</button>
+        <button class="btn danger-btn" id="clearBtn">Очистить историю чатов</button>
+      </div>
+    </section>
+
+    <section class="set-section">
+      <h3>О приложении</h3>
+      <p class="hint"><b>Оракул v0.1.0</b> · MIT · standimaoff-oss<br />Локальный ИИ: ПК (EXE) и телефон (APK). Без подписок и облаков: вопросы и чаты не покидают устройство.</p>
+      <a class="text-link" href="https://github.com/standimaoff-oss/aiarsenal" target="_blank" rel="noopener">Исходный код на GitHub ↗</a>
+    </section>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="./src/js/main.js"></script>
+</body>
+</html>

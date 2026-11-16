@@ -1,0 +1,15 @@
+{
+  "name": "orakul",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Оракул — локальный ИИ для ПК и телефона. Офлайн, агентный интерфейс, поиск и уровни размышления.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

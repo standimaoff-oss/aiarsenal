@@ -1,0 +1,28 @@
+name: Оракул CI
+
+on:
+  push:
+    branches: [main, 'arena/**']
+    paths: ['app/**', '.github/workflows/oracle-ci.yml']
+  pull_request:
+    paths: ['app/**', '.github/workflows/oracle-ci.yml']
+
+jobs:
+  web:
+    name: Проверка веб-сборки Оракула
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  # Заход 4 добавит сюда сборку EXE (Tauri, Windows) и APK (Tauri Android)
+  # с публикацией бинарников в GitHub Releases (теги app-v*).
