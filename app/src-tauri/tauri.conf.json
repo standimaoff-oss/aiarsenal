@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/crates/tauri-cli/schema.json",
   "productName": "Оракул",
-  "version": "0.2.0-dev.0",
+  "version": "0.3.0-dev.0",
   "identifier": "ai.standimaoff.oracle",
   "build": {
     "frontendDist": "../dist",
@@ -23,7 +23,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com https://huggingface.co https://*.hf.co https://*.xethub.hf.co https://*.githubusercontent.com"
+      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com https://huggingface.co https://*.hf.co https://*.xethub.hf.co https://*.githubusercontent.com https://geocoding-api.open-meteo.com https://api.open-meteo.com https://ru.wikipedia.org https://en.wikipedia.org https://html.duckduckgo.com https://api.allorigins.win"
     }
   },
   "bundle": {

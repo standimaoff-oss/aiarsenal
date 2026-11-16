@@ -1,6 +1,6 @@
 [package]
 name = "orakul"
-version = "0.2.0-dev.0"
+version = "0.3.0-dev.0"
 description = "Оракул — локальный ИИ для ПК и телефона. Офлайн, агентный интерфейс, уровни размышления."
 authors = ["standimaoff-oss"]
 edition = "2021"

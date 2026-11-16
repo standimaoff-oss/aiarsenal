@@ -269,6 +269,16 @@ kbd { background: var(--panel-2); border: 1px solid var(--border-strong); border
 .src-foot { margin-top: 8px; font-size: .67rem; color: var(--muted); font-style: italic; }
 .detail-text { line-height: 1.55; white-space: pre-wrap; }
 .detail-calc { font-family: 'SF Mono', Consolas, monospace; font-size: .95rem; color: var(--accent); background: var(--panel-2); border-radius: 8px; padding: 8px 12px; display: inline-block; }
+.wx-lines { display: grid; gap: 4px; }
+.wx-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-top: 1px dashed var(--border); padding: 4px 0; }
+.wx-row:first-child { border-top: 0; padding-top: 2px; }
+.wx-row span { font-size: .7rem; color: var(--muted); }
+.wx-row b { font-size: .78rem; color: var(--text); font-weight: 600; text-align: right; }
+.local-hit-list { display: grid; gap: 6px; }
+.local-hit { display: flex; gap: 9px; align-items: flex-start; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2); }
+.local-hit-tag { flex: 0 0 auto; font-size: .58rem; letter-spacing: .08em; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 2px 5px; margin-top: 1px; }
+.local-hit-body { font-size: .72rem; line-height: 1.45; color: var(--muted); }
+.local-hit-body b { color: var(--text); font-weight: 600; }
 
 .scroll-pill {
   position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);

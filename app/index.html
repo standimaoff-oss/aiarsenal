@@ -56,7 +56,7 @@
           <span class="foot-btn-sub">Интерфейс, модель, обновления</span>
         </span>
       </button>
-      <div class="foot-version">Оракул <span id="footVersion">v0.1.0</span> · локально</div>
+      <div class="foot-version">Оракул <span id="footVersion">v0.3.0-dev.0</span> · локально</div>
     </div>
   </aside>
   <div id="backdrop" aria-hidden="true"></div>
@@ -205,8 +205,27 @@
     </section>
 
     <section class="set-section">
+      <h3>Поиск и источники</h3>
+      <label class="switch-row" for="liveSearchToggle">
+        <span>
+          <b>Живой веб-поиск</b>
+          <small>Без ключей: Wikipedia напрямую + DuckDuckGo (в браузере — через прокси, в приложении — напрямую). Без него запросы в сеть не уходят: отвечаю из встроенной базы знаний и локальной модели.</small>
+        </span>
+        <span class="switch"><input type="checkbox" id="liveSearchToggle" role="switch" checked /><i></i></span>
+      </label>
+      <label class="switch-row" for="searchProxyToggle">
+        <span>
+          <b>Читать сайты через прокси (allorigins.win)</b>
+          <small>Браузер блокирует чтение произвольных сайтов (CORS). Прокси открывает DuckDuckGo и полные страницы — но ваши запросы видит сторонний сервис. В Windows/Android-приложении это выключено за ненадобностью: там запросы идут напрямую.</small>
+        </span>
+        <span class="switch"><input type="checkbox" id="searchProxyToggle" role="switch" /><i></i></span>
+      </label>
+      <p class="hint">Полный список источников раскрывается в «Ходе работы» → шаг «Поиск». Отключённый поиск никогда не ходит в сеть.</p>
+    </section>
+
+    <section class="set-section">
       <h3>Обновления приложения</h3>
-      <div class="kv-row"><span>Текущая версия</span><b id="currentVersionText">0.1.0</b></div>
+      <div class="kv-row"><span>Текущая версия</span><b id="currentVersionText">0.3.0-dev.0</b></div>
       <button class="btn ghost-btn" id="appUpdateBtn">Проверить обновления</button>
       <p class="hint" id="appUpdateStatus">Источник: GitHub Releases, standimaoff-oss/aiarsenal · теги app-v*</p>
       <a class="text-link" id="releasesLink" href="https://github.com/standimaoff-oss/aiarsenal/releases" target="_blank" rel="noopener">Страница релизов ↗</a>
@@ -222,7 +241,7 @@
 
     <section class="set-section">
       <h3>О приложении</h3>
-      <p class="hint"><b>Оракул v0.2.0-dev.0</b> · MIT · standimaoff-oss<br />Локальный ИИ: ПК (EXE) и телефон (APK). Без подписок и облаков: вопросы и чаты не покидают устройство. Ядро: wllama (MIT), модель Qwen2.5-0.5B-Instruct (Qwen Research License / Apache-2.0, см. THIRD_PARTY_NOTICES).</p>
+      <p class="hint"><b>Оракул v0.3.0-dev.0</b> · MIT · standimaoff-oss<br />Локальный ИИ: ПК (EXE) и телефон (APK). Без подписок и облаков: вопросы и чаты не покидают устройство. Ядро: wllama (MIT), модель Qwen2.5-0.5B-Instruct (Qwen Research License / Apache-2.0, см. THIRD_PARTY_NOTICES).</p>
       <a class="text-link" href="https://github.com/standimaoff-oss/aiarsenal" target="_blank" rel="noopener">Исходный код на GitHub ↗</a>
     </section>
   </div>

@@ -8,7 +8,7 @@ import {
   uid, fmtTime, groupLabel, exportChatsJSON,
 } from './store.js';
 import { EFFORTS, runAgent } from './agent.js';
-import { getModelState, downloadModel, removeModel, generateLocal } from './model.js';
+import { getModelState, downloadModel, removeModel } from './model.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -240,6 +240,18 @@ function renderStepDetail(step) {
   if (d.type === 'calc') {
     return `<span class="detail-calc">${escapeHtml(d.expression)} = ${escapeHtml(d.result)}</span>`;
   }
+  if (d.type === 'weather') {
+    const rows = (d.lines || []).map(([k, v]) => `<div class="wx-row"><span>${escapeHtml(k)}</span><b>${escapeHtml(v)}</b></div>`).join('');
+    return `<div class="wx-lines">${rows}</div>`;
+  }
+  if (d.type === 'rag') {
+    const rows = (d.hits || []).map((h) => `
+      <div class="local-hit">
+        <span class="local-hit-tag">LOCAL</span>
+        <span class="local-hit-body"><b>${escapeHtml(h.title)}</b><br />${escapeHtml(h.text)}</span>
+      </div>`).join('');
+    return `<div class="local-hit-list">${rows}</div>`;
+  }
   if (d.type === 'text') {
     return `<div class="detail-text">${escapeHtml(d.text)}</div>`;
   }
@@ -247,6 +259,8 @@ function renderStepDetail(step) {
 }
 
 const STEP_ICONS = {
+  weather: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .42-8.98 6 6 0 0 0-11.7 1.62A4 4 0 0 0 7 19h10.5z"/></svg>',
+  db: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>',
   search: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.3" y2="16.3"/></svg>',
   read: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
   calc: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="8.01" y2="12"/><line x1="12" y1="12" x2="12.01" y2="12"/><line x1="16" y1="12" x2="16.01" y2="12"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>',
@@ -361,11 +375,11 @@ function finalizeAssistant({ chat, wrap, liveTrace, content, streamedText, effor
 }
 
 /* Демо-движок (Заход 1): показывает ход работы на встроенных сценариях */
-async function runDemoInto({ chat, wrap, liveTrace, content, signal, effort, text }) {
+async function runAgentInto({ chat, wrap, liveTrace, content, signal, effort, text, agentSettings }) {
   const liveSteps = [];
   const stepEls = new Map();
   let streamed = '';
-  await runAgent({ prompt: text, effort, signal }, {
+  await runAgent({ prompt: text, effort, signal, settings: agentSettings }, {
     onStepStart(step) {
       const el = createStepElement(step);
       stepEls.set(step, el);
@@ -375,7 +389,14 @@ async function runDemoInto({ chat, wrap, liveTrace, content, signal, effort, tex
       scrollToBottom(true);
     },
     onStepDone(step) {
-      finishStepElement(stepEls.get(step));
+      const el = stepEls.get(step);
+      if (el) {
+        finishStepElement(el);
+        const titleEl = el.querySelector('.step-title');
+        if (titleEl && typeof step.title === 'string') titleEl.textContent = step.title;
+        const detailEl = el.querySelector('.step-detail');
+        if (detailEl) detailEl.innerHTML = renderStepDetail(step);
+      }
       scrollToBottom();
     },
     onDelta(fullText) {
@@ -383,60 +404,14 @@ async function runDemoInto({ chat, wrap, liveTrace, content, signal, effort, tex
       content.innerHTML = renderContent(fullText) + '<span class="caret"></span>';
       scrollToBottom();
     },
-    onDone({ aborted }) {
+    onDone({ aborted, modelFailed }) {
+      if (modelFailed && !aborted) toast('Локальная модель не ответила — отвечаю по источникам из поиска.');
       finalizeAssistant({ chat, wrap, liveTrace, content, streamedText: streamed, effort, liveSteps, aborted });
     },
   });
 }
 
-/* Реальная локальная модель (Заход 2): один честный шаг, никакого выдуманного поиска */
-async function runLocalInto({ chat, wrap, liveTrace, content, signal, effort, text }) {
-  const history = (chat.messages || [])
-    .filter((m) => typeof m.text === 'string' && m.text.trim())
-    .map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.text }))
-    .slice(-12);
-  const liveSteps = [];
-  const step = {
-    icon: 'plan', type: 'text',
-    title: 'Оракул-Core 0.5B отвечает локально',
-    detail: { type: 'text', text: 'llama.cpp → WebAssembly. Веса — в кэше OPFS на этом устройстве. Сеть не используется.' },
-    ms: 0,
-  };
-  liveSteps.push(step);
-  const stepEl = createStepElement(step);
-  liveTrace.classList.remove('hidden');
-  liveTrace.appendChild(stepEl);
-  scrollToBottom(true);
-
-  let streamed = '';
-  try {
-    await generateLocal({
-      messages: history,
-      effort,
-      signal,
-      onDelta(fullText) {
-        streamed = fullText;
-        content.innerHTML = renderContent(fullText) + '<span class="caret"></span>';
-        scrollToBottom();
-      },
-    });
-    finishStepElement(stepEl);
-    finalizeAssistant({ chat, wrap, liveTrace, content, streamedText: streamed, effort, liveSteps, aborted: !!signal?.aborted });
-  } catch (err) {
-    if (signal?.aborted) {
-      if (streamed) finalizeAssistant({ chat, wrap, liveTrace, content, streamedText: streamed, effort, liveSteps, aborted: true });
-      else { wrap.remove(); setGenerating(false); }
-      return;
-    }
-    const msg = String(err?.message || err);
-    liveTrace.querySelectorAll('.step').forEach((el) => el.remove());
-    liveTrace.classList.add('hidden');
-    content.innerHTML = '<span class="caret"></span>';
-    toast('Локальная модель не ответила (' + msg.slice(0, 110) + '). Отвечаю в демо-режиме…');
-    await runDemoInto({ chat, wrap, liveTrace, content, signal, effort, text });
-  }
-}
-
+/* Удалённый (Заход 2) отдельный путь runLocalInto: локальная модель теперь внутри агента. */
 async function send(textRaw) {
   const text = String(textRaw ?? promptEl.value).trim();
   if (!text || state.generating) return;
@@ -472,12 +447,14 @@ async function send(textRaw) {
   const signal = state.abort.signal;
   const effort = state.settings.effort;
 
-  if (state.settings.localModel) await refreshModelStatus();
-  if (state.settings.localModel && localModelStatus.status === 'cached') {
-    await runLocalInto({ chat, wrap, liveTrace, content, signal, effort, text });
-  } else {
-    await runDemoInto({ chat, wrap, liveTrace, content, signal, effort, text });
+  let modelUsable = false;
+  if (state.settings.localModel) {
+    await refreshModelStatus();
+    modelUsable = localModelStatus.status === 'cached';
+    if (!modelUsable) toast('Локальная модель не скачана — отвечаю по источникам. Веса качаются в Настройки → ИИ и модель.');
   }
+  const agentSettings = { ...state.settings, localModel: modelUsable };
+  await runAgentInto({ chat, wrap, liveTrace, content, signal, effort, text, agentSettings });
 }
 
 $('#composer').addEventListener('submit', (e) => { e.preventDefault(); send(); });
@@ -596,6 +573,17 @@ $('#traceToggle').addEventListener('change', (e) => {
   saveSettings(state.settings);
   toast(e.target.checked ? 'Ход работы всегда развёрнут' : 'Ход работы сворачивается после ответа');
 });
+$('#liveSearchToggle').addEventListener('change', (e) => {
+  state.settings.liveSearch = e.target.checked;
+  saveSettings(state.settings);
+  toast(e.target.checked ? 'Живой веб-поиск включён' : 'Живой веб-поиск выключен — запросы в сеть не уходят');
+});
+$('#searchProxyToggle').addEventListener('change', (e) => {
+  state.settings.searchProxy = e.target.checked;
+  saveSettings(state.settings);
+  if (e.target.checked) toast('Чтение страниц идёт через allorigins.win — запросы видит сторонний сервис');
+  else toast('Прокси выключен: в браузере читаются только Wikipedia-страницы');
+});
 
 function refreshSettingsPanel() {
   refreshProfile();
@@ -604,6 +592,8 @@ function refreshSettingsPanel() {
   $('#statMessages').textContent = stats.messages;
   $('#statBytes').textContent = stats.bytes > 1024 * 1024 ? (stats.bytes / 1048576).toFixed(1) + ' МБ' : Math.max(1, Math.round(stats.bytes / 1024)) + ' КБ';
   $('#traceToggle').checked = !!state.settings.alwaysShowTrace;
+  $('#liveSearchToggle').checked = state.settings.liveSearch !== false;
+  $('#searchProxyToggle').checked = !!state.settings.searchProxy;
   $('#currentVersionText').textContent = APP_VERSION;
   // Статус модели — асинхронно: wasm трогаем только здесь, а не на каждом старте
   $('#modelStatusText').textContent = 'определяю…';

@@ -1,7 +1,7 @@
 {
   "name": "orakul",
   "private": true,
-  "version": "0.2.0-dev.0",
+  "version": "0.3.0-dev.0",
   "description": "Оракул — локальный ИИ для ПК и телефона. Офлайн, агентный интерфейс, поиск и уровни размышления.",
   "type": "module",
   "scripts": {

@@ -12,7 +12,11 @@
 ├───────────────────┬─────────────────────────┤
 │ Инференс (Заход 2)│ Инструменты (Заход 3)   │
 │ wllama/llama.cpp  │ поиск · чтение · кальк. │
-│ GGUF, офлайн      │ RAG по локальной базе   │
+│ GGUF, офлайн      │ погода · BM25-RAG       │
+├─────────────────────────────────────────────┤
+│ Сеть без ключей: net/wiki.js · net/ddg.js · net/weather.js
+│ (+ search.js: слияние, чтение; local-knowledge.js: BM25;
+│  rag-corpus.js: встроенная база; efforts.js: уровни усилий)
 ├───────────────────┴─────────────────────────┤
 │ Хранилище: localStorage → SQLite (Tauri)    │
 ├─────────────────────────────────────────────┤
@@ -30,12 +34,12 @@
 См. [MODEL.md](MODEL.md). Ключевое: приложение никогда не зависит от весов в сборке — в v0.2.0-dev.0 модель скачивается один раз кнопкой из Hugging Face (официальный GGUF) и кешируется в OPFS; с GitHub-релизов (`model-v*`) можно добавить зеркало. Приложение (`app-v*`) и модель обновляются независимо.
 - Исполнитель: `@wllama/wllama` (llama.cpp → WASM, MIT), локальный `/wasm/wllama.wasm` (копируется из npm в `public/` при установке), `setCompat(null)` — никакого CDN.
 - Кэш: OPFS через `wllama.modelManager` (ключ = URL, проверка по ETag/размеру).
-- CSP в Tauri: `script-src 'self' 'wasm-unsafe-eval'`, `worker-src blob:`, `connect-src` ограничен github/huggingface.
+- CSP в Tauri: `script-src 'self' 'wasm-unsafe-eval'`, `worker-src blob:`, `connect-src` ограничен: github/huggingface (обновления/веса), open-meteo.com и ru/en.wikipedia.org (поиск и погода без ключей), html.duckduckgo.com и api.allorigins.win (только по выбору пользователя).
 
 ## Обновления
 - **Приложение**: GitHub Releases. В приложении кнопка «Проверить обновления» → GitHub API → сравнение semver → приложение открывает страницу релиза (Заход 4: тихая установка через Tauri updater на Windows; на Android — системный диалог).
 - **Модель**: тот же механизм, теги `model-v*`; атомарная замена GGUF + проверка контрольной суммы SHA-256 (публикуется в релизе).
-- CSP приложения (`tauri.conf.json`) разрешает исходящие запросы только к `api.github.com` — кроме явно включённого веб-поиска (Заход 3), всё остальное остаётся на устройстве.
+- CSP приложения (`tauri.conf.json`) разрешает исходящие запросы только к явно перечисленным хостам: `api.github.com`, `huggingface.co` (веса/обновления), `geocoding-api.open-meteo.com`, `api.open-meteo.com` (погода), `ru/en.wikipedia.org` (поиск и чтение), `html.duckduckgo.com` и `api.allorigins.win` (только если пользователь включил прокси). Выключенный «Живой веб-поиск» не делает ни одного сетевого запроса.
 
 ## Приватность
 - Чаты, профиль, настройки — в локальном хранилище устройства. Никакой телеметрии, аккаунтов и аналитики.
