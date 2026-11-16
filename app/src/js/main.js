@@ -8,6 +8,7 @@ import {
   uid, fmtTime, groupLabel, exportChatsJSON,
 } from './store.js';
 import { EFFORTS, runAgent } from './agent.js';
+import { getModelState, downloadModel, removeModel, generateLocal } from './model.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -331,6 +332,111 @@ function setGenerating(on) {
   sendBtn.classList.toggle('hidden', on);
 }
 
+function finalizeAssistant({ chat, wrap, liveTrace, content, streamedText, effort, liveSteps, aborted }) {
+  const finalText = (streamedText ?? '').trim();
+  if (!finalText && aborted) { // остановлено до первого токена — не оставляем пустую карточку
+    wrap.remove();
+    setGenerating(false);
+    return;
+  }
+  content.innerHTML = renderContent(finalText);
+  // Сворачиваем живые шаги в аккуратную «ход работы»
+  if (liveSteps.length) {
+    liveTrace.replaceWith(buildTraceWrapper(liveSteps, state.settings.alwaysShowTrace));
+  } else {
+    liveTrace.remove();
+  }
+  if (aborted) {
+    const note = document.createElement('div');
+    note.className = 'stopped-note';
+    note.textContent = 'Остановлено вами';
+    wrap.appendChild(note);
+  }
+  wrap.classList.remove('streaming');
+  chat.messages.push({ role: 'assistant', text: finalText, ts: Date.now(), stopped: aborted || undefined, trace: liveSteps.length ? { effort, steps: liveSteps } : undefined });
+  chat.updatedAt = Date.now();
+  persistChats();
+  setGenerating(false);
+  scrollToBottom();
+}
+
+/* Демо-движок (Заход 1): показывает ход работы на встроенных сценариях */
+async function runDemoInto({ chat, wrap, liveTrace, content, signal, effort, text }) {
+  const liveSteps = [];
+  const stepEls = new Map();
+  let streamed = '';
+  await runAgent({ prompt: text, effort, signal }, {
+    onStepStart(step) {
+      const el = createStepElement(step);
+      stepEls.set(step, el);
+      liveSteps.push(step);
+      if (liveTrace.classList.contains('hidden')) liveTrace.classList.remove('hidden');
+      liveTrace.appendChild(el);
+      scrollToBottom(true);
+    },
+    onStepDone(step) {
+      finishStepElement(stepEls.get(step));
+      scrollToBottom();
+    },
+    onDelta(fullText) {
+      streamed = fullText;
+      content.innerHTML = renderContent(fullText) + '<span class="caret"></span>';
+      scrollToBottom();
+    },
+    onDone({ aborted }) {
+      finalizeAssistant({ chat, wrap, liveTrace, content, streamedText: streamed, effort, liveSteps, aborted });
+    },
+  });
+}
+
+/* Реальная локальная модель (Заход 2): один честный шаг, никакого выдуманного поиска */
+async function runLocalInto({ chat, wrap, liveTrace, content, signal, effort, text }) {
+  const history = (chat.messages || [])
+    .filter((m) => typeof m.text === 'string' && m.text.trim())
+    .map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.text }))
+    .slice(-12);
+  const liveSteps = [];
+  const step = {
+    icon: 'plan', type: 'text',
+    title: 'Оракул-Core 0.5B отвечает локально',
+    detail: { type: 'text', text: 'llama.cpp → WebAssembly. Веса — в кэше OPFS на этом устройстве. Сеть не используется.' },
+    ms: 0,
+  };
+  liveSteps.push(step);
+  const stepEl = createStepElement(step);
+  liveTrace.classList.remove('hidden');
+  liveTrace.appendChild(stepEl);
+  scrollToBottom(true);
+
+  let streamed = '';
+  try {
+    await generateLocal({
+      messages: history,
+      effort,
+      signal,
+      onDelta(fullText) {
+        streamed = fullText;
+        content.innerHTML = renderContent(fullText) + '<span class="caret"></span>';
+        scrollToBottom();
+      },
+    });
+    finishStepElement(stepEl);
+    finalizeAssistant({ chat, wrap, liveTrace, content, streamedText: streamed, effort, liveSteps, aborted: !!signal?.aborted });
+  } catch (err) {
+    if (signal?.aborted) {
+      if (streamed) finalizeAssistant({ chat, wrap, liveTrace, content, streamedText: streamed, effort, liveSteps, aborted: true });
+      else { wrap.remove(); setGenerating(false); }
+      return;
+    }
+    const msg = String(err?.message || err);
+    liveTrace.querySelectorAll('.step').forEach((el) => el.remove());
+    liveTrace.classList.add('hidden');
+    content.innerHTML = '<span class="caret"></span>';
+    toast('Локальная модель не ответила (' + msg.slice(0, 110) + '). Отвечаю в демо-режиме…');
+    await runDemoInto({ chat, wrap, liveTrace, content, signal, effort, text });
+  }
+}
+
 async function send(textRaw) {
   const text = String(textRaw ?? promptEl.value).trim();
   if (!text || state.generating) return;
@@ -365,52 +471,13 @@ async function send(textRaw) {
   state.abort = new AbortController();
   const signal = state.abort.signal;
   const effort = state.settings.effort;
-  const liveSteps = [];
-  const stepEls = new Map();
-  let streamed = '';
 
-  await runAgent({ prompt: text, effort, signal }, {
-    onStepStart(step) {
-      const el = createStepElement(step);
-      stepEls.set(step, el);
-      liveSteps.push(step);
-      if (liveTrace.classList.contains('hidden')) liveTrace.classList.remove('hidden');
-      liveTrace.appendChild(el);
-      scrollToBottom(true);
-    },
-    onStepDone(step) {
-      finishStepElement(stepEls.get(step));
-      scrollToBottom();
-    },
-    onDelta(fullText) {
-      streamed = fullText;
-      content.innerHTML = renderContent(fullText) + '<span class="caret"></span>';
-      scrollToBottom();
-    },
-    onDone({ aborted }) {
-      const finalText = streamed.trim();
-      content.innerHTML = renderContent(finalText);
-      // Сворачиваем живые шаги в аккуратную «ход работы»
-      if (liveSteps.length) {
-        const traceEl = buildTraceWrapper(liveSteps, state.settings.alwaysShowTrace);
-        liveTrace.replaceWith(traceEl);
-      } else {
-        liveTrace.remove();
-      }
-      if (aborted) {
-        const note = document.createElement('div');
-        note.className = 'stopped-note';
-        note.textContent = 'Остановлено вами';
-        wrap.appendChild(note);
-      }
-      wrap.classList.remove('streaming');
-      chat.messages.push({ role: 'assistant', text: finalText, ts: Date.now(), stopped: aborted || undefined, trace: liveSteps.length ? { effort, steps: liveSteps } : undefined });
-      chat.updatedAt = Date.now();
-      persistChats();
-      setGenerating(false);
-      scrollToBottom();
-    },
-  });
+  if (state.settings.localModel) await refreshModelStatus();
+  if (state.settings.localModel && localModelStatus.status === 'cached') {
+    await runLocalInto({ chat, wrap, liveTrace, content, signal, effort, text });
+  } else {
+    await runDemoInto({ chat, wrap, liveTrace, content, signal, effort, text });
+  }
 }
 
 $('#composer').addEventListener('submit', (e) => { e.preventDefault(); send(); });
@@ -538,10 +605,119 @@ function refreshSettingsPanel() {
   $('#statBytes').textContent = stats.bytes > 1024 * 1024 ? (stats.bytes / 1048576).toFixed(1) + ' МБ' : Math.max(1, Math.round(stats.bytes / 1024)) + ' КБ';
   $('#traceToggle').checked = !!state.settings.alwaysShowTrace;
   $('#currentVersionText').textContent = APP_VERSION;
-  $('#modelVersionText').textContent = `v${MODEL_VERSION} · демо-режим`;
+  // Статус модели — асинхронно: wasm трогаем только здесь, а не на каждом старте
+  $('#modelStatusText').textContent = 'определяю…';
+  refreshModelStatus().then(renderModelPanel);
   syncThemeSeg(); syncFontSeg(); renderSwatches();
   disarmClear();
 }
+
+/* ───────────── Модель: статус, загрузка, удаление, переключатель ───────────── */
+let localModelStatus = { status: 'absent', size: 0 };
+let downloadController = null;
+const fmtMB = (b) => `${Math.max(1, Math.round((b || 0) / 1048576))} МБ`;
+
+async function refreshModelStatus() {
+  try { localModelStatus = await getModelState(); }
+  catch (err) { localModelStatus = { status: 'error', size: 0, error: String(err?.message || err) }; }
+  // Флаг «локальная модель» честно выключаем, если весов нет/они битые
+  if (state.settings.localModel && localModelStatus.status !== 'cached') {
+    state.settings.localModel = false;
+    saveSettings(state.settings);
+  }
+  return localModelStatus;
+}
+
+function renderModelPanel() {
+  const s = localModelStatus;
+  const statusEl = $('#modelStatusText');
+  const dlBtn = $('#modelDownloadBtn');
+  const rmBtn = $('#modelRemoveBtn');
+  const toggle = $('#localModelToggle');
+  const cached = s.status === 'cached';
+  if (s.status === 'cached') statusEl.textContent = `готова · ${fmtMB(s.size)} · офлайн`;
+  else if (s.status === 'invalid') statusEl.textContent = 'файл повреждён — скачайте заново';
+  else if (s.status === 'error') statusEl.textContent = 'ошибка: ' + String(s.error || 'неизвестно').slice(0, 90);
+  else statusEl.textContent = 'не загружена';
+  dlBtn.classList.toggle('hidden', cached);
+  dlBtn.disabled = !!downloadController;
+  dlBtn.textContent = s.status === 'invalid' ? 'Скачать модель заново (≈400 МБ)' : 'Скачать модель (≈400 МБ)';
+  rmBtn.classList.toggle('hidden', !cached);
+  toggle.disabled = !cached;
+  toggle.checked = cached && !!state.settings.localModel;
+}
+
+function setModelProgress(pct, text) {
+  const box = $('#modelProgress');
+  box.classList.remove('hidden');
+  $('#modelProgressBar').style.width = `${Math.min(100, Math.max(0, pct))}%`;
+  box.setAttribute('aria-valuenow', String(Math.round(pct)));
+  $('#modelStatusText').textContent = text;
+}
+
+$('#modelDownloadBtn').addEventListener('click', async () => {
+  if (downloadController) return;
+  downloadController = new AbortController();
+  const ctrl = downloadController;
+  $('#modelDownloadBtn').classList.add('hidden');
+  $('#modelCancelBtn').classList.remove('hidden');
+  setModelProgress(0, 'Подключаюсь к Hugging Face…');
+  try {
+    const res = await downloadModel({
+      signal: ctrl.signal,
+      onProgress: ({ loaded, total }) => {
+        const pct = total > 0 ? (loaded / total) * 100 : 0;
+        setModelProgress(pct, `Загружено ${fmtMB(loaded)} из ${fmtMB(total)} · ${Math.round(pct)}%`);
+      },
+    });
+    if (!res.ok) throw new Error('файл не прошёл проверку целостности');
+    setModelProgress(100, 'Готово — модель на устройстве');
+    toast('Модель загружена. Включите «Реальная локальная модель».');
+  } catch (err) {
+    if (ctrl.signal.aborted) toast('Загрузка отменена');
+    else toast('Не удалось скачать: ' + String(err?.message || err).slice(0, 120));
+  } finally {
+    downloadController = null;
+    setTimeout(() => $('#modelProgress').classList.add('hidden'), 900);
+    $('#modelCancelBtn').classList.add('hidden');
+    await refreshModelStatus();
+    renderModelPanel();
+  }
+});
+$('#modelCancelBtn').addEventListener('click', () => downloadController?.abort());
+
+const modelRemoveBtn = $('#modelRemoveBtn');
+let modelRemoveArmed = false, modelRemoveTimer = null;
+const disarmModelRemove = () => { modelRemoveArmed = false; modelRemoveBtn.classList.remove('armed'); modelRemoveBtn.textContent = 'Удалить веса с устройства'; };
+modelRemoveBtn.addEventListener('click', async () => {
+  if (!modelRemoveArmed) {
+    modelRemoveArmed = true;
+    modelRemoveBtn.classList.add('armed');
+    modelRemoveBtn.textContent = 'Точно удалить веса? (≈400 МБ)';
+    modelRemoveTimer = setTimeout(disarmModelRemove, 3200);
+    return;
+  }
+  clearTimeout(modelRemoveTimer);
+  disarmModelRemove();
+  await removeModel();
+  state.settings.localModel = false;
+  saveSettings(state.settings);
+  await refreshModelStatus();
+  renderModelPanel();
+  toast('Веса удалены с устройства');
+});
+
+$('#localModelToggle').addEventListener('change', async (e) => {
+  await refreshModelStatus();
+  if (e.target.checked && localModelStatus.status !== 'cached') {
+    e.target.checked = false;
+    toast('Сначала скачайте модель');
+    return;
+  }
+  state.settings.localModel = e.target.checked;
+  saveSettings(state.settings);
+  toast(e.target.checked ? 'Локальная модель включена — отвечает офлайн' : 'Включён демо-движок');
+});
 
 $('#footVersion').textContent = 'v' + APP_VERSION;
 
@@ -619,10 +795,10 @@ $('#modelUpdateBtn').addEventListener('click', async (e) => {
   try {
     const list = await fetchJSON(`https://api.github.com/repos/${REPO}/releases?per_page=40`);
     const modelReleases = Array.isArray(list) ? list.filter(r => (r.tag_name || '').toLowerCase().startsWith(MODEL_TAG_PREFIX)) : [];
-    if (!modelReleases.length) { setStatus(status, `Релизов модели ещё нет. Текущая: v${MODEL_VERSION} (${MODEL_NAME}). Первая модельная версия появится вместе с Заходом 2.`, 'ok'); }
+    if (!modelReleases.length) { setStatus(status, `Релизов модели на GitHub пока нет. Текущая: v${MODEL_VERSION}. Веса скачиваются с Hugging Face по кнопке выше.`, 'ok'); }
     else {
       const tag = modelReleases[0].tag_name;
-      if (cmpVersions(tag, MODEL_VERSION) > 0) setStatus(status, `Доступно обновление модели: ${tag} (у вас v${MODEL_VERSION}). Скачивание и замена весов — в Заходе 2.`, 'found');
+      if (cmpVersions(tag, MODEL_VERSION) > 0) setStatus(status, `Доступно обновление модели: ${tag} (у вас v${MODEL_VERSION}). Удалите веса и скачайте заново по кнопке выше.`, 'found');
       else setStatus(status, `Модель актуальна: v${MODEL_VERSION}.`, 'ok');
     }
   } catch {

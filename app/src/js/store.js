@@ -2,7 +2,7 @@
 
 const CHATS_KEY = 'oracle.chats.v1';
 const SETTINGS_KEY = 'oracle.settings.v1';
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0-dev.0';
 export const MODEL_VERSION = '0.1.0';
 export const MODEL_NAME = 'Оракул-Core 0.5B · Q4_K_M';
 export const REPO = 'standimaoff-oss/aiarsenal';
@@ -18,6 +18,7 @@ export const DEFAULT_SETTINGS = {
   alwaysShowTrace: false,
   profileName: '',
   effort: 2,            // индекс уровня размышления
+  localModel: false,    // отвечать реальной локальной моделью (нужен скачанный файл весов)
 };
 
 export function loadSettings() {

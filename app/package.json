@@ -1,15 +1,19 @@
 {
   "name": "orakul",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0-dev.0",
   "description": "Оракул — локальный ИИ для ПК и телефона. Офлайн, агентный интерфейс, поиск и уровни размышления.",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/copy-wasm.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@wllama/wllama": "^3.13.0"
   }
 }

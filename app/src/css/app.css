@@ -380,6 +380,9 @@ kbd { background: var(--panel-2); border: 1px solid var(--border-strong); border
 .btn:active { transform: scale(.98); }
 .ghost-btn { border-color: var(--border-strong); color: var(--text); margin-top: 10px; width: 100%; }
 .ghost-btn:hover { border-color: var(--accent); color: var(--accent-hover); background: var(--accent-soft); }
+
+.progress { height: 8px; border-radius: 999px; background: var(--panel-3); overflow: hidden; margin: 10px 0 2px; }
+.progress-bar { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-hover)); transition: width .18s ease; }
 .danger-btn { border-color: rgba(224, 120, 86, 0.35); color: var(--danger); width: 100%; }
 .danger-btn:hover { background: rgba(224, 120, 86, 0.12); border-color: var(--danger); }
 .danger-btn.armed { background: var(--danger); border-color: var(--danger); color: #fff7f0; }
